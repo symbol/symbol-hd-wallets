@@ -20,7 +20,6 @@
  */
 import * as bip39 from 'bip39';
 import {nacl_catapult} from 'nem2-library';
-import {defer as observableWith, from as observableFrom, Observable} from 'rxjs';
 
 /**
  * Class `MnemonicPassPhrase` describes a mnemonic pass phrase generator
@@ -205,10 +204,8 @@ export class MnemonicPassPhrase {
         entropy: Buffer | string,
         language: string = MnemonicPassPhrase.DEFAULT_LANGUAGE
     ): string {
-        // check if `language` is supported
-        if (! bip39.wordlists.hasOwnProperty(language)) {
-            throw new Error('Language "' + language + '" is not supported.');
-        }
+        // check if `language` is supported or throw
+        MnemonicPassPhrase.assertLanguageSupported(language);
 
         return bip39.entropyToMnemonic(entropy, bip39.wordlists[language]);
     }
