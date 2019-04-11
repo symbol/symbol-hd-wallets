@@ -69,6 +69,19 @@ export class MnemonicPassPhrase {
     };
 
     /**
+     * Create a `MnemonicPassPhrase` instance.
+     *
+     * @param plain {string}
+     */
+    public constructor(/**
+                        * The mnemonic pass phrase (plain text).
+                        * @var {string}
+                        */
+                        public readonly plain: string) {
+
+    }
+
+    /**
      * Create a random mnemonic pass phrase. Arguments to this method are
      * all optional, default values are static variables of this class.
      *
@@ -85,7 +98,7 @@ export class MnemonicPassPhrase {
         language: string = MnemonicPassPhrase.DEFAULT_LANGUAGE,
         strength: number = MnemonicPassPhrase.DEFAULT_STRENGTH,
         rng: (size: number) => Buffer = MnemonicPassPhrase.CATAPULT_RNG
-    ): string {
+    ): MnemonicPassPhrase {
         // check if `language` is supported or throw
         MnemonicPassPhrase.assertLanguageSupported(language);
 
@@ -99,90 +112,7 @@ export class MnemonicPassPhrase {
             bip39.setDefaultWordlist(language);
         }
 
-        return bip39.generateMnemonic(strength, rng);
-    }
-
-    /**
-     * Validate a mnemonic pass phrase with optional `language`.
-     *
-     * If the `language` argument is ommited, the default 
-     * language 'english' will be used.
-     *
-     * The `bitcoinjs/bip39` package's `validateMnemonic` function
-     * checks the mnemonic pass phrase by internally converting
-     * to an entropy bytes array with `mnemonicToEntropy`.
-     *
-     * Validation steps include `size`, `checksum bits` and `checksum`
-     * validations.
-     *
-     * @param   mnemonic    {string}    The mnemonic pass phrase to validate.
-     * @param   language    {string}    (Optional) The language used for the wordlist.
-     * @return  {boolean}   True for *valid mnemonic*, False for *invalid mnemonic*.
-     * @throws  {Error}     On unsupported `language` argument.
-     */
-    public static validateMnemonic(
-        mnemonic: string,
-        language: string = MnemonicPassPhrase.DEFAULT_LANGUAGE
-    ): boolean {
-        // check if `language` is supported or throw
-        MnemonicPassPhrase.assertLanguageSupported(language);
-
-        return bip39.validateMnemonic(mnemonic, bip39.wordlists[language]);
-    }
-
-    /**
-     * Convert a mnemonic to an **encrypted** hexadecimal seed.
-     *
-     * If the `password` argument is ommited, an empty password will be assumed.
-     *
-     * The `bitcoinjs/bip39` package's `mnemonicToSeedSync` function
-     * will first *normalize* the mnemonic pass phrase Buffer to 
-     * [NFKD form](https://en.wikipedia.org/wiki/Unicode_equivalence#Normal_forms).
-     * Afterwards the buffer will be *salted* with the `password` (or empty) prepend
-     * by the string 'mnemonic'.
-     * In its last step, the function will then use PBKDF2 to derivate the password-
-     * protected hexadecimal seed from the salted buffer.
-     *
-     * @see https://en.wikipedia.org/wiki/Unicode_equivalence#Normal_forms
-     * @param   mnemonic    {string}
-     * @param   password    {string}
-     * @return  {Buffer}    Buffer containing bytes of the hexadecimal seed.
-     */
-    public static mnemonicToSeed(
-        mnemonic: string,
-        password?: string
-    ): Buffer {
-        return bip39.mnemonicToSeedSync(mnemonic, password || '');
-    }
-
-    /**
-     * Converts a mnemonic to hexadecimal entropy (of `strength` bits).
-     *
-     * If the `language` argument is ommited, the default 
-     * language 'english' will be used.
-     *
-     * The `bitcoinjs/bip39` package's `mnemonicToEntropy` function
-     * converts words into 11 bit binary strings, then validates the
-     * checksum and finally, returns the built entropy hexadecimal
-     * (of `strength` bits).
-     *
-     * It is not recommended to store the result of this function. Please,
-     * have a look at `mnemonicToSeed(m, pw)` instead.
-     *
-     * @see {MnemonicPassPhrase}#mnemonicToSeed
-     * @param   mnemonic    {string}    The mnemonic pass phrase to validate.
-     * @param   language    {string}    (Optional) The language used for the wordlist.
-     * @return  {string}    Returns the hexadecimal format of the entropy value.
-     * @throws  {Error}     On unsupported `language` argument.
-     */
-    public static mnemonicToEntropy(
-        mnemonic: string,
-        language: string = MnemonicPassPhrase.DEFAULT_LANGUAGE
-    ): string {
-        // check if `language` is supported or throw
-        MnemonicPassPhrase.assertLanguageSupported(language);
-
-        return bip39.mnemonicToEntropy(mnemonic, bip39.wordlists[language]);
+        return new MnemonicPassPhrase(bip39.generateMnemonic(strength, rng));
     }
 
     /**
@@ -200,14 +130,14 @@ export class MnemonicPassPhrase {
      * @return  {string}    Returns the mnemonic pass phrase in plain text format.
      * @throws  {Error}     On unsupported `language` argument.
      */
-    public static entropyToMnemonic(
+    public static createFromEntropy(
         entropy: Buffer | string,
         language: string = MnemonicPassPhrase.DEFAULT_LANGUAGE
-    ): string {
+    ): MnemonicPassPhrase {
         // check if `language` is supported or throw
         MnemonicPassPhrase.assertLanguageSupported(language);
 
-        return bip39.entropyToMnemonic(entropy, bip39.wordlists[language]);
+        return new MnemonicPassPhrase(bip39.entropyToMnemonic(entropy, bip39.wordlists[language]));
     }
 
     /**
@@ -229,4 +159,91 @@ export class MnemonicPassPhrase {
         return true;
     }
 
+    /**
+     * Validate a mnemonic pass phrase with optional `language`.
+     *
+     * If the `language` argument is ommited, the default 
+     * language 'english' will be used.
+     *
+     * The `bitcoinjs/bip39` package's `validateMnemonic` function
+     * checks the mnemonic pass phrase by internally converting
+     * to an entropy bytes array with `mnemonicToEntropy`.
+     *
+     * Validation steps include `size`, `checksum bits` and `checksum`
+     * validations.
+     *
+     * @param   mnemonic    {string}    The mnemonic pass phrase to validate.
+     * @param   language    {string}    (Optional) The language used for the wordlist.
+     * @return  {boolean}   True for *valid mnemonic*, False for *invalid mnemonic*.
+     * @throws  {Error}     On unsupported `language` argument.
+     */
+    public isValid(
+        language: string = MnemonicPassPhrase.DEFAULT_LANGUAGE
+    ): boolean {
+        // check if `language` is supported or throw
+        MnemonicPassPhrase.assertLanguageSupported(language);
+        return bip39.validateMnemonic(this.plain, bip39.wordlists[language]);
+    }
+
+    /**
+     * Get the array representation for the mnemonic pass phrase.
+     *
+     * Words are split using a white-space character as a separator.
+     *
+     * @return  {string[]}  Array of plain text words
+     */
+    public toArray(): string[] {
+        return this.plain.split(' ');
+    }
+
+    /**
+     * Convert a mnemonic to an **encrypted** hexadecimal seed.
+     *
+     * If the `password` argument is ommited, an empty password will be assumed.
+     *
+     * The `bitcoinjs/bip39` package's `mnemonicToSeedSync` function
+     * will first *normalize* the mnemonic pass phrase Buffer to 
+     * [NFKD form](https://en.wikipedia.org/wiki/Unicode_equivalence#Normal_forms).
+     * Afterwards the buffer will be *salted* with the `password` (or empty) prepend
+     * by the string 'mnemonic'.
+     * In its last step, the function will then use PBKDF2 to derivate the password-
+     * protected hexadecimal seed from the salted buffer.
+     *
+     * @see https://en.wikipedia.org/wiki/Unicode_equivalence#Normal_forms
+     * @param   password    {string}
+     * @return  {Buffer}    Buffer containing bytes of the hexadecimal seed.
+     */
+    public toSeed(
+        password?: string
+    ): Buffer {
+        return bip39.mnemonicToSeedSync(this.plain, password || '');
+    }
+
+    /**
+     * Converts a mnemonic to hexadecimal entropy (of `strength` bits).
+     *
+     * If the `language` argument is ommited, the default 
+     * language 'english' will be used.
+     *
+     * The `bitcoinjs/bip39` package's `mnemonicToEntropy` function
+     * converts words into 11 bit binary strings, then validates the
+     * checksum and finally, returns the built entropy hexadecimal
+     * (of `strength` bits).
+     *
+     * It is not recommended to store the result of this function. Please,
+     * have a look at `mnemonicToSeed(m, pw)` instead.
+     *
+     * @see {MnemonicPassPhrase}#mnemonicToSeed
+     * @param   language    {string}    (Optional) The language used for the wordlist.
+     * @return  {string}    Returns the hexadecimal format of the entropy value.
+     * @throws  {Error}     On unsupported `language` argument.
+     */
+    public toEntropy(
+        language: string = MnemonicPassPhrase.DEFAULT_LANGUAGE
+    ): string {
+        // check if `language` is supported or throw
+        MnemonicPassPhrase.assertLanguageSupported(language);
+
+        return bip39.mnemonicToEntropy(this.plain, bip39.wordlists[language]);
+    }
 }

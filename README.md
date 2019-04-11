@@ -16,9 +16,11 @@ This is a PoC to validate the proposed [NIP? Multi-Account Hierarchy for Determi
 
 ## Examples
 
-### Generating mnemonic pass phrase
+### Generating a mnemonic pass phrase
 
 ```typescript
+import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+
 // random 24-words mnemonic
 const mnemonic = MnemonicPassPhrase.createRandom();
 
@@ -32,7 +34,114 @@ const mnemonic = MnemonicPassPhrase.createRandom('french');
 const mnemonic = MnemonicPassPhrase.createRandom('japanese');
 ```
 
-### Generating a hyper-deterministic wallet
+### Generating a password-protected mnemonic pass phrase seed (for storage)
+
+```typescript
+import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+
+// Example 1: generate password-protected seed for random pass phrase
+const mnemonic = MnemonicPassPhrase.createRandom();
+const secureSeedHex = mnemonic.toSeed('your-password');
+
+// Example 2: empty password for password-protected seed
+const mnemonic = MnemonicPassPhrase.createRandom();
+const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: ''
+```
+
+### Generating a BIP32 root extended key
+
+```typescript
+import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+
+// Example 1: generate BIP32 master seed for random pass phrase
+const mnemonic = MnemonicPassPhrase.createRandom();
+const bip32Seed = mnemonic.toEntropy();
+
+// Example 2: generate BIP32 master seed for known pass phrase
+const words = 'alpha pattern real admit vacuum wall ready code '
+            + 'correct program depend valid focus basket whisper firm '
+            + 'tray fit rally day dance demise engine mango';
+const mnemonic = new MnemonicPassPhrase(words);
+
+ // the following seed can be used with `ExtendedKeyNode.createFromSeed()`
+const bip32Seed = mnemonic.toEntropy();
+```
+
+### Generating a BIP32 extended _private_ key from BIP39 mnemonic pass phrase
+
+```typescript
+import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
+
+// using BIP39 mnemonic pass phrase for BIP32 extended keys generation
+const mnemonic = MnemonicPassPhrase.createRandom();
+const bip32Seed = mnemonic.toEntropy();
+const bip32Node = ExtendedKeyNode.createFromSeed(bip32Seed);
+
+// the extended private key (never share, base of private keys tree)
+const xprvKey = bip32Node.toBase58();
+```
+
+### Generating a BIP32 extended _public_ key from BIP39 mnemonic pass phrase
+
+```typescript
+import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
+
+// using BIP39 mnemonic pass phrase for BIP32 extended keys generation
+const mnemonic = MnemonicPassPhrase.createRandom();
+const bip32Seed = mnemonic.toEntropy();
+const bip32Node = ExtendedKeyNode.createFromSeed(bip32Seed);
+
+// the extended public key (base of public keys tree)
+const xpubKey = bip32Node.getPublicNode().toBase58();
+```
+
+### Derive BIP44 path of a BIP32 extended key with BIP44 mnemonic pass phrase
+
+```typescript
+import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
+
+// using BIP39 mnemonic pass phrase for BIP32 extended keys generation
+const mnemonic = MnemonicPassPhrase.createRandom();
+const bip32Seed = mnemonic.toEntropy();
+const bip32Node = ExtendedKeyNode.createFromSeed(bip32Seed);
+
+// derive BIP44 tree root
+const bip44Root = bip32Node.derivePath("m/44'");
+
+// the extended private key (never share, base of private keys tree)
+const xprvKey = bip32Node.toBase58();
+
+// the extended public key (never share, base of private keys tree)
+const xpubKey = bip32Node.getPublicNode().toBase58();
+```
+
+### Derive default wallet BIP44 from a BIP39 mnemonic pass phrase
+
+```typescript
+import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
+
+// using BIP39 mnemonic pass phrase for BIP32 extended keys generation
+const mnemonic = MnemonicPassPhrase.createRandom();
+const bip32Seed = mnemonic.toEntropy();
+const bip32Node = ExtendedKeyNode.createFromSeed(bip32Seed);
+
+// derive default wallet path "m/44'/43'/0'/0/0"
+const defaultWallet = bip32Node.derivePath("m/44'/43'/0'/0/0");
+
+// the extended private key (never share, base of private keys tree)
+const xprvKey = defaultWallet.toBase58();
+
+// the extended public key (never share, base of private keys tree)
+const xpubKey = defaultWallet.getPublicNode().toBase58();
+```
+
+### Generating a hyper-deterministic wallet (CATAPULT compatible)
+
+```typescript
+    TBD
+```
+
+### Signing with a hyper-deterministic wallet (CATAPULT compatible)
 
 ```typescript
     TBD
