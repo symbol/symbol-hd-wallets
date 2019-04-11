@@ -18,8 +18,14 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-export { MnemonicPassPhrase } from './src/MnemonicPassPhrase';
-export { KeyPrefix } from './src/KeyPrefix';
-export { KeyEncoding } from './src/KeyEncoding';
-export { ExtendedKeyNode } from './src/ExtendedKeyNode';
-export { ExtendedKey } from './src/ExtendedKey';
+
+/**
+ * Enum `KeyEncoding` describes available key encoding methods.
+ *
+ * @see https://github.com/nemtech/NIP/issues/12
+ * @since 0.1.0
+ */
+export enum KeyEncoding {
+    ENC_HEX = 0,
+    ENC_BIN = 1
+}
