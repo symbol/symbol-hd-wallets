@@ -29,16 +29,43 @@ import {
 
 describe('ExtendedKeyNode -->', () => {
 
+    // https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vectors
     const extendedKeys = {
+        seedHex: '000102030405060708090a0b0c0d0e0f',
         neutered: [
             {path: 'm', key: 'xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8'},
-            {path: 'm/0', key: 'xpub68Gmy5EdvgibQVfPdqkBBCHxA5htiqg55crXYuXoQRKfDBFA1WEjWgP6LHhwBZeNK1VTsfTFUHCdrfp1bgwQ9xv5ski8PX9rL2dZXvgGDnw'},
+            {path: 'm/0\'', key: 'xpub68Gmy5EdvgibQVfPdqkBBCHxA5htiqg55crXYuXoQRKfDBFA1WEjWgP6LHhwBZeNK1VTsfTFUHCdrfp1bgwQ9xv5ski8PX9rL2dZXvgGDnw'},
+            {path: 'm/0\'/1', key: 'xpub6ASuArnXKPbfEwhqN6e3mwBcDTgzisQN1wXN9BJcM47sSikHjJf3UFHKkNAWbWMiGj7Wf5uMash7SyYq527Hqck2AxYysAA7xmALppuCkwQ'},
         ],
         nonNeutered: [
             {path: 'm', key: 'xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi'},
-            {path: 'm/0', key: 'xprv9uHRZZhk6KAJC1avXpDAp4MDc3sQKNxDiPvvkX8Br5ngLNv1TxvUxt4cV1rGL5hj6KCesnDYUhd7oWgT11eZG7XnxHrnYeSvkzY7d2bhkJ7'},
+            {path: 'm/0\'', key: 'xprv9uHRZZhk6KAJC1avXpDAp4MDc3sQKNxDiPvvkX8Br5ngLNv1TxvUxt4cV1rGL5hj6KCesnDYUhd7oWgT11eZG7XnxHrnYeSvkzY7d2bhkJ7'},
+            {path: 'm/0\'/1', key: 'xprv9wTYmMFdV23N2TdNG573QoEsfRrWKQgWeibmLntzniatZvR9BmLnvSxqu53Kw1UmYPxLgboyZQaXwTCg8MSY3H2EU4pWcQDnRnrVA1xe8fs'},
         ],
-    }
+    };
+
+    describe('createFromBase58 should', () => {
+        it('create neutered from extended public key', () => {
+            const neuteredNode = ExtendedKeyNode.createFromBase58(extendedKeys.neutered[0].key);
+            expect(neuteredNode.isNeutered()).to.be.equal(true);
+        });
+
+        it('create non-neutered from extended private key', () => {
+            const nonNeuteredNode = ExtendedKeyNode.createFromBase58(extendedKeys.nonNeutered[0].key);
+            expect(nonNeuteredNode.isNeutered()).to.be.equal(false);
+        });
+    });
+
+    describe('createFromSeed should', () => {
+        it('create master key with hexadecimal seed notation', () => {
+            const masterFromSeed = ExtendedKeyNode.createFromSeed(extendedKeys.seedHex);
+            expect(masterFromSeed.isMaster()).to.be.equal(true);
+
+            // check XPUB and XPRV
+            expect(masterFromSeed.getPublicNode().toBase58()).to.be.equals(extendedKeys.neutered[0].key);
+            expect(masterFromSeed.toBase58()).to.be.equals(extendedKeys.nonNeutered[0].key);
+        });
+    });
 
     describe('constructor should', () => {
         it('create master key with payload for "m" path', () => {
@@ -180,6 +207,28 @@ describe('ExtendedKeyNode -->', () => {
             expect(publicKey.byteLength).to.be.equal(32);
             expect(uintArray.length).to.be.equal(32);
             expect(Array.from(uintArray)).to.be.deep.equal(expectedBytes);
+        });
+    });
+
+    describe('derivePath() should', () => {
+        it('derive first chain with path "m/0\'"', () => {
+            const masterKey = ExtendedKeyNode.createFromSeed(extendedKeys.seedHex);
+            const fstChainNode = masterKey.derivePath("m/0'");
+            expect(fstChainNode.isMaster()).to.be.equal(false);
+
+            // check XPUB and XPRV
+            expect(fstChainNode.getPublicNode().toBase58()).to.be.equals(extendedKeys.neutered[1].key);
+            expect(fstChainNode.toBase58()).to.be.equals(extendedKeys.nonNeutered[1].key);
+        });
+
+        it('derive child chain with path "m/0\'/1"', () => {
+            const masterKey = ExtendedKeyNode.createFromSeed(extendedKeys.seedHex);
+            const childChainNode = masterKey.derivePath("m/0'/1");
+            expect(childChainNode.isMaster()).to.be.equal(false);
+
+            // check XPUB and XPRV
+            expect(childChainNode.getPublicNode().toBase58()).to.be.equals(extendedKeys.neutered[2].key);
+            expect(childChainNode.toBase58()).to.be.equals(extendedKeys.nonNeutered[2].key);
         });
     });
 

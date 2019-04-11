@@ -72,8 +72,8 @@ export class ExtendedKeyNode {
      * payload.
      *
      * This method uses the `bitcoinjs/bip32` function named `fromBase58`
-     * and creates an extended key node *without* private key and public
-     * key.
+     * and creates an extended key node by parsing the Base58 binary
+     * representation.
      *
      * @param payload 
      */
@@ -81,6 +81,34 @@ export class ExtendedKeyNode {
         payload: string
     ): ExtendedKeyNode {
         const hdNode = bip32.fromBase58(payload);
+        //const prefix = new KeyPrefix(
+        //    hdNode.network.bip32.private,
+        //    hdNode.network.bip32.public
+        //);
+
+        return new ExtendedKeyNode(hdNode/*, prefix*/);
+    }
+
+    /**
+     * Create an extended key hyper-deterministic node with the master
+     * seed.
+     *
+     * This method uses the `bitcoinjs/bip32` function named `fromSeed`
+     * and creates an extended key node by creating HMAC-SHA512 hash
+     * of the words 'Bitcoin seed' appended with the `seed` binary
+     * representation.
+     *
+     * The result is split in 2 parts where the left most 32 bytes are
+     * the private and right most 32 bytes are the public key.
+     *
+     * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L265
+     * @param   seed    {string}
+     * @return  {ExtendedKeyNode}
+     */
+    public static createFromSeed(
+        seed: string
+    ): ExtendedKeyNode {
+        const hdNode = bip32.fromSeed(Buffer.from(seed, 'hex'));
         //const prefix = new KeyPrefix(
         //    hdNode.network.bip32.private,
         //    hdNode.network.bip32.public
