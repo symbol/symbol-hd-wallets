@@ -196,12 +196,14 @@ export class ExtendedKeyNode {
     public getPublicKey(
         encoding: KeyEncoding = KeyEncoding.ENC_HEX
     ): string | Buffer {
-        if (this.isNeutered()) {
-            throw new Error('Cannot read private key out of extended public key.');
-        }
+
+        // @see https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
+        // ser-p(P) serializes the coordinate and prepends either 0x02 or 0x03 to it.
+        // drop first byte for 32-bytes public key
+        const publicKey = this.node.publicKey.slice(1);
 
         // return encoded public key (default hexadecimal format)
-        return this.encodeAs(this.node.publicKey, encoding);
+        return this.encodeAs(publicKey, encoding);
     }
 
     /**
