@@ -41,4 +41,15 @@ export interface NodeInterface {
     derivePath(path: string): NodeInterface;
     sign(hash: Buffer): Buffer;
     verify(hash: Buffer, signature: Buffer): boolean;
+
+    // Public getter addons
+    getPrivateKey(): Buffer;
+    getPublicKey(): Buffer;
+    getNetwork(): Network;
+    getChainCode(): Buffer;
+    getIdentifier(): Buffer;
+    getFingerprint(): Buffer;
+    getDepth(): number;
+    getIndex(): number;
+    getParentFingerprint(): number;
 }

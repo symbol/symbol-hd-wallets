@@ -44,8 +44,10 @@ import {
  */
 export class NodeImpl<T extends NodeInterface | BIP32> {
     /**
-     * 
-     * @param node 
+     * Construct a `NodeImpl` object.
+     *
+     * @internal This class is used internally in `ExtendedKeyNode`.
+     * @param   node    {BIP32 | NodeInterface}
      */
     public constructor(/**
                         *  

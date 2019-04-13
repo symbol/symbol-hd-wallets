@@ -174,7 +174,7 @@ export class NodeEd25519 implements NodeInterface {
     public static fromSeed(
         seed: Buffer,
         network: Network = Network.CATAPULT
-    ): NodeInterface {
+    ): NodeEd25519 {
 
         if (seed.length < 16) throw new TypeError('Seed should be at least 128 bits');
         if (seed.length > 64) throw new TypeError('Seed should be at most 512 bits');
@@ -207,7 +207,7 @@ export class NodeEd25519 implements NodeInterface {
     public static fromBase58(
         inString: string,
         network: Network = Network.CATAPULT,
-    ): NodeInterface {
+    ): NodeEd25519 {
 
         // decode base58
         const buffer = bs58check.decode(inString);
@@ -245,7 +245,7 @@ export class NodeEd25519 implements NodeInterface {
 
         // 32 bytes: the chain code
         const chainCode = buffer.slice(13, 45);
-        let hd: NodeInterface;
+        let hd: NodeEd25519;
 
         if (version === Network.CATAPULT.privateKeyPrefix) {
         // 33 bytes: private key data (0x00 + k)
@@ -358,6 +358,27 @@ export class NodeEd25519 implements NodeInterface {
     public get fingerprint(): Buffer {
         return this.identifier.slice(0, 4);
     }
+
+    /**
+     * /// region: NodeInterface Getters
+     *
+     * Getters are implemented to permit better
+     * unit testing without breaking BIP32 object
+     * extensibility.
+     *
+     */
+    public getPrivateKey(): Buffer { return this.privateKey; }
+    public getPublicKey(): Buffer { return this.publicKey; }
+    public getNetwork(): Network { return this.network; }
+    public getChainCode(): Buffer { return this.chainCode; }
+    public getIdentifier(): Buffer { return this.identifier; }
+    public getFingerprint(): Buffer { return this.fingerprint; }
+    public getDepth(): number { return this.depth; }
+    public getIndex(): number  { return this.index; }
+    public getParentFingerprint(): number { return this.parentFingerprint; }
+    /**
+     * /// end-region: NodeInterface Getters
+     */
 
     /**
      * Return whether the node is neutered or not.
