@@ -24,8 +24,11 @@ const bs58check = require('bs58check');
 
 // internal dependencies
 import { 
-    KeyPrefix,
-    KeyEncoding
+    CurveAlgorithm,
+    KeyEncoding,
+    Network,
+    NodeImpl,
+    NodeEd25519,
 } from '../index';
 
 /**
@@ -57,12 +60,12 @@ export class ExtendedKeyNode {
                  * The hyper-deterministic node.
                  * @var {BIP32}
                  */
-                public readonly node: BIP32,
+                public readonly node: NodeImpl<BIP32 | NodeEd25519>,
                 /**
-                 * The hyper-deterministic node network key prefix.
-                 * @var {KeyPrefix}
+                 * The hyper-deterministic node network.
+                 * @var {Network}
                  */
-                public readonly prefix: KeyPrefix = KeyPrefix.CATAPULT
+                public network: Network = Network.BITCOIN
     ) {
 
     }
@@ -78,15 +81,26 @@ export class ExtendedKeyNode {
      * @param payload 
      */
     public static createFromBase58(
-        payload: string
+        payload: string,
+        network: Network = Network.BITCOIN
     ): ExtendedKeyNode {
-        const hdNode = bip32.fromBase58(payload);
-        //const prefix = new KeyPrefix(
-        //    hdNode.network.bip32.private,
-        //    hdNode.network.bip32.public
-        //);
 
-        return new ExtendedKeyNode(hdNode/*, prefix*/);
+        let hdNode: BIP32 | NodeEd25519;
+
+        if (network === Network.BITCOIN) {
+        // use BIP32 for node creation
+
+            hdNode = bip32.fromBase58(payload);
+            return new ExtendedKeyNode(new NodeImpl<BIP32>(hdNode));
+        } else if (network === Network.CATAPULT) {
+        // use NodeEd25519 for node creation
+
+            hdNode = NodeEd25519.fromBase58(payload);
+            const node = new NodeImpl<NodeEd25519>(hdNode as NodeEd25519);
+            return new ExtendedKeyNode(node);
+        }
+
+        throw new Error('Network not recognized in ExtendedKeyNode.createFromBase58().');
     }
 
     /**
@@ -128,6 +142,11 @@ export class ExtendedKeyNode {
     public derivePath(
         path: string
     ): ExtendedKeyNode {
+
+        // if (! this.isValidPath(path)) {
+        //     throw new Error('Path: "' + path + '" is not a valid BIP32 path.');
+        // }
+
         // derive path with BIP32
         const derived = this.node.derivePath(path);
 

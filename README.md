@@ -131,7 +131,27 @@ const defaultWallet = bip32Node.derivePath("m/44'/43'/0'/0/0");
 // the extended private key (never share, base of private keys tree)
 const xprvKey = defaultWallet.toBase58();
 
-// the extended public key (never share, base of private keys tree)
+// the extended public key (default wallet base of public keys tree)
+const xpubKey = defaultWallet.getPublicNode().toBase58();
+```
+
+### Derive second account with BIP44 from a BIP39 mnemonic pass phrase
+
+```typescript
+import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
+
+// using BIP39 mnemonic pass phrase for BIP32 extended keys generation
+const mnemonic = MnemonicPassPhrase.createRandom();
+const bip32Seed = mnemonic.toEntropy();
+const bip32Node = ExtendedKeyNode.createFromSeed(bip32Seed);
+
+// derive default wallet path "m/44'/43'/1'/0/0"
+const defaultWallet = bip32Node.derivePath("m/44'/43'/1'/0/0"); // second hardened account
+
+// the extended private key (never share, base of private keys tree)
+const xprvKey = defaultWallet.toBase58();
+
+// the extended public key (default wallet base of public keys tree)
 const xpubKey = defaultWallet.getPublicNode().toBase58();
 ```
 
