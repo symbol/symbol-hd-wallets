@@ -32,6 +32,11 @@ import {
  * @since 0.2.0
  */
 export interface NodeInterface {
+    privateKey: Buffer;
+    publicKey: Buffer;
+    network: Network;
+    chainCode: Buffer;
+
     isNeutered(): boolean;
     neutered(): NodeInterface;
     toBase58(): string;
@@ -43,12 +48,6 @@ export interface NodeInterface {
     verify(hash: Buffer, signature: Buffer): boolean;
 
     // Public getter addons
-    getPrivateKey(): Buffer;
-    getPublicKey(): Buffer;
-    getNetwork(): Network;
-    getChainCode(): Buffer;
-    getIdentifier(): Buffer;
-    getFingerprint(): Buffer;
     getDepth(): number;
     getIndex(): number;
     getParentFingerprint(): number;

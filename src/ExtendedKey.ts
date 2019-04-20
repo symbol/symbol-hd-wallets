@@ -71,6 +71,8 @@ export class ExtendedKey {
         this.node = ExtendedKeyNode.createFromBase58(base58Payload);
     }
 
+    //XXX fromSeed => .toBase58()
+
     /**
      * Create a child private key from an extended key.
      * 

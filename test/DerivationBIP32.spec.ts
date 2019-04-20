@@ -28,7 +28,7 @@ import {
 } from "../index";
 import { ExtendedKey } from "../src/ExtendedKey";
 
-describe('BIP32 Compliance -->', () => {
+describe('BIP32 Extended Keys -->', () => {
 
     // https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vectors
     const extendedKeys = [
@@ -110,32 +110,7 @@ describe('BIP32 Compliance -->', () => {
         ]
     }];
 
-    describe('ExtendedKeyNode should', () => {
-        it ('throw for hardened derivation with extended public key', () => {
-            expect((function () {
-                // create master key node
-                const masterKey = ExtendedKeyNode.createFromSeed(extendedKeys[0].seedHex);
-                const masterPub = masterKey.getPublicNode();
-
-                // use hardened path to produce error because `masterPub` is neutered
-                const childDerived = masterPub.derivePath('m/0\'');
-            })).to.throw('Missing private key for hardened child key');
-        });
-
-        it ('throw given seed length smaller than 16 (seed of 8 bytes)', () => {
-            expect((function () {
-                // create master key node
-                const masterKey = ExtendedKeyNode.createFromSeed(extendedKeys[0].seedHex.substr(0, 16));
-            })).to.throw('Seed should be at least 128 bits');
-        });
-
-        it ('throw given seed length bigger than 64 (seed of 96 bytes)', () => {
-            expect((function () {
-                // create master key node
-                const masterKey = ExtendedKeyNode.createFromSeed('00'.repeat(96));
-            })).to.throw('Seed should be at most 512 bits');
-        });
-
+    describe('BIP32 ExtendedKeyNode should', () => {
         extendedKeys.map((extendedKey) => {
             // create master key node
             const masterKey = ExtendedKeyNode.createFromSeed(extendedKey.seedHex);

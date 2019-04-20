@@ -23,6 +23,7 @@ import { BIP32 } from 'bip32';
 
 import {
     NodeInterface,
+    NodeEd25519,
 } from '../index';
 
 /**
@@ -54,5 +55,31 @@ export class NodeImpl<T extends NodeInterface | BIP32> {
                         */
                        public readonly node: T) {
 
+    }
+
+    /**
+     * Get whether deterministic node is a Bitcoin
+     * BIP32 extended key node.
+     *
+     * When this method returns true, the `node.network.curve`
+     * field will hold `CurveAlgorithm.secp256k1`.
+     *
+     * @return  {boolean}
+     */
+    public isBitcoin(): boolean {
+        return this.node instanceof BIP32;
+    }
+
+    /**
+     * Get whether deterministic node is a Catapult
+     * BIP32 extended key node.
+     *
+     * When this method returns true, the `node.network.curve`
+     * field will hold `CurveAlgorithm.ed25519`.
+     *
+     * @return  {boolean}
+     */
+    public isCatapult(): boolean {
+        return this.node instanceof NodeEd25519;
     }
 }

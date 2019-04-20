@@ -171,6 +171,7 @@ const xpubKey = defaultWallet.getPublicNode().toBase58();
 
 Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 
+- [0.2.0](CHANGELOG.md#v020) - 2019-04-20
 - [0.1.0](CHANGELOG.md#v010) - 2019-03-08
 
 ## License

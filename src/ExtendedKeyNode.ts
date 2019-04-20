@@ -52,10 +52,10 @@ import {
 export class ExtendedKeyNode {
 
     /**
-     * The hyper-deterministic node.
-     * @var {BIP32 | NodeEd25519}
+     * The hyper-deterministic derivation scheme.
+     * @var NodeImpl<BIP32 | NodeEd25519>
      */
-    public node: BIP32 | NodeEd25519;
+    public derivation: NodeImpl<BIP32 | NodeEd25519>;
 
     /**
      * Construct an `ExtendedKeyNode` object out of its' base58 payload.
@@ -65,16 +65,16 @@ export class ExtendedKeyNode {
      */
     constructor(/**
                  * The hyper-deterministic node.
-                 * @var {BIP32}
+                 * @var {BIP32 | NodeEd25519}
                  */
-                public readonly impl: NodeImpl<BIP32 | NodeEd25519>,
+                public readonly node: BIP32 | NodeEd25519,
                 /**
                  * The hyper-deterministic node network.
                  * @var {Network}
                  */
                 public network: Network = Network.BITCOIN
     ) {
-        this.node = impl.node;
+        this.derivation = new NodeImpl<BIP32 | NodeEd25519>(node);
 
         if (this.node instanceof NodeEd25519
             && this.network !== Network.CATAPULT) {
@@ -85,7 +85,6 @@ export class ExtendedKeyNode {
                  && this.network !== Network.BITCOIN) {
             throw new Error('Given node is of type BIP32 but network does not match Network.BITCOIN.');
         }
-
     }
 
     /**
@@ -110,8 +109,7 @@ export class ExtendedKeyNode {
             const node = NodeEd25519.fromBase58(payload);
 
             // instanciate our ExtendedKeyNode
-            const impl = new NodeImpl<NodeEd25519>(node as NodeEd25519);
-            return new ExtendedKeyNode(impl, network);
+            return new ExtendedKeyNode(node, network);
         }
         // else {
         // use BIP32 node implementation
@@ -120,8 +118,7 @@ export class ExtendedKeyNode {
         const node = bip32.fromBase58(payload);
 
         // instanciate our ExtendedKeyNode
-        const impl = new NodeImpl<BIP32>(node as BIP32);
-        return new ExtendedKeyNode(impl, network);
+        return new ExtendedKeyNode(node, network);
     }
 
     /**
@@ -152,8 +149,7 @@ export class ExtendedKeyNode {
             const node = NodeEd25519.fromSeed(Buffer.from(seed, 'hex'));
 
             // instanciate our ExtendedKeyNode
-            const impl = new NodeImpl<NodeEd25519>(node as NodeEd25519);
-            return new ExtendedKeyNode(impl, network);
+            return new ExtendedKeyNode(node, network);
         }
         // else {
         // use BIP32 node implementation
@@ -162,8 +158,7 @@ export class ExtendedKeyNode {
         const node = bip32.fromSeed(Buffer.from(seed, 'hex'));
 
         // instanciate our ExtendedKeyNode
-        const impl = new NodeImpl<BIP32>(node as BIP32);
-        return new ExtendedKeyNode(impl, network);
+        return new ExtendedKeyNode(node, network);
     }
 
     /**
@@ -183,12 +178,12 @@ export class ExtendedKeyNode {
 
         if (derived instanceof NodeEd25519) {
         // use NodeEd25519 node implementation
-            return new ExtendedKeyNode(new NodeImpl<NodeEd25519>(derived as NodeEd25519));
+            return new ExtendedKeyNode(derived as NodeEd25519);
         }
         // else {
         // use BIP32 node implementation
 
-        return new ExtendedKeyNode(new NodeImpl<BIP32>(derived as BIP32));
+        return new ExtendedKeyNode(derived as BIP32);
     }
 
     /**
@@ -236,12 +231,12 @@ export class ExtendedKeyNode {
         if (node instanceof NodeEd25519) {
         // use NodeEd25519 node implementation
 
-            return new ExtendedKeyNode(new NodeImpl<NodeEd25519>(node as NodeEd25519), this.network);
+            return new ExtendedKeyNode(node as NodeEd25519, this.network);
         }
         // else {
         // use BIP32 node implementation
 
-        return new ExtendedKeyNode(new NodeImpl<BIP32>(node as BIP32), this.network);
+        return new ExtendedKeyNode(node as BIP32, this.network);
     }
 
     /**

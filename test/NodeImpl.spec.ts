@@ -56,17 +56,17 @@ describe('NodeImpl<T> -->', () => {
             expect(impl.node).to.be.instanceof(NodeEd25519);
 
             // presence checks
-            expect(impl.node.getPrivateKey()).to.not.be.undefined;
-            expect(impl.node.getPublicKey()).to.not.be.undefined;
-            expect(impl.node.getChainCode()).to.not.be.undefined;
-            expect(impl.node.getNetwork().curve).to.be.equal(CurveAlgorithm.ed25519);
+            expect(impl.node.privateKey).to.not.be.undefined;
+            expect(impl.node.publicKey).to.not.be.undefined;
+            expect(impl.node.chainCode).to.not.be.undefined;
+            expect(impl.node.network.curve).to.be.equal(CurveAlgorithm.ed25519);
 
             // + value integrity check
-            expect(impl.node.getPrivateKey().byteLength).to.be.equal(32);
-            expect(impl.node.getChainCode().byteLength).to.be.equal(32);
+            expect(impl.node.privateKey.byteLength).to.be.equal(32);
+            expect(impl.node.chainCode.byteLength).to.be.equal(32);
 
             // IMPORTANT: Catapult public keys are 32 bytes but BIP32 requires 33-bytes!
-            expect(impl.node.getPublicKey().byteLength).to.be.equal(32);
+            expect(impl.node.publicKey.byteLength).to.be.equal(32);
         });
     });
 

@@ -28,7 +28,8 @@ import {
     NodeInterface,
     Network,
     Cryptography,
-    CatapultECC
+    CatapultECC,
+    DeterministicKey,
 } from '../../index';
 
 /**
@@ -64,51 +65,6 @@ const CKDPriv = (
     return new NodeEd25519(IL, undefined, IR);
 };
 
-/**
- * Implementation of CKDPub() function as described in the paper
- * at following URL:
- * 
- *     https://cardanolaunch.com/assets/Ed25519_BIP.pdf
- * 
- * This method permits to derive *child public keys* from extended
- * public keys (parent).
- *
- * This is not possible with the SLIP-10 proposal in BIP32 and 
- * presents an implementation proposal for the compatibility of
- * Extended Keys with Ed25519 ellyptic curves.
- *
- * @see https://cardanolaunch.com/assets/Ed25519_BIP.pdf
- * @param param0 
- * @param index 
- */
-const CKDPub = (
-    parent: NodeEd25519,
-    index: number
-): NodeEd25519 => {
-    const indexBuffer = Buffer.allocUnsafe(4);
-    indexBuffer.writeUInt32BE(index, 0);
-
-    // publicKey || index
-    const data = Buffer.concat([parent.publicKey, indexBuffer]);
-
-    const I = createHmac('sha512', parent.chainCode)
-        .update(data)
-        .digest();
-    const IL = I.slice(0, 32);
-    const IR = I.slice(32);
-
-    //XXX pointAddScalar(this.publicKey, IL) compatibility ?
-    const Ki = parent.publicKey;
-    nacl_catapult.add(Ki, IL);
-
-    // In case Ki is the point at infinity, proceed with the next value for i
-    if (Ki === null) {
-        return CKDPub(parent, index + 1);
-    }
-
-    // Ki = publicKey ; IR = chainCode
-    return new NodeEd25519(undefined, Ki, IR);
-};
 
 /**
  * Class `NodeEd25519` describes a hyper-deterministic BIP32 node
@@ -130,7 +86,7 @@ const CKDPub = (
  * @see https://github.com/nemtech/NIP/issues/12
  * @since 0.2.0
  */
-export class NodeEd25519 implements NodeInterface {
+export class NodeEd25519 extends DeterministicKey implements NodeInterface {
 
     /**
      * Hardened key derivation uses HIGHEST_BIT.
@@ -138,29 +94,6 @@ export class NodeEd25519 implements NodeInterface {
      * @var number
      */
     public static readonly HIGHEST_BIT = 0x80000000;
-
-    /**
-     * Construct a `NodeEd25519` object.
-     *
-     * @param ___D      {Buffer|undefined}  The private key of the node.
-     * @param ___Q      {Buffer|undefined}  The public key of the node.
-     * @param chainCode {Buffer}            The chain code of the node (32 bytes).
-     * @param network   {Network}           The network of the node, defaults to `Network.CATAPULT`.
-     * @param ___DEPTH  {number}            The depth of the node (0 for master).
-     * @param ___INDEX  {number}            The account index (0 for master).
-     * @param ___PARENT_FINGERPRINT     {number}    The parent fingerprint (0x00000000 for master)
-     */
-    public constructor(
-        private readonly __D: Buffer | undefined, // private Key
-        private __Q: Buffer | undefined, // public Key
-        public readonly chainCode: Buffer,
-        public readonly network: Network = Network.CATAPULT,
-        private readonly __DEPTH: number = 0,
-        private readonly __INDEX: number = 0,
-        private readonly __PARENT_FINGERPRINT: number = 0x00000000,
-      ) {
-
-    }
 
     /**
      * Create a hyper-deterministic ED25519 node from a
@@ -179,14 +112,16 @@ export class NodeEd25519 implements NodeInterface {
         if (seed.length < 16) throw new TypeError('Seed should be at least 128 bits');
         if (seed.length > 64) throw new TypeError('Seed should be at most 512 bits');
 
-        //XXX keep "Bitcoin seed" for BIP32 compatibility ?
+        // (1) Create SHA512 HMAC prepended with `Catapult seed`
         const hmac = createHmac('sha512', Buffer.from('Catapult seed', 'utf8'));
         const I = hmac.update(seed).digest();
-        const IL = I.slice(0, 32);
-        const IR = I.slice(32);
 
-        // IL = privateKey ; IR = chainCode
-        return new NodeEd25519(IL, undefined, IR, network);
+        // (2) Split in 2 parts: privateKey and chainCode
+        const kL = I.slice(0, 32);
+        const kR = I.slice(32);
+
+        // kL = privateKey ; kR = chainCode
+        return new NodeEd25519(kL, undefined, kR, network);
     }
 
     /**
@@ -274,126 +209,6 @@ export class NodeEd25519 implements NodeInterface {
     }
 
     /**
-     * Getter for the `depth` of the key.
-     *
-     * @access private
-     * @return {number}
-     */
-    private get depth(): number {
-        return this.__DEPTH;
-    }
-
-    /**
-     * Getter for the `index` (account index) of the key.
-     *
-     * @access private
-     * @return {number}
-     */
-    private get index(): number {
-        return this.__INDEX;
-    }
-
-    /**
-     * Getter for the `parentFingerprint` parent fingerprint of the key.
-     *
-     * @access private
-     * @return {number}
-     */
-    private get parentFingerprint(): number {
-        return this.__PARENT_FINGERPRINT;
-    }
-
-    /**
-     * Getter for the `publicKey` of the key.
-     *
-     * @access public
-     * @return {Buffer}
-     */
-    public get publicKey(): Buffer {
-        // if the publicKey is not set, derive from private key
-        if (this.__Q === undefined) {
-            this.__Q = Buffer.from(CatapultECC.extractPublicKey((this.__D as Buffer), Cryptography.sha3Hash));
-        }
-
-        return this.__Q!;
-    }
-
-    /**
-     * Getter for the `privateKey` of the key.
-     *
-     * @access public
-     * @return {Buffer}
-     */
-    public get privateKey(): Buffer {
-        if (! this.__D) {
-            throw new Error('Missing private key.');
-        }
-
-        return this.__D;
-    }
-
-    /**
-     * Getter for the `identifier` of the key.
-     *
-     * The identifier is build as follows:
-     * - Step 1: Sha3-256 of the public key
-     * - Step 2: RIPEMD160 of the sha3 hash
-     *
-     * @access public
-     * @return {Buffer}
-     */
-    public get identifier(): Buffer {
-        return Cryptography.hash160(this.publicKey);
-    }
-
-    /**
-     * Getter for the `fingerprint` of the key.
-     *
-     * The fingerprint are the first 4 bytes of the
-     * identifier of the key.
-     *
-     * @access public
-     * @return {Buffer}
-     */
-    public get fingerprint(): Buffer {
-        return this.identifier.slice(0, 4);
-    }
-
-    /**
-     * /// region: NodeInterface Getters
-     *
-     * Getters are implemented to permit better
-     * unit testing without breaking BIP32 object
-     * extensibility.
-     *
-     */
-    public getPrivateKey(): Buffer { return this.privateKey; }
-    public getPublicKey(): Buffer { return this.publicKey; }
-    public getNetwork(): Network { return this.network; }
-    public getChainCode(): Buffer { return this.chainCode; }
-    public getIdentifier(): Buffer { return this.identifier; }
-    public getFingerprint(): Buffer { return this.fingerprint; }
-    public getDepth(): number { return this.depth; }
-    public getIndex(): number  { return this.index; }
-    public getParentFingerprint(): number { return this.parentFingerprint; }
-    /**
-     * /// end-region: NodeInterface Getters
-     */
-
-    /**
-     * Return whether the node is neutered or not.
-     *
-     * Neutered keys = Extended Public Keys
-     * Non-Neutered keys = Extended Private Keys 
-     *
-     * @access public
-     * @return {Buffer}
-     */
-    public isNeutered(): boolean {
-        return this.__D === undefined;
-    }
-
-    /**
      * Get the neutered node.
      *
      * @access public
@@ -405,76 +220,15 @@ export class NodeEd25519 implements NodeInterface {
             this.publicKey,
             this.chainCode,
             this.network,
-            this.depth,
-            this.index,
-            this.parentFingerprint,
+            this.getDepth(),
+            this.getIndex(),
+            this.getParentFingerprint(),
         );
     }
 
     /**
-     * Get the base58 representation of the node.
-     *
-     * When the node is neutered, this will return
-     * an extended public key. When the node is not
-     * neutered this will return an extended private
-     * key.
-     *
-     * This method is copied AS IS from the `bitcoin/bip32`
-     * package and provides a detailed implementation of the
-     * base58 conversion process for extended keys.
-     *
-     * No ED25519 changes have been done here.
-     *
-     * @see https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts#L129
-     * @access public
-     * @return {string}     The extended public or private key
-     */
-    public toBase58(): string {
-        const network = this.network;
-        const version = !this.isNeutered()
-            ? Network.CATAPULT.privateKeyPrefix
-            : Network.CATAPULT.publicKeyPrefix;
-        const buffer = Buffer.allocUnsafe(78);
-
-        // 4 bytes: version bytes
-        buffer.writeUInt32BE(version, 0);
-
-        // 1 byte: depth: 0x00 for master nodes, 0x01 for level-1 descendants, ....
-        buffer.writeUInt8(this.depth, 4);
-
-        // 4 bytes: the fingerprint of the parent's key (0x00000000 if master key)
-        buffer.writeUInt32BE(this.parentFingerprint, 5);
-
-        // 4 bytes: child number. This is the number i in xi = xpar/i, with xi the key being serialized.
-        // This is encoded in big endian. (0x00000000 if master key)
-        buffer.writeUInt32BE(this.index, 9);
-
-        // 32 bytes: the chain code
-        this.chainCode.copy(buffer, 13);
-
-        // 33 bytes: the public key or private key data
-        if (!this.isNeutered()) {
-            // 0x00 + k for private keys
-            buffer.writeUInt8(0, 45);
-            this.privateKey!.copy(buffer, 46);
-
-        // 33 bytes: the public key
-        } else {
-            // X9.62 encoding for public keys
-            this.publicKey.copy(buffer, 45);
-        }
-
-        return bs58check.encode(buffer);
-    }
-
-    //XXX hidden usage of toHex() ?
-    public toWIF(): string {
-        throw new TypeError("Catapult BIP32 keys cannot be converted to WIF. Please use the toHex() method.");
-    }
-
-    /**
      * Generic child derivation.
-     * 
+     *
      * This method reads the derivation paths and uses `derive`
      * and `deriveHardened` accordingly.
      *
@@ -495,7 +249,7 @@ export class NodeEd25519 implements NodeInterface {
 
         // check whether current node is a master node,
         // if not: "m/" derivation is not possible.
-        if (splitPath[0] === 'm' && this.parentFingerprint) {
+        if (splitPath[0] === 'm' && this.getParentFingerprint()) {
             throw new TypeError('Expected master node with "m" derivation, but got child with parentFingerprint.');
         }
 
@@ -509,16 +263,9 @@ export class NodeEd25519 implements NodeInterface {
             (prevHd, indexStr) => {
                 let index;
 
-                // determine whether hardened derivation is used or not
-                if (indexStr.slice(-1) === `'`) {
-                    // Hardened child key derivation
-                    index = parseInt(indexStr.slice(0, -1), 10);
-                    return prevHd.deriveHardened(index);
-                } else {
-                    // Normal child key derivation
-                    index = parseInt(indexStr, 10);
-                    return prevHd.derive(index);
-                }
+                // Always use hardened key derivation
+                index = parseInt(indexStr.replace(/'/, ''), 10);
+                return prevHd.deriveHardened(index);
             },
             this as NodeInterface, // apply / bind interface
         );
@@ -581,9 +328,9 @@ export class NodeEd25519 implements NodeInterface {
         }
 
         // (2) Public parent key -> public child key
+        // This is not possible with our implementation
 
-        // use ED25519-adapted child key derivation function
-        return CKDPub(parentKey, index);
+        throw new Error("Non-Hardened key derivation is not permitted with ED25519 curve.");
     }
 
     /**
@@ -599,11 +346,10 @@ export class NodeEd25519 implements NodeInterface {
      * @return  {NodeInterface}
      */
     public sign(
-        hash: Buffer,
-        length: number = 64
+        hash: Buffer
     ): Buffer {
         const secretKey = this.privateKey as Buffer;
-        const hasher = Cryptography.createSha3Hasher(64);
+        const hasher = Cryptography.createSha3Hasher(64); // 64=size
         const signature = CatapultECC.sign(hash, this.publicKey, secretKey, hasher);
 
         return Buffer.from(signature);
