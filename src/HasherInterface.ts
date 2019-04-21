@@ -18,16 +18,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-export { CurveAlgorithm } from './src/CurveAlgorithm';
-export { KeyEncoding } from './src/KeyEncoding';
-export { Network } from './src/Network';
-export { Cryptography } from './src/Cryptography';
-export { HasherInterface } from './src/HasherInterface';
-export { CatapultECC } from './src/CatapultECC';
-export { NodeInterface } from './src/NodeInterface';
-export { DeterministicKey } from './src/Compat/DeterministicKey';
-export { NodeImpl } from './src/NodeImpl';
-export { NodeEd25519 } from './src/Curves/ed25519';
-export { MnemonicPassPhrase } from './src/MnemonicPassPhrase';
-export { ExtendedKeyNode } from './src/ExtendedKeyNode';
-export { ExtendedKey } from './src/ExtendedKey';
+/**
+ * Interface `HasherInterface` defines ground rules for
+ * catapult hasher objects.
+ *
+ * @see https://github.com/nemtech/NIP/issues/12
+ * @since 0.2.0
+ */
+export interface HasherInterface {
+    reset(): any;
+    update(d: Uint8Array): any;
+    finalize(r: Uint8Array): any;
+}

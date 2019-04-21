@@ -87,6 +87,8 @@ export class MnemonicPassPhrase {
      *
      * This static method returns a sentence built following the Bitcoin
      * BIP39 standard using the `bitcoinjs/bip39` library.
+     * 
+     * @todo `strength` replace by `countWords` for higher level approach
      *
      * @param   language    {string}    (Optional) The language used for the wordlist.
      * @param   strength    {number}    (Optional) Strength of mnemonic pass phrase (% 32 == 0).

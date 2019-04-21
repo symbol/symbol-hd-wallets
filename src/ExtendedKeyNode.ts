@@ -24,8 +24,12 @@ const bs58check = require('bs58check');
 
 // internal dependencies
 import { 
-    KeyPrefix,
-    KeyEncoding
+    CurveAlgorithm,
+    KeyEncoding,
+    Network,
+    NodeInterface,
+    NodeImpl,
+    NodeEd25519,
 } from '../index';
 
 /**
@@ -48,6 +52,12 @@ import {
 export class ExtendedKeyNode {
 
     /**
+     * The hyper-deterministic derivation scheme.
+     * @var NodeImpl<BIP32 | NodeEd25519>
+     */
+    public derivation: NodeImpl<BIP32 | NodeEd25519>;
+
+    /**
      * Construct an `ExtendedKeyNode` object out of its' base58 payload.
      * 
      * @see https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts
@@ -55,16 +65,26 @@ export class ExtendedKeyNode {
      */
     constructor(/**
                  * The hyper-deterministic node.
-                 * @var {BIP32}
+                 * @var {BIP32 | NodeEd25519}
                  */
-                public readonly node: BIP32,
+                public readonly node: BIP32 | NodeEd25519,
                 /**
-                 * The hyper-deterministic node network key prefix.
-                 * @var {KeyPrefix}
+                 * The hyper-deterministic node network.
+                 * @var {Network}
                  */
-                public readonly prefix: KeyPrefix = KeyPrefix.CATAPULT
+                public network: Network = Network.BITCOIN
     ) {
+        this.derivation = new NodeImpl<BIP32 | NodeEd25519>(node);
 
+        if (this.node instanceof NodeEd25519
+            && this.network !== Network.CATAPULT) {
+            throw new Error('Given node is of type NodeEd25519 but network does not match Network.CATAPULT.');
+        }
+        // } else if (this.node instanceof nist256p1) { ..
+        else if (! (this.node instanceof NodeEd25519)
+                 && this.network !== Network.BITCOIN) {
+            throw new Error('Given node is of type BIP32 but network does not match Network.BITCOIN.');
+        }
     }
 
     /**
@@ -78,15 +98,27 @@ export class ExtendedKeyNode {
      * @param payload 
      */
     public static createFromBase58(
-        payload: string
+        payload: string,
+        network: Network = Network.BITCOIN
     ): ExtendedKeyNode {
-        const hdNode = bip32.fromBase58(payload);
-        //const prefix = new KeyPrefix(
-        //    hdNode.network.bip32.private,
-        //    hdNode.network.bip32.public
-        //);
 
-        return new ExtendedKeyNode(hdNode/*, prefix*/);
+        if (network === Network.CATAPULT) {
+        // use NodeEd25519 node implementation
+
+            // interpret payload
+            const node = NodeEd25519.fromBase58(payload);
+
+            // instanciate our ExtendedKeyNode
+            return new ExtendedKeyNode(node, network);
+        }
+        // else {
+        // use BIP32 node implementation
+
+        // interpret payload
+        const node = bip32.fromBase58(payload);
+
+        // instanciate our ExtendedKeyNode
+        return new ExtendedKeyNode(node, network);
     }
 
     /**
@@ -103,18 +135,31 @@ export class ExtendedKeyNode {
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L265
      * @param   seed    {string}
+     * @param   network {Network}
      * @return  {ExtendedKeyNode}
      */
     public static createFromSeed(
-        seed: string
+        seed: string,
+        network: Network = Network.BITCOIN
     ): ExtendedKeyNode {
-        const hdNode = bip32.fromSeed(Buffer.from(seed, 'hex'));
-        //const prefix = new KeyPrefix(
-        //    hdNode.network.bip32.private,
-        //    hdNode.network.bip32.public
-        //);
 
-        return new ExtendedKeyNode(hdNode/*, prefix*/);
+        if (network === Network.CATAPULT) {
+        // use NodeEd25519 node implementation
+
+            // use hexadecimal seed
+            const node = NodeEd25519.fromSeed(Buffer.from(seed, 'hex'));
+
+            // instanciate our ExtendedKeyNode
+            return new ExtendedKeyNode(node, network);
+        }
+        // else {
+        // use BIP32 node implementation
+
+        // use hexadecimal seed
+        const node = bip32.fromSeed(Buffer.from(seed, 'hex'));
+
+        // instanciate our ExtendedKeyNode
+        return new ExtendedKeyNode(node, network);
     }
 
     /**
@@ -128,11 +173,18 @@ export class ExtendedKeyNode {
     public derivePath(
         path: string
     ): ExtendedKeyNode {
-        // derive path with BIP32
+
+        // derive path with specialized `derivePath`
         const derived = this.node.derivePath(path);
 
-        // create new node from derived
-        return new ExtendedKeyNode(derived);
+        if (derived instanceof NodeEd25519) {
+        // use NodeEd25519 node implementation
+            return new ExtendedKeyNode(derived as NodeEd25519, this.network);
+        }
+        // else {
+        // use BIP32 node implementation
+
+        return new ExtendedKeyNode(derived as BIP32, this.network);
     }
 
     /**
@@ -173,10 +225,19 @@ export class ExtendedKeyNode {
      * @return {ExtendedKeyNode}    The neutered HD-node
      */
     public getPublicNode(): ExtendedKeyNode {
-        const node = this.node.neutered();
 
         // create new node from neutered
-        return new ExtendedKeyNode(node);
+        const node = this.node.neutered();
+
+        if (node instanceof NodeEd25519) {
+        // use NodeEd25519 node implementation
+
+            return new ExtendedKeyNode(node as NodeEd25519, this.network);
+        }
+        // else {
+        // use BIP32 node implementation
+
+        return new ExtendedKeyNode(node as BIP32, this.network);
     }
 
     /**
@@ -228,7 +289,10 @@ export class ExtendedKeyNode {
         // @see https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
         // ser-p(P) serializes the coordinate and prepends either 0x02 or 0x03 to it.
         // drop first byte for 32-bytes public key
-        const publicKey = this.node.publicKey.slice(1);
+        let publicKey = this.node.publicKey;
+        if (this.node.publicKey.byteLength === 33) {
+            publicKey = this.node.publicKey.slice(1);
+        }
 
         // return encoded public key (default hexadecimal format)
         return this.encodeAs(publicKey, encoding);

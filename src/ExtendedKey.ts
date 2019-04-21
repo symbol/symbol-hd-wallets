@@ -19,7 +19,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // internal dependencies
-import { ExtendedKeyNode } from '../index';
+import { 
+    ExtendedKeyNode,
+    Network,
+} from '../index';
 
 /**
  * Class `ExtendedKey` describes an extended key as described in 
@@ -28,9 +31,9 @@ import { ExtendedKeyNode } from '../index';
  *
  *     https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
  *
- * It will be adapted to work with ED25519 ellyptic curve because BIP32
- * is only compatible with secp256k1 ellyptic curve.
- * 
+ * It will be adapted to work with ED25519 elliptic curve because BIP32
+ * is only compatible with secp256k1 elliptic curve.
+ *
  * The work on this BIP32-ED25519 will be discussed and described in 
  * the following [NIP](https://github.com/nemtech/NIP/issues/12): 
  *
@@ -59,7 +62,6 @@ export class ExtendedKey {
      *   `xpub68Gmy5EdvgibQVfPdqkBBCHxA5htiqg55crXYuXoQRKfDBFA1WEjWgP6LHhwBZeNK1VTsfTFUHCdrfp1bgwQ9xv5ski8PX9rL2dZXvgGDnw`
      *   `xprv9uHRZZhk6KAJC1avXpDAp4MDc3sQKNxDiPvvkX8Br5ngLNv1TxvUxt4cV1rGL5hj6KCesnDYUhd7oWgT11eZG7XnxHrnYeSvkzY7d2bhkJ7`
      *
-     * @see 
      * @param   base58Payload   {string}
      */
     constructor(/**
@@ -69,6 +71,21 @@ export class ExtendedKey {
                 public readonly base58Payload: string
     ) {
         this.node = ExtendedKeyNode.createFromBase58(base58Payload);
+    }
+
+    /**
+     * Create an extended key with the master seed.
+     *
+     * @param   seed    {string}
+     * @param   network {Network}
+     * @return  {ExtendedKey}
+     */
+    public static createFromSeed(
+        seed: string,
+        network: Network = Network.BITCOIN
+    ): ExtendedKey {
+        const node = ExtendedKeyNode.createFromSeed(seed, network);
+        return new ExtendedKey(node.toBase58());
     }
 
     /**

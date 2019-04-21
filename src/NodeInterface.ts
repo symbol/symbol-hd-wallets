@@ -18,16 +18,39 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-export { CurveAlgorithm } from './src/CurveAlgorithm';
-export { KeyEncoding } from './src/KeyEncoding';
-export { Network } from './src/Network';
-export { Cryptography } from './src/Cryptography';
-export { HasherInterface } from './src/HasherInterface';
-export { CatapultECC } from './src/CatapultECC';
-export { NodeInterface } from './src/NodeInterface';
-export { DeterministicKey } from './src/Compat/DeterministicKey';
-export { NodeImpl } from './src/NodeImpl';
-export { NodeEd25519 } from './src/Curves/ed25519';
-export { MnemonicPassPhrase } from './src/MnemonicPassPhrase';
-export { ExtendedKeyNode } from './src/ExtendedKeyNode';
-export { ExtendedKey } from './src/ExtendedKey';
+// internal dependencies
+import { 
+    Network,
+} from '../index';
+
+/**
+ * Interface `NodeInterface` defines ground rules for
+ * BIP32 node implementation for different curves than
+ * secp256k1 and ed25519.
+ *
+ * @see https://github.com/nemtech/NIP/issues/12
+ * @since 0.2.0
+ */
+export interface NodeInterface {
+    privateKey: Buffer;
+    publicKey: Buffer;
+    network: Network;
+    chainCode: Buffer;
+
+    isNeutered(): boolean;
+    neutered(): NodeInterface;
+    toBase58(): string;
+    toWIF(): string;
+    derive(index: number): NodeInterface;
+    deriveHardened(index: number): NodeInterface;
+    derivePath(path: string): NodeInterface;
+    sign(hash: Buffer): Buffer;
+    verify(hash: Buffer, signature: Buffer): boolean;
+
+    // Public getter addons
+    getD(): Buffer | undefined;
+    getQ(): Buffer | undefined;
+    getDepth(): number;
+    getIndex(): number;
+    getParentFingerprint(): number;
+}
