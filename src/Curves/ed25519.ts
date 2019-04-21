@@ -32,6 +32,11 @@ import {
     DeterministicKey,
 } from '../../index';
 
+import {
+    Account,
+    NetworkType,
+} from 'nem2-sdk';
+
 /**
  * Implementation of CKDPriv() function as described in SLIP-10
  * for multi-curve BIP32 compatibility with ED25519.
@@ -112,8 +117,8 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         if (seed.length < 16) throw new TypeError('Seed should be at least 128 bits');
         if (seed.length > 64) throw new TypeError('Seed should be at most 512 bits');
 
-        // (1) Create SHA512 HMAC prepended with `Catapult seed`
-        const hmac = createHmac('sha512', Buffer.from('Catapult seed', 'utf8'));
+        // (1) Create SHA512 HMAC seeded with `ed25519 seed`
+        const hmac = createHmac('sha512', Buffer.from('ed25519 seed', 'utf8'));
         const I = hmac.update(seed).digest();
 
         // (2) Split in 2 parts: privateKey and chainCode
@@ -206,6 +211,27 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         }
 
         return hd;
+    }
+
+    /**
+     * Getter for the `publicKey` of the key.
+     *
+     * @access public
+     * @return {Buffer}
+     */
+    public get publicKey(): Buffer {
+
+        if (this.getQ() !== undefined) {
+            return this.getQ()!;
+        }
+
+        // if the publicKey is not set, derive from private key
+        const extract = CatapultECC.extractPublicKey(
+            (this.privateKey as Buffer),
+            Cryptography.sha3Hash
+        );
+
+        return Buffer.from(extract);
     }
 
     /**

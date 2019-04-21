@@ -48,6 +48,8 @@ export interface NodeInterface {
     verify(hash: Buffer, signature: Buffer): boolean;
 
     // Public getter addons
+    getD(): Buffer | undefined;
+    getQ(): Buffer | undefined;
     getDepth(): number;
     getIndex(): number;
     getParentFingerprint(): number;

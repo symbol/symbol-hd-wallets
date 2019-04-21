@@ -135,6 +135,7 @@ export class ExtendedKeyNode {
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L265
      * @param   seed    {string}
+     * @param   network {Network}
      * @return  {ExtendedKeyNode}
      */
     public static createFromSeed(
@@ -178,12 +179,12 @@ export class ExtendedKeyNode {
 
         if (derived instanceof NodeEd25519) {
         // use NodeEd25519 node implementation
-            return new ExtendedKeyNode(derived as NodeEd25519);
+            return new ExtendedKeyNode(derived as NodeEd25519, this.network);
         }
         // else {
         // use BIP32 node implementation
 
-        return new ExtendedKeyNode(derived as BIP32);
+        return new ExtendedKeyNode(derived as BIP32, this.network);
     }
 
     /**
@@ -288,7 +289,10 @@ export class ExtendedKeyNode {
         // @see https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
         // ser-p(P) serializes the coordinate and prepends either 0x02 or 0x03 to it.
         // drop first byte for 32-bytes public key
-        const publicKey = this.node.publicKey.slice(1);
+        let publicKey = this.node.publicKey;
+        if (this.node.publicKey.byteLength === 33) {
+            publicKey = this.node.publicKey.slice(1);
+        }
 
         // return encoded public key (default hexadecimal format)
         return this.encodeAs(publicKey, encoding);
