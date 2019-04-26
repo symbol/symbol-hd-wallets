@@ -25,15 +25,14 @@ import {BIP32} from 'bip32';
 // internal dependencies
 import {
     CurveAlgorithm,
-    ExtendedKeyNode,
+    ExtendedKey,
     KeyEncoding,
     Network,
     NodeInterface,
-    NodeImpl,
     NodeEd25519,
 } from "../index";
 
-describe('ExtendedKeyNode -->', () => {
+describe('ExtendedKey -->', () => {
 
     // https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vectors
     const extendedKeys = {
@@ -54,14 +53,14 @@ describe('ExtendedKeyNode -->', () => {
 
         it('should create BIP32 node object given no network', () => {
             const node = bip32.fromBase58(extendedKeys.neutered[0].key);
-            const neuteredMaster = new ExtendedKeyNode(node);
+            const neuteredMaster = new ExtendedKey(node);
 
             expect(neuteredMaster.network.curve).to.be.equal(CurveAlgorithm.secp256k1);
         });
 
         it('should create BIP32 node object given Network.BITCOIN', () => {
             const node = bip32.fromBase58(extendedKeys.neutered[0].key);
-            const neuteredMaster = new ExtendedKeyNode(node, Network.BITCOIN);
+            const neuteredMaster = new ExtendedKey(node, Network.BITCOIN);
             const nodeBIP32 = neuteredMaster.node as BIP32;
 
             //XXX `BIP32` class cannot be used as a right-hand operator of instanceof
@@ -76,7 +75,7 @@ describe('ExtendedKeyNode -->', () => {
 
         it('should create NodeEd25519 node object given Network.CATAPULT', () => {
             const node = NodeEd25519.fromBase58(extendedKeys.neutered[0].key);
-            const neuteredMaster = new ExtendedKeyNode(node, Network.CATAPULT);
+            const neuteredMaster = new ExtendedKey(node, Network.CATAPULT);
             const nodeEd25519 = neuteredMaster.node as NodeEd25519;
 
             expect(nodeEd25519).to.be.instanceof(NodeEd25519);
@@ -87,28 +86,28 @@ describe('ExtendedKeyNode -->', () => {
         it('should throw error with inconsistent BIP32 node given network Network.CATAPULT', () => {
             expect((function () {
                 const node = bip32.fromBase58(extendedKeys.neutered[1].key);
-                const neuteredMaster = new ExtendedKeyNode(node, Network.CATAPULT);
+                const neuteredMaster = new ExtendedKey(node, Network.CATAPULT);
             })).to.throw('Given node is of type BIP32 but network does not match Network.BITCOIN.');
         });
 
         it('should throw error with inconsistent NodeEd25519 node given network Network.BITCOIN', () => {
             expect((function () {
                 const node = NodeEd25519.fromBase58(extendedKeys.neutered[1].key);
-                const neuteredMaster = new ExtendedKeyNode(node, Network.BITCOIN);
+                const neuteredMaster = new ExtendedKey(node, Network.BITCOIN);
             })).to.throw('Given node is of type NodeEd25519 but network does not match Network.CATAPULT.');
         });
 
         it('create master key with payload for "m" path', () => {
-            const neuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.neutered[0].key));
-            const nonNeuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.nonNeutered[0].key));
+            const neuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.neutered[0].key));
+            const nonNeuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.nonNeutered[0].key));
 
             expect(neuteredMaster.isMaster()).to.be.equal(true);
             expect(nonNeuteredMaster.isMaster()).to.be.equal(true);
         });
 
         it('create child key with payload for "m/0" path', () => {
-            const neuteredChild = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.neutered[1].key));
-            const nonNeuteredChild = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.nonNeutered[1].key));
+            const neuteredChild = new ExtendedKey(bip32.fromBase58(extendedKeys.neutered[1].key));
+            const nonNeuteredChild = new ExtendedKey(bip32.fromBase58(extendedKeys.nonNeutered[1].key));
 
             expect(neuteredChild.isMaster()).to.be.equal(false);
             expect(nonNeuteredChild.isMaster()).to.be.equal(false);
@@ -117,7 +116,7 @@ describe('ExtendedKeyNode -->', () => {
         it('create neutered from neutered keys', () => {
             extendedKeys.neutered.map(
                 (neuteredKey) => {
-                    const neuteredNode = new ExtendedKeyNode(bip32.fromBase58(neuteredKey.key));
+                    const neuteredNode = new ExtendedKey(bip32.fromBase58(neuteredKey.key));
                     expect(neuteredNode.isNeutered()).to.be.equal(true);
                 });
         });
@@ -125,7 +124,7 @@ describe('ExtendedKeyNode -->', () => {
         it('create non-neutered from non-neutered keys', () => {
             extendedKeys.nonNeutered.map(
                 (nonNeuteredKey) => {
-                    const nonNeuteredNode = new ExtendedKeyNode(bip32.fromBase58(nonNeuteredKey.key));
+                    const nonNeuteredNode = new ExtendedKey(bip32.fromBase58(nonNeuteredKey.key));
                     expect(nonNeuteredNode.isNeutered()).to.be.equal(false);
                 });
         });
@@ -134,7 +133,7 @@ describe('ExtendedKeyNode -->', () => {
     describe('createFromBase58 should', () => {
 
         it('use network Network.BITCOIN given no network', () => {
-            const neuteredNode = ExtendedKeyNode.createFromBase58(extendedKeys.neutered[0].key);
+            const neuteredNode = ExtendedKey.createFromBase58(extendedKeys.neutered[0].key);
 
             // check that Network.BITCOIN is default
             expect(neuteredNode.network.privateKeyPrefix).to.be.equal(Network.BITCOIN.privateKeyPrefix);
@@ -143,7 +142,7 @@ describe('ExtendedKeyNode -->', () => {
         });
 
         it('use network given network Network.CATAPULT', () => {
-            const neuteredNode = ExtendedKeyNode.createFromBase58(extendedKeys.neutered[0].key, Network.CATAPULT);
+            const neuteredNode = ExtendedKey.createFromBase58(extendedKeys.neutered[0].key, Network.CATAPULT);
 
             // check that Network.CATAPULT was used correctly
             expect(neuteredNode.network.privateKeyPrefix).to.be.equal(Network.CATAPULT.privateKeyPrefix);
@@ -155,19 +154,19 @@ describe('ExtendedKeyNode -->', () => {
         });
 
         it('create neutered from extended public key', () => {
-            const neuteredNode = ExtendedKeyNode.createFromBase58(extendedKeys.neutered[0].key);
+            const neuteredNode = ExtendedKey.createFromBase58(extendedKeys.neutered[0].key);
             expect(neuteredNode.isNeutered()).to.be.equal(true);
         });
 
         it('create non-neutered from extended private key', () => {
-            const nonNeuteredNode = ExtendedKeyNode.createFromBase58(extendedKeys.nonNeutered[0].key);
+            const nonNeuteredNode = ExtendedKey.createFromBase58(extendedKeys.nonNeutered[0].key);
             expect(nonNeuteredNode.isNeutered()).to.be.equal(false);
         });
     });
 
     describe('createFromSeed should', () => {
         it('create master key with hexadecimal seed notation', () => {
-            const masterFromSeed = ExtendedKeyNode.createFromSeed(extendedKeys.seedHex);
+            const masterFromSeed = ExtendedKey.createFromSeed(extendedKeys.seedHex);
             expect(masterFromSeed.isMaster()).to.be.equal(true);
 
             // check XPUB and XPRV
@@ -176,7 +175,7 @@ describe('ExtendedKeyNode -->', () => {
         });
 
         it('use network Network.BITCOIN given no network', () => {
-            const masterFromSeed = ExtendedKeyNode.createFromSeed(extendedKeys.seedHex);
+            const masterFromSeed = ExtendedKey.createFromSeed(extendedKeys.seedHex);
 
             // check that Network.BITCOIN is default
             expect(masterFromSeed.network.privateKeyPrefix).to.be.equal(Network.BITCOIN.privateKeyPrefix);
@@ -185,7 +184,7 @@ describe('ExtendedKeyNode -->', () => {
         });
 
         it('use network given network Network.CATAPULT', () => {
-            const masterFromSeed = ExtendedKeyNode.createFromSeed(extendedKeys.seedHex, Network.CATAPULT);
+            const masterFromSeed = ExtendedKey.createFromSeed(extendedKeys.seedHex, Network.CATAPULT);
 
             // check that Network.CATAPULT was used correctly
             expect(masterFromSeed.network.privateKeyPrefix).to.be.equal(Network.CATAPULT.privateKeyPrefix);
@@ -199,14 +198,14 @@ describe('ExtendedKeyNode -->', () => {
 
     describe('getPublicNode() should', () => {
         it('create neutered from non-neutered', () => {
-            const nonNeuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.nonNeutered[0].key));
+            const nonNeuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.nonNeutered[0].key));
             const publicNode = nonNeuteredMaster.getPublicNode();
 
             expect(publicNode.isNeutered()).to.be.equal(true);
         });
 
         it('create neutered from neutered', () => {
-            const neuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.neutered[1].key));
+            const neuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.neutered[1].key));
             const publicNode = neuteredMaster.getPublicNode();
 
             expect(publicNode.isNeutered()).to.be.equal(true);
@@ -214,7 +213,7 @@ describe('ExtendedKeyNode -->', () => {
 
         it('use correct network after being neutered', () => {
             const node = NodeEd25519.fromBase58(extendedKeys.neutered[1].key);
-            const neuteredMaster = new ExtendedKeyNode(node, Network.CATAPULT);
+            const neuteredMaster = new ExtendedKey(node, Network.CATAPULT);
             const publicNode = neuteredMaster.getPublicNode();
 
             // check that Network.CATAPULT was used correctly
@@ -229,8 +228,8 @@ describe('ExtendedKeyNode -->', () => {
 
     describe('toBase58() should', () => {
         it('produce same payloads', () => {
-            const neuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.neutered[1].key));
-            const nonNeuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.nonNeutered[1].key));
+            const neuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.neutered[1].key));
+            const nonNeuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.nonNeutered[1].key));
             const neuteredBase58 = neuteredMaster.toBase58();
             const nonNeuteredBase58 = nonNeuteredMaster.toBase58();
 
@@ -242,13 +241,13 @@ describe('ExtendedKeyNode -->', () => {
     describe('getPrivateKey() should', () => {
         it('should throw error with neutered nodes', () => {
             expect((function () {
-                const neuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.neutered[1].key));
+                const neuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.neutered[1].key));
                 const privateKey = neuteredMaster.getPrivateKey();
             })).to.throw('Cannot read private key out of extended public key.');
         });
 
         it('should return hexadecimal notation by default', () => {
-            const nonNeuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.nonNeutered[1].key));
+            const nonNeuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.nonNeutered[1].key));
             const privateKey = nonNeuteredMaster.getPrivateKey();
 
             expect(privateKey.length).to.be.equal(64);
@@ -256,7 +255,7 @@ describe('ExtendedKeyNode -->', () => {
         });
 
         it('should return binary notation with ENC_BIN', () => {
-            const nonNeuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.nonNeutered[1].key));
+            const nonNeuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.nonNeutered[1].key));
             const privateKey: Buffer = nonNeuteredMaster.getPrivateKey(KeyEncoding.ENC_BIN) as Buffer;
             const uintArray = new Uint8Array(privateKey);
 
@@ -280,8 +279,8 @@ describe('ExtendedKeyNode -->', () => {
 
     describe('getPublicKey() should', () => {
         it('should return public key for both neutered and non-neutered', () => {
-            const neuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.neutered[0].key));
-            const nonNeuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.nonNeutered[0].key));
+            const neuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.neutered[0].key));
+            const nonNeuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.nonNeutered[0].key));
             const neuteredPubKey = neuteredMaster.getPublicKey();
             const nonNeuteredPubKey = nonNeuteredMaster.getPublicKey();
 
@@ -290,7 +289,7 @@ describe('ExtendedKeyNode -->', () => {
         });
 
         it('should return hexadecimal notation by default', () => {
-            const neuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.neutered[1].key));
+            const neuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.neutered[1].key));
             const publicKey = neuteredMaster.getPublicKey();
 
             expect(publicKey.length).to.be.equal(64);
@@ -298,7 +297,7 @@ describe('ExtendedKeyNode -->', () => {
         });
 
         it('should return binary notation with ENC_BIN', () => {
-            const neuteredMaster = new ExtendedKeyNode(bip32.fromBase58(extendedKeys.neutered[1].key));
+            const neuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.neutered[1].key));
             const publicKey: Buffer = neuteredMaster.getPublicKey(KeyEncoding.ENC_BIN) as Buffer;
             const uintArray = new Uint8Array(publicKey);
 
@@ -322,7 +321,7 @@ describe('ExtendedKeyNode -->', () => {
 
     describe('derivePath() should', () => {
         it('derive first chain with path "m/0\'"', () => {
-            const masterKey = ExtendedKeyNode.createFromSeed(extendedKeys.seedHex);
+            const masterKey = ExtendedKey.createFromSeed(extendedKeys.seedHex);
             const fstChainNode = masterKey.derivePath("m/0'");
             expect(fstChainNode.isMaster()).to.be.equal(false);
 
@@ -332,7 +331,7 @@ describe('ExtendedKeyNode -->', () => {
         });
 
         it('derive child chain with path "m/0\'/1"', () => {
-            const masterKey = ExtendedKeyNode.createFromSeed(extendedKeys.seedHex);
+            const masterKey = ExtendedKey.createFromSeed(extendedKeys.seedHex);
             const childChainNode = masterKey.derivePath("m/0'/1");
             expect(childChainNode.isMaster()).to.be.equal(false);
 

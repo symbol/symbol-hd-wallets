@@ -23,7 +23,6 @@ import * as bip32 from 'bip32';
 
 // internal dependencies
 import {
-    ExtendedKeyNode,
     KeyEncoding
 } from "../index";
 import { ExtendedKey } from "../src/ExtendedKey";
@@ -110,10 +109,10 @@ describe('BIP32 Extended Keys -->', () => {
         ]
     }];
 
-    describe('BIP32 ExtendedKeyNode should', () => {
+    describe('BIP32 ExtendedKey should', () => {
         extendedKeys.map((extendedKey) => {
             // create master key node
-            const masterKey = ExtendedKeyNode.createFromSeed(extendedKey.seedHex);
+            const masterKey = ExtendedKey.createFromSeed(extendedKey.seedHex);
 
             it (extendedKey.label + ': create correct master extended private key', () => {
                 expect(masterKey.toBase58()).to.be.equal(extendedKey.masterPrv);

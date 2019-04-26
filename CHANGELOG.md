@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.3.0
+
+- added `Wallet` draft implementation
+- refactor `ExtendedKeyNode` to `ExtendedKey`
+- remove `NodeImpl` template class
+
 ## v0.2.0
 
 - added draft implementation for `DeterministicKey` abstraction compatibility layer

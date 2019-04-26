@@ -23,18 +23,17 @@ import * as bip32 from 'bip32';
 
 // internal dependencies
 import {
-    ExtendedKeyNode,
+    ExtendedKey,
     KeyEncoding
 } from "../index";
-import { ExtendedKey } from "../src/ExtendedKey";
 
 describe('BIP32 Compatibility -->', () => {
 
-    describe('ExtendedKeyNode should', () => {
+    describe('ExtendedKey should', () => {
         it ('throw for hardened derivation with extended public key', () => {
             expect((function () {
                 // create master key node
-                const masterKey = ExtendedKeyNode.createFromSeed('000102030405060708090a0b0c0d0e0f');
+                const masterKey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f');
                 const masterPub = masterKey.getPublicNode();
 
                 // use hardened path to produce error because `masterPub` is neutered
@@ -45,14 +44,14 @@ describe('BIP32 Compatibility -->', () => {
         it ('throw given seed length smaller than 16 (seed of 8 bytes)', () => {
             expect((function () {
                 // create master key node
-                const masterKey = ExtendedKeyNode.createFromSeed('000102030405060708090a0b0c0d0e0f'.substr(0, 16));
+                const masterKey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f'.substr(0, 16));
             })).to.throw('Seed should be at least 128 bits');
         });
 
         it ('throw given seed length bigger than 64 (seed of 96 bytes)', () => {
             expect((function () {
                 // create master key node
-                const masterKey = ExtendedKeyNode.createFromSeed('00'.repeat(96));
+                const masterKey = ExtendedKey.createFromSeed('00'.repeat(96));
             })).to.throw('Seed should be at most 512 bits');
         });
     });

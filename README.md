@@ -48,7 +48,7 @@ const mnemonic = MnemonicPassPhrase.createRandom();
 const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: ''
 ```
 
-### Generating a BIP32 root extended key
+### Generating a root (master) extended key
 
 ```typescript
 import {MnemonicPassPhrase} from 'nem2-hd-wallets';
@@ -67,7 +67,7 @@ const mnemonic = new MnemonicPassPhrase(words);
 const bip32Seed = mnemonic.toEntropy();
 ```
 
-### Generating a BIP32 extended _private_ key from BIP39 mnemonic pass phrase
+### Generating an extended _private_ key from a mnemonic pass phrase
 
 ```typescript
 import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
@@ -81,7 +81,7 @@ const bip32Node = ExtendedKeyNode.createFromSeed(bip32Seed);
 const xprvKey = bip32Node.toBase58();
 ```
 
-### Generating a BIP32 extended _public_ key from BIP39 mnemonic pass phrase
+### Generating an extended _public_ key from a mnemonic pass phrase
 
 ```typescript
 import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
@@ -95,7 +95,7 @@ const bip32Node = ExtendedKeyNode.createFromSeed(bip32Seed);
 const xpubKey = bip32Node.getPublicNode().toBase58();
 ```
 
-### Derive BIP44 path of a BIP32 extended key with BIP44 mnemonic pass phrase
+### Derive child path of an extended key
 
 ```typescript
 import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
@@ -115,7 +115,7 @@ const xprvKey = bip32Node.toBase58();
 const xpubKey = bip32Node.getPublicNode().toBase58();
 ```
 
-### Derive default wallet BIP44 from a BIP39 mnemonic pass phrase
+### Derive default wallet from a mnemonic pass phrase
 
 ```typescript
 import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
@@ -126,7 +126,7 @@ const bip32Seed = mnemonic.toEntropy();
 const bip32Node = ExtendedKeyNode.createFromSeed(bip32Seed);
 
 // derive default wallet path "m/44'/43'/0'/0/0"
-const defaultWallet = bip32Node.derivePath("m/44'/43'/0'/0/0");
+const defaultWallet = bip32Node.derivePath("m/44'/43'/0'/0'/0'");
 
 // the extended private key (never share, base of private keys tree)
 const xprvKey = defaultWallet.toBase58();
@@ -135,7 +135,7 @@ const xprvKey = defaultWallet.toBase58();
 const xpubKey = defaultWallet.getPublicNode().toBase58();
 ```
 
-### Derive second account with BIP44 from a BIP39 mnemonic pass phrase
+### Derive second account from a mnemonic pass phrase
 
 ```typescript
 import {MnemonicPassPhrase, ExtendedKeyNode} from 'nem2-hd-wallets';
@@ -146,19 +146,36 @@ const bip32Seed = mnemonic.toEntropy();
 const bip32Node = ExtendedKeyNode.createFromSeed(bip32Seed);
 
 // derive default wallet path "m/44'/43'/1'/0/0"
-const defaultWallet = bip32Node.derivePath("m/44'/43'/1'/0/0"); // second hardened account
+const secondWallet = bip32Node.derivePath("m/44'/43'/1'/0'/0'"); // second hardened account
 
 // the extended private key (never share, base of private keys tree)
-const xprvKey = defaultWallet.toBase58();
+const xprvKey = secondWallet.toBase58();
 
 // the extended public key (default wallet base of public keys tree)
-const xpubKey = defaultWallet.getPublicNode().toBase58();
+const xpubKey = secondWallet.getPublicNode().toBase58();
 ```
 
 ### Generating a hyper-deterministic wallet (CATAPULT compatible)
 
 ```typescript
-    TBD
+const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f');
+const wallet = new Wallet(xkey);
+
+// get master account
+const masterAccount = wallet.getAccount();
+
+// get DEFAULT ACCOUNT
+const defaultAccount = wallet.getChildAccount();
+
+// derive specific child path
+const childAccount = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'');
+
+// get read-only wallet
+const readOnlyWallet = new Wallet(xkey.getPublicNode());
+const readOnlyAccount = readOnlyWallet.getPublicAccount();
+
+// get read-only DEFAULT ACCOUNT
+const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 ```
 
 ### Signing with a hyper-deterministic wallet (CATAPULT compatible)

@@ -27,7 +27,6 @@ import {
 
 // internal dependencies
 import {
-    ExtendedKeyNode,
     KeyEncoding,
     Network,
 } from "../index";
@@ -150,10 +149,10 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
         ]
     }];
 
-    describe('BIP32-Ed25519 ExtendedKeyNode should', () => {
+    describe('BIP32-Ed25519 ExtendedKey should', () => {
         extendedKeys.map((extendedKey) => {
             // create master key node
-            const masterKey = ExtendedKeyNode.createFromSeed(
+            const masterKey = ExtendedKey.createFromSeed(
                 extendedKey.seedHex,
                 Network.CATAPULT
             );
