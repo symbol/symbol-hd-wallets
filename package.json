@@ -1,6 +1,6 @@
 {
   "name": "nem2-hd-wallets",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "nem2 library to handle hyper-deterministic wallets",
   "author": "",
   "main": "dist/index.js",
