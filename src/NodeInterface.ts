@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Grégory Saive for NEM Foundation
+ * Copyright 2019 NEM
  *
  * Licensed under the BSD 2-Clause License (the "License");
  * you may not use this file except in compliance with the License.

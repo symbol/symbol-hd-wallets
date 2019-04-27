@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Grégory Saive for NEM Foundation
+ * Copyright 2019 NEM
  *
  * Licensed under the BSD 2-Clause License (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,9 @@ import {
  * Class `Wallet` describes a hierarchical deterministic Wallet that
  * produces _Catapult-ED25519_-compatible accounts.
  *
+ * This class provides with a bridge between BIP32-ED25519 compatible
+ * key pairs and the nem2-sdk `Account` or `PublicAccount` objects.
+ *
  * @example Usage of hierarchical deterministic wallets
  * 
  * ```typescript
@@ -57,14 +60,22 @@ import {
 export class Wallet {
 
     /**
+     * The default wallet derivaton path.
+     * @var {string}
+     */
+    public static DEFAULT_WALLET_PATH = 'm/44\'/43\'/0\'/0\'/0\'';
+
+    /**
      * Whether the wallet is read-only or not.
      * @var {boolean}
      */
     protected readOnly: boolean = false;
 
+    /**
+     * The wallet public key.
+     * @var {Buffer}
+     */
     protected publicKey: Buffer;
-
-    public static DEFAULT_WALLET_PATH = 'm/44\'/43\'/0\'/0\'/0\'';
 
     /**
      * Construct a `Wallet` object from an extended key.
@@ -100,13 +111,13 @@ export class Wallet {
     /**
      * Get a nem2-sdk `Account` object with the extended
      * key property.
-     * 
+     *
      * No derivation is done in this step. Derivation must be done either before
-     * calling this method (using the ExtendedKey class) or please have a look at
-     * the `getChildAccount` method.
+     * calling this method or using the `getChildAccount` method.
      *
      * @param   networkType {NetworkType}   Which network type to use, defaults to MIJIN_TEST.
      * @return  {Account}
+     * @throws  {Error}     On call of this method with a read-only wallet.
      */
     getAccount(
         networkType: NetworkType = NetworkType.MIJIN_TEST
@@ -127,10 +138,9 @@ export class Wallet {
 
     /**
      * Get a nem2-sdk `PublicAccount` object with the extended key property.
-     * 
+     *
      * No derivation is done in this step. Derivation must be done either before
-     * calling this method (using the ExtendedKey class) or please have a look at
-     * the `getChildAccount` method.
+     * calling this method or using the `getChildPublicAccount` method.
      *
      * @param   networkType {NetworkType}   Which network type to use, defaults to MIJIN_TEST.
      * @return  {PublicAccount}
@@ -146,6 +156,7 @@ export class Wallet {
 
     /**
      * Get a nem2-sdk `Account` object with the derived child account.
+     *
      * In case no derivation path is provided, the default wallet path
      * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
      *
@@ -153,11 +164,12 @@ export class Wallet {
      * @param   path        {string}        Child derivation path, default to `Wallet.DEFAULT_WALLET_PATH`.
      * @param   networkType {NetworkType}   Which network type to use, defaults to MIJIN_TEST.
      * @return  {Account | PublicAccount}
+     * @throws  {Error}     On call of this method with a read-only wallet.
      */
     getChildAccount(
         path: string = Wallet.DEFAULT_WALLET_PATH,
         networkType: NetworkType = NetworkType.MIJIN_TEST
-    ): Account | PublicAccount {
+    ): Account {
 
         // in case of read-only wallet, get PublicAccount instance
         if (this.readOnly) {
@@ -176,6 +188,7 @@ export class Wallet {
 
     /**
      * Get a nem2-sdk `PublicAccount` object with the derived child account.
+     *
      * In case no derivation path is provided, the default wallet path
      * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
      *

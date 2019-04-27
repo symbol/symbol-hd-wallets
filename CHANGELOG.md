@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.3.1
+
+- added tests for getAccount, getChildAccount
+- added tests for getPublicAccount, getChildPublicAccount
+- fixed typos and documentation
+
 ## v0.3.0
 
 - added `Wallet` draft implementation

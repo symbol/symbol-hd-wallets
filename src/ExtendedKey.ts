@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Grégory Saive for NEM Foundation
+ * Copyright 2019 NEM
  *
  * Licensed under the BSD 2-Clause License (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,9 @@ import {
 
 /**
  * Class `ExtendedKey` describes a hierarchical deterministic extended
- * key that can be derived (or not if leaf node). This hierarchical 
- * deterministic key derivation feature is described in the Bitcoin 
- * BIP32 standard which can be found at following URL:
+ * key that can be derived. This hierarchical deterministic child key
+ * derivation feature is described in the Bitcoin BIP32 standard which
+ * can be found at following URL:
  *
  *     https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
  *

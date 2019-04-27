@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Grégory Saive for NEM Foundation
+ * Copyright 2019 NEM
  *
  * Licensed under the BSD 2-Clause License (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,6 +81,14 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
              // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
              key: 'c53618757b76cc34376b7464902b18e495651c69f47cd2e7a2910d401fba2f94',
              chain: '68789923a0cac2cd5a29172a475fe9e0fb14cd6adb5ad98a3fa70333e7afa230'},
+             {path: 'm/44\'/43\'/0\'/0\'/0\'',
+             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
+             key: '81357c2d65be8b12aa2506fc315b6e1e2b6ab847727d460c3c7d13755ab62395',
+             chain: 'c428a9ed5355167f312292c4e4ef3aae680145009197c4f6b23bfeed0780643e'},
+             {path: 'm/44\'/43\'/1\'/0\'/0\'',
+             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
+             key: 'af0868a6edcc3e768854fae2e3534bed3cce222893b16fdc5d780f82cd8990dd',
+             chain: '5619e49ec9c210ac75e89000e9c3266a388ae913615449790c4cbefff990b00e'},
         ],
         nonNeutered: [
             {path: 'm/0\'', 
@@ -98,6 +106,14 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
             {path: 'm/0\'/1\'/2\'/2\'/1000000000\'',
              key: '8f94d394a8e8fd6b1bc2f3f49f5c47e385281d5c17e65324b0f62483e37e8793',
              chain: '68789923a0cac2cd5a29172a475fe9e0fb14cd6adb5ad98a3fa70333e7afa230'},
+             {path: 'm/44\'/43\'/0\'/0\'/0\'',
+             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
+             key: '4ce1c399f5f72acf16e7231a406f6e8284033f686d565100fed376960ea8c871',
+             chain: 'c428a9ed5355167f312292c4e4ef3aae680145009197c4f6b23bfeed0780643e'},
+             {path: 'm/44\'/43\'/1\'/0\'/0\'',
+             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
+             key: '1b05cb9db696df7216bd6a551c0e2b441234a59b23d785f4c803a41d64ce4d69',
+             chain: '5619e49ec9c210ac75e89000e9c3266a388ae913615449790c4cbefff990b00e'},
         ],
     },
     // Test vector 2: https://github.com/satoshilabs/slips/blob/master/slip-0010.md#test-vector-2-for-ed25519

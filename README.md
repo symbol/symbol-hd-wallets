@@ -111,7 +111,7 @@ const bip44Root = bip32Node.derivePath("m/44'");
 // the extended private key (never share, base of private keys tree)
 const xprvKey = bip32Node.toBase58();
 
-// the extended public key (never share, base of private keys tree)
+// the extended public key (base of public keys tree)
 const xpubKey = bip32Node.getPublicNode().toBase58();
 ```
 
@@ -188,6 +188,8 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 
 Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 
+- [0.3.1](CHANGELOG.md#v031) - 2019-04-27
+- [0.3.0](CHANGELOG.md#v030) - 2019-04-26
 - [0.2.0](CHANGELOG.md#v020) - 2019-04-20
 - [0.1.0](CHANGELOG.md#v010) - 2019-03-08
 

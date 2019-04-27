@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Grégory Saive for NEM Foundation
+ * Copyright 2019 NEM
  *
  * Licensed under the BSD 2-Clause License (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@
  */
 import {expect} from "chai";
 import {
+    Account,
     NetworkType,
+    PublicAccount,
 } from 'nem2-sdk';
 
 // internal dependencies
@@ -40,6 +42,14 @@ describe('Wallet -->', () => {
     const masterPriv = '2b4be7f19ee27bbf30c667b642d5f4aa69fd169872f8fc3059c08ebae2eb19e7';
     const masterPub  = '398d57dda0faae646097435e648a2c10f0f367b67e9a1e99a3d9170948d85750';
     const chainCode  = '90046a93de5380a72b5e45010748567d5ea02bbf6522f979e05c0d8d8ca9fffb';
+
+    // m/44'/43'/0'/0'/0'
+    const defaultPriv = '4ce1c399f5f72acf16e7231a406f6e8284033f686d565100fed376960ea8c871';
+    const defaultPub = '81357c2d65be8b12aa2506fc315b6e1e2b6ab847727d460c3c7d13755ab62395';
+
+    // m/44'/43'/1'/0'/0'
+    const secondPriv = '1b05cb9db696df7216bd6a551c0e2b441234a59b23d785f4c803a41d64ce4d69';
+    const secondPub = 'af0868a6edcc3e768854fae2e3534bed3cce222893b16fdc5d780f82cd8990dd';
 
     describe('constructor should', () => {
 
@@ -101,13 +111,65 @@ describe('Wallet -->', () => {
             })).to.throw('Missing private key, please use method getChildPublicAccount().');
         });
 
-        it('get catapult compatible public key read-only account', () => {
+        it('derive default account when given no path', () => {
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const wallet = new Wallet(xkey);
+            const account = wallet.getChildAccount();
+
+            expect(account.privateKey.toLowerCase()).to.be.equal(defaultPriv);
+            expect(account.publicKey.toLowerCase()).to.be.equal(defaultPub);
+        });
+
+        it('derive second account when given path m/44\'/43\'/1\'/0\'/0\'', () => {
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const wallet = new Wallet(xkey);
+            const account = wallet.getChildAccount('m/44\'/43\'/1\'/0\'/0\'');
+
+            expect(account.privateKey.toLowerCase()).to.be.equal(secondPriv);
+            expect(account.publicKey.toLowerCase()).to.be.equal(secondPub);
+        });
+    });
+
+    describe('getPublicAccount() should', () => {
+
+        it('get catapult compatible read-only account given extended private key', () => {
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const wallet = new Wallet(xkey);
+            const account = wallet.getPublicAccount();
+
+            expect(account).to.be.instanceof(PublicAccount);
+            expect(account.publicKey.toLowerCase()).to.be.equal(masterPub);
+        });
+
+        it('get catapult compatible read-only account given extended public key', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const xpub = xkey.getPublicNode();
             const wallet = new Wallet(xpub);
             const account = wallet.getPublicAccount();
 
+            expect(account).to.be.instanceof(PublicAccount);
             expect(account.publicKey.toLowerCase()).to.be.equal(masterPub);
+        });
+    });
+
+    describe('getChildPublicAccount() should', () => {
+
+        it('derive default account when given no path', () => {
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const wallet = new Wallet(xkey);
+            const account = wallet.getChildPublicAccount();
+
+            expect(account).to.be.instanceof(PublicAccount);
+            expect(account.publicKey.toLowerCase()).to.be.equal(defaultPub);
+        });
+
+        it('derive second account when given path m/44\'/43\'/1\'/0\'/0\'', () => {
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const wallet = new Wallet(xkey);
+            const account = wallet.getChildPublicAccount('m/44\'/43\'/1\'/0\'/0\'');
+
+            expect(account).to.be.instanceof(PublicAccount);
+            expect(account.publicKey.toLowerCase()).to.be.equal(secondPub);
         });
     });
 });
