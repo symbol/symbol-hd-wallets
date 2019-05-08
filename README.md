@@ -188,6 +188,7 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 
 Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 
+- [0.4.0](CHANGELOG.md#v040) - 2019-05-08
 - [0.3.1](CHANGELOG.md#v031) - 2019-04-27
 - [0.3.0](CHANGELOG.md#v030) - 2019-04-26
 - [0.2.0](CHANGELOG.md#v020) - 2019-04-20

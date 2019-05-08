@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.4.0
+
+- implement KMAC authentication codes for key derivation
+- added HMAC as default key derivation scheme
+- added class MACImpl responsible for MAC generation
+- added enum MACType with HMAC and KMAC
+- added ExtendedKey.macType and ExtendedKey.DEFAULT_MAC_TYPE
+
 ## v0.3.1
 
 - added tests for getAccount, getChildAccount
