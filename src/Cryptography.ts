@@ -19,6 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import {sha3Hasher} from 'nem2-library';
+import { kmac256 } from 'js-sha3';
 const createHash = require('create-hash');
 const createHmac = require('create-hmac');
 
@@ -47,15 +48,38 @@ export class Cryptography {
     }
 
     /**
+     * Creates a Hash Message Authentication Code.
      * 
-     * @param key 
-     * @param data 
+     * This method uses SHA512 algorithm and `create-hmac`
+     * dependency for the MAC generation.
+     *
+     * @param   key     {Buffer}
+     * @param   data    {Buffer}
+     * @return  {Buffer}
      */
-    public static hmacSHA512(
+    public static HMAC(
         key: Buffer,
         data: Buffer
     ): Buffer {
         return createHmac('sha512', key).update(data).digest();
+    }
+
+    /**
+     * Creates a Keccak Message Authentication Code.
+     *
+     * @internal This method is used internally for key derivation
+     * @param   key         {Buffer}
+     * @param   data        {Buffer}
+     * @param   publicSalt  {string}
+     * @return  {Buffer}
+     */
+    public static KMAC(
+        key: Buffer,
+        data: Buffer,
+        publicSalt: Buffer | undefined
+    ): Buffer {
+        const hex = kmac256(key, data, 512, publicSalt || '');
+        return Buffer.from(hex, 'hex');
     }
 
     /**
@@ -67,7 +91,7 @@ export class Cryptography {
     public static sha3Hash(
         dest: Uint8Array,
         data: Uint8Array,
-        length: number
+        length: number = 64
     ): Uint8Array {
         sha3Hasher.func(dest, data, length);
         return dest;
@@ -79,7 +103,7 @@ export class Cryptography {
      * @returns {object} The hasher.
      */
     public static createSha3Hasher(
-        length: number
+        length: number = 64
     ): HasherInterface {
         return sha3Hasher.createHasher(length);
     }

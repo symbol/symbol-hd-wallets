@@ -23,9 +23,9 @@ import * as bip32 from 'bip32';
 
 // internal dependencies
 import {
+    ExtendedKey,
     KeyEncoding
 } from "../index";
-import { ExtendedKey } from "../src/ExtendedKey";
 
 describe('BIP32 Extended Keys -->', () => {
 

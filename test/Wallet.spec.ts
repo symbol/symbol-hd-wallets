@@ -39,9 +39,11 @@ import {
 describe('Wallet -->', () => {
 
     const masterSeed = '000102030405060708090a0b0c0d0e0f';
+    const chainCode  = '90046a93de5380a72b5e45010748567d5ea02bbf6522f979e05c0d8d8ca9fffb';
+
+    // m
     const masterPriv = '2b4be7f19ee27bbf30c667b642d5f4aa69fd169872f8fc3059c08ebae2eb19e7';
     const masterPub  = '398d57dda0faae646097435e648a2c10f0f367b67e9a1e99a3d9170948d85750';
-    const chainCode  = '90046a93de5380a72b5e45010748567d5ea02bbf6522f979e05c0d8d8ca9fffb';
 
     // m/44'/43'/0'/0'/0'
     const defaultPriv = '4ce1c399f5f72acf16e7231a406f6e8284033f686d565100fed376960ea8c871';

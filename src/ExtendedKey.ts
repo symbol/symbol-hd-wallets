@@ -29,6 +29,7 @@ import {
     Network,
     NodeInterface,
     NodeEd25519,
+    MACType,
 } from '../index';
 
 /**
@@ -51,6 +52,14 @@ import {
 export class ExtendedKey {
 
     /**
+     * Static property to define which type of 
+     * message authentication code must be used.
+     *
+     * @var {MACType}
+     */
+    public static DEFAULT_MAC_TYPE: MACType = MACType.HMAC;
+
+    /**
      * Construct an `ExtendedKey` object out of its' base58 payload.
      * 
      * @see https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts
@@ -65,7 +74,13 @@ export class ExtendedKey {
                  * The hyper-deterministic node network.
                  * @var {Network}
                  */
-                public network: Network = Network.BITCOIN
+                public network: Network = Network.BITCOIN,
+                /**
+                 * The Message Authentication Code type to use.
+                 * Possible values include HMAC and KMAC.
+                 * @var {MACType}
+                 */
+                public readonly macType: MACType = MACType.HMAC
     ) {
         if (this.node instanceof NodeEd25519
             && this.network !== Network.CATAPULT) {
@@ -90,7 +105,8 @@ export class ExtendedKey {
      */
     public static createFromBase58(
         payload: string,
-        network: Network = Network.BITCOIN
+        network: Network = Network.BITCOIN,
+        macType: MACType = MACType.HMAC
     ): ExtendedKey {
 
         if (network === Network.CATAPULT) {
@@ -100,7 +116,7 @@ export class ExtendedKey {
             const node = NodeEd25519.fromBase58(payload);
 
             // instanciate our ExtendedKey
-            return new ExtendedKey(node, network);
+            return new ExtendedKey(node, network, macType);
         }
         // else {
         // use BIP32 node implementation
@@ -109,7 +125,7 @@ export class ExtendedKey {
         const node = bip32.fromBase58(payload);
 
         // instanciate our ExtendedKey
-        return new ExtendedKey(node, network);
+        return new ExtendedKey(node, network, macType);
     }
 
     /**
@@ -131,17 +147,22 @@ export class ExtendedKey {
      */
     public static createFromSeed(
         seed: string,
-        network: Network = Network.BITCOIN
+        network: Network = Network.BITCOIN,
+        macType: MACType = MACType.HMAC
     ): ExtendedKey {
 
         if (network === Network.CATAPULT) {
         // use NodeEd25519 node implementation
 
             // use hexadecimal seed
-            const node = NodeEd25519.fromSeed(Buffer.from(seed, 'hex'));
+            const node = NodeEd25519.fromSeed(
+                Buffer.from(seed, 'hex'),
+                Network.CATAPULT,
+                macType
+            );
 
             // instanciate our ExtendedKey
-            return new ExtendedKey(node, network);
+            return new ExtendedKey(node, network, macType);
         }
         // else {
         // use BIP32 node implementation
@@ -150,7 +171,7 @@ export class ExtendedKey {
         const node = bip32.fromSeed(Buffer.from(seed, 'hex'));
 
         // instanciate our ExtendedKey
-        return new ExtendedKey(node, network);
+        return new ExtendedKey(node, network, macType);
     }
 
     /**
@@ -170,12 +191,12 @@ export class ExtendedKey {
 
         if (derived instanceof NodeEd25519) {
         // use NodeEd25519 node implementation
-            return new ExtendedKey(derived as NodeEd25519, this.network);
+            return new ExtendedKey(derived as NodeEd25519, this.network, this.macType);
         }
         // else {
         // use BIP32 node implementation
 
-        return new ExtendedKey(derived as BIP32, this.network);
+        return new ExtendedKey(derived as BIP32, this.network, this.macType);
     }
 
     /**
@@ -223,12 +244,12 @@ export class ExtendedKey {
         if (node instanceof NodeEd25519) {
         // use NodeEd25519 node implementation
 
-            return new ExtendedKey(node as NodeEd25519, this.network);
+            return new ExtendedKey(node as NodeEd25519, this.network, this.macType);
         }
         // else {
         // use BIP32 node implementation
 
-        return new ExtendedKey(node as BIP32, this.network);
+        return new ExtendedKey(node as BIP32, this.network, this.macType);
     }
 
     /**

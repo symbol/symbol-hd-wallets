@@ -28,6 +28,16 @@ import {
     NodeInterface,
 } from '../../index';
 
+/**
+ * Class `DeterministicKey` describes hierarchical deterministic
+ * keys that are compatible with the `bitcoinjs/bip32` implementation.
+ * 
+ * This class is used to provide with compatibility for both schemes:
+ * BIP32 and NIP6.
+ * 
+ * @see https://github.com/nemtech/NIP/issues/12
+ * @since 0.2.0
+ */
 export abstract class DeterministicKey implements NodeInterface {
     /**
      * Construct a `NodeEd25519` object.

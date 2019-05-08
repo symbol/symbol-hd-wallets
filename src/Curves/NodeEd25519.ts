@@ -30,6 +30,8 @@ import {
     Cryptography,
     CatapultECC,
     DeterministicKey,
+    MACType,
+    MACImpl,
 } from '../../index';
 
 import {
@@ -47,12 +49,15 @@ import {
  * @see https://cardanolaunch.com/assets/Ed25519_BIP.pdf
  * @see https://github.com/satoshilabs/slips/blob/master/slip-0010.md
  * @see https://github.com/alepop/ed25519-hd-key/blob/master/src/index.ts#L36
- * @param param0 
- * @param index 
+ * @param   parent      {NodeEd25519}
+ * @param   index       {number}
+ * @param   macType     {MACType}
+ * @return  {NodeEd25519}
  */
 const CKDPriv = (
     parent: NodeEd25519,
-    index: number
+    index: number,
+    macType: MACType = MACType.HMAC
 ): NodeEd25519 => {
     const indexBuffer = Buffer.allocUnsafe(4);
     indexBuffer.writeUInt32BE(index, 0);
@@ -60,16 +65,17 @@ const CKDPriv = (
     // 0x00 || privateKey || index
     const data = Buffer.concat([Buffer.alloc(1, 0), parent.privateKey, indexBuffer]);
 
-    const I = createHmac('sha512', parent.chainCode)
-        .update(data)
-        .digest();
+    // derive with said `macType` MAC algorithm
+    const I = MACImpl.create(macType, parent.chainCode, data);
+    // const I = createHmac('sha512', parent.chainCode)
+    //     .update(data)
+    //     .digest();
     const IL = I.slice(0, 32);
     const IR = I.slice(32);
 
     // IL = privateKey ; IR = chainCode
     return new NodeEd25519(IL, undefined, IR);
 };
-
 
 /**
  * Class `NodeEd25519` describes a hyper-deterministic BIP32 node
@@ -95,7 +101,6 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
 
     /**
      * Hardened key derivation uses HIGHEST_BIT.
-     *
      * @var number
      */
     public static readonly HIGHEST_BIT = 0x80000000;
@@ -111,15 +116,17 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      */
     public static fromSeed(
         seed: Buffer,
-        network: Network = Network.CATAPULT
+        network: Network = Network.CATAPULT,
+        macType: MACType = MACType.HMAC
     ): NodeEd25519 {
 
         if (seed.length < 16) throw new TypeError('Seed should be at least 128 bits');
         if (seed.length > 64) throw new TypeError('Seed should be at most 512 bits');
 
-        // (1) Create SHA512 HMAC seeded with `ed25519 seed`
-        const hmac = createHmac('sha512', Buffer.from('ed25519 seed', 'utf8'));
-        const I = hmac.update(seed).digest();
+        // (1) Create KMAC seeded with `ed25519 seed`
+        const I = MACImpl.create(macType, Buffer.from('ed25519 seed', 'utf8'), seed);
+        // const hmac = createHmac('sha512', Buffer.from('ed25519 seed', 'utf8'));
+        // const I = hmac.update(seed).digest();
 
         // (2) Split in 2 parts: privateKey and chainCode
         const kL = I.slice(0, 32);
@@ -384,7 +391,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
     /**
      * Verify a signature `signature` for data
      * `hash` with the current node.
-     * 
+     *
      * Overloads the `bitcoinjs/bip32` method named `verify` in order to
      * be ED25519 compliant and use `CatapultECC` with ed25519 instead
      * of secp256k1.

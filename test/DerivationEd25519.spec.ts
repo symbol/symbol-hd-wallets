@@ -27,10 +27,10 @@ import {
 
 // internal dependencies
 import {
+    ExtendedKey,
     KeyEncoding,
     Network,
 } from "../index";
-import { ExtendedKey } from "../src/ExtendedKey";
 
 /**
  * BIP32-Ed25519 Extended Keys Unit Tests

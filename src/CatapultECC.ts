@@ -218,4 +218,11 @@ export class CatapultECC {
         hashfunc(sharedKeyHash, sharedKey, CatapultECC.KEY_SIZE);
         return sharedKeyHash;
     }
+
+    public static keyToUint8(
+        key: string
+    ): Uint8Array {
+        const buffer = Buffer.from(key);
+        return Uint8Array.from(buffer);
+    }
 }

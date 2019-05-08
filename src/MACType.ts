@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Grégory Saive for NEM Foundation
+ * Copyright 2019 NEM
  *
  * Licensed under the BSD 2-Clause License (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,14 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-export { CurveAlgorithm } from './src/CurveAlgorithm';
-export { MACType } from './src/MACType';
-export { MACImpl } from './src/MACImpl';
-export { KeyEncoding } from './src/KeyEncoding';
-export { Network } from './src/Network';
-export { Cryptography } from './src/Cryptography';
-export { HasherInterface } from './src/HasherInterface';
-export { CatapultECC } from './src/CatapultECC';
-export { NodeInterface } from './src/NodeInterface';
-export { DeterministicKey } from './src/Compat/DeterministicKey';
-export { NodeEd25519 } from './src/Curves/NodeEd25519';
-export { MnemonicPassPhrase } from './src/MnemonicPassPhrase';
-export { ExtendedKey } from './src/ExtendedKey';
-export { Wallet } from './src/Wallet';
+/**
+ * Enumeration `MACType` lists supported message authentication code
+ * algorithms.
+ *
+ * @see https://github.com/nemtech/NIP/issues/12
+ * @since 0.3.0
+ */
+export enum MACType {
+    HMAC = 0,
+    KMAC = 1,
+}
