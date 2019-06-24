@@ -19,13 +19,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import {expect} from "chai";
-import {array, convert, nacl_catapult, sha3Hasher} from 'nem2-library';
+import {Crypto} from 'nem2-sdk';
 
 // internal dependencies
 import {
     CatapultECC,
     Cryptography,
 } from "../index";
+import { from } from "rxjs";
 
 describe('CatapultECC -->', () => {
 
@@ -43,7 +44,7 @@ describe('CatapultECC -->', () => {
             // Arrange:
             const privateKey = CatapultECC.keyToUint8(Private_Keys[0]);
             const publicKey = CatapultECC.extractPublicKey(privateKey, Cryptography.sha3Hash);
-            const payload = nacl_catapult.randomBytes(100);
+            const payload = Crypto.randomBytes(100);
 
             // Act:
             const signature = CatapultECC.sign(payload, publicKey, privateKey, Cryptography.createSha3Hasher(64));
@@ -58,7 +59,7 @@ describe('CatapultECC -->', () => {
             const privateKey_2 = CatapultECC.keyToUint8(Private_Keys[0]); // SAME
             const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
             const publicKey_2 = CatapultECC.extractPublicKey(privateKey_2, Cryptography.sha3Hash);
-            const payload = nacl_catapult.randomBytes(100);
+            const payload = Crypto.randomBytes(100);
 
             // Act:
             const signature1 = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
@@ -74,7 +75,7 @@ describe('CatapultECC -->', () => {
             const privateKey_2 = CatapultECC.keyToUint8(Private_Keys[1]); // DIFFERENT
             const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
             const publicKey_2 = CatapultECC.extractPublicKey(privateKey_2, Cryptography.sha3Hash);
-            const payload = nacl_catapult.randomBytes(100);
+            const payload = Crypto.randomBytes(100);
 
             // Act:
             const signature1 = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
@@ -101,7 +102,7 @@ describe('CatapultECC -->', () => {
             // Arrange:
             const privateKey = CatapultECC.keyToUint8(Private_Keys[0]);
             const publicKey = CatapultECC.extractPublicKey(privateKey, Cryptography.sha3Hash);
-            const payload = nacl_catapult.randomBytes(100);
+            const payload = Crypto.randomBytes(100);
             const signature = CatapultECC.sign(payload, publicKey, privateKey, Cryptography.createSha3Hasher(64));
 
             // Act:
@@ -117,7 +118,7 @@ describe('CatapultECC -->', () => {
             const privateKey_2 = CatapultECC.keyToUint8(Private_Keys[1]); // DIFFERENT
             const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
             const publicKey_2 = CatapultECC.extractPublicKey(privateKey_2, Cryptography.sha3Hash);
-            const payload = nacl_catapult.randomBytes(100);
+            const payload = Crypto.randomBytes(100);
             const signature = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
 
             // Act:
@@ -131,7 +132,7 @@ describe('CatapultECC -->', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
             const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
-            const payload = nacl_catapult.randomBytes(100);
+            const payload = Crypto.randomBytes(100);
 
             for (let i = 0; i < CatapultECC.SIGNATURE_SIZE; i += 4) {
                 const signature = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
@@ -149,7 +150,7 @@ describe('CatapultECC -->', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
             const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
-            const payload = nacl_catapult.randomBytes(44);
+            const payload = Crypto.randomBytes(44);
 
             for (let i = 0; i < payload.length; i += 4) {
                 const signature = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
@@ -170,7 +171,7 @@ describe('CatapultECC -->', () => {
             publicKey_1.fill(0);
             publicKey_1[publicKey_1.length - 1] = 1;
 
-            const payload = nacl_catapult.randomBytes(100);
+            const payload = Crypto.randomBytes(100);
             const signature = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
 
             // Act:
@@ -184,7 +185,7 @@ describe('CatapultECC -->', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
             const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
-            const payload = nacl_catapult.randomBytes(100);
+            const payload = Crypto.randomBytes(100);
             const signature = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
 
             for (let i = 0; i < publicKey_1.length; ++i)
@@ -203,7 +204,7 @@ describe('CatapultECC -->', () => {
             const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
             publicKey_1.fill(0);
 
-            const payload = nacl_catapult.randomBytes(100);
+            const payload = Crypto.randomBytes(100);
             const signature = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
 
             // Act:

@@ -18,7 +18,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {sha3Hasher} from 'nem2-library';
+
+ import {SHA3Hasher as sha3Hasher} from 'nem2-sdk/dist/src/core/crypto/SHA3Hasher';
 import { kmac256 } from 'js-sha3';
 const createHash = require('create-hash');
 const createHmac = require('create-hmac');
@@ -30,8 +31,8 @@ import {
 
 export class Cryptography {
     /**
-     * 
-     * @param buffer 
+     *
+     * @param buffer
      */
     public static hash160(
         buffer: Buffer
@@ -49,7 +50,7 @@ export class Cryptography {
 
     /**
      * Creates a Hash Message Authentication Code.
-     * 
+     *
      * This method uses SHA512 algorithm and `create-hmac`
      * dependency for the MAC generation.
      *
