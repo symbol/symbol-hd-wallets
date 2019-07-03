@@ -19,7 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as nacl_catapult from 'nem2-sdk/dist/src/core/crypto/nacl_catapult';
+import * as nacl_catapult from 'nem2-sdk';
 import { RawArray as array }from 'nem2-sdk/dist/src/core/format';
 
 // internal dependencies

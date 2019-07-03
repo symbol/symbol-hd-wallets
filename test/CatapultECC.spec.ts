@@ -26,7 +26,6 @@ import {
     CatapultECC,
     Cryptography,
 } from "../index";
-import { from } from "rxjs";
 
 describe('CatapultECC -->', () => {
 

@@ -19,7 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
- import {SHA3Hasher as sha3Hasher} from 'nem2-sdk/dist/src/core/crypto/SHA3Hasher';
+import { SHA3Hasher as sha3Hasher } from 'nem2-sdk';
 import { kmac256 } from 'js-sha3';
 const createHash = require('create-hash');
 const createHmac = require('create-hmac');
