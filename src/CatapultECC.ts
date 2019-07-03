@@ -20,7 +20,7 @@
  */
 
 import * as nacl_catapult from 'nem2-sdk';
-import { RawArray as array }from 'nem2-sdk/dist/src/core/format';
+import { RawArray as array }from 'nem2-sdk';
 
 // internal dependencies
 import {
