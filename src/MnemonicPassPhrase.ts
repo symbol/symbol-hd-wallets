@@ -19,19 +19,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import * as bip39 from 'bip39';
-import {nacl_catapult} from 'nem2-library';
+import {Crypto} from 'nem2-sdk';
 
 /**
  * Class `MnemonicPassPhrase` describes a mnemonic pass phrase generator
  * as defined by the Bitcoin BIP39 standard which can be found at following
  * URL:
- * 
+ *
  *     https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
  *
  * This class *uses* features provided by the `bitcoinjs/bip39` package
  * and therefor is licensed under the BSD-2 Clause License as mentioned
  * [here](https://github.com/bitcoinjs/bip39/blob/master/LICENSE).
- * 
+ *
  * @see https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
  * @see https://github.com/bitcoinjs/bip39
  * @since 0.1.0
@@ -65,7 +65,7 @@ export class MnemonicPassPhrase {
      * @return  {Buffer}
      */
     public static CATAPULT_RNG = (bytes: number) => {
-        return Buffer.from(nacl_catapult.randomBytes(bytes).buffer);
+        return Buffer.from(Crypto.randomBytes(bytes).buffer);
     };
 
     /**
@@ -87,7 +87,7 @@ export class MnemonicPassPhrase {
      *
      * This static method returns a sentence built following the Bitcoin
      * BIP39 standard using the `bitcoinjs/bip39` library.
-     * 
+     *
      * @todo `strength` replace by `countWords` for higher level approach
      *
      * @param   language    {string}    (Optional) The language used for the wordlist.
@@ -120,13 +120,13 @@ export class MnemonicPassPhrase {
     /**
      * Convert an entropy value to a mnemonic pass phrase in plain text.
      *
-     * If the `language` argument is ommited, the default 
+     * If the `language` argument is ommited, the default
      * language 'english' will be used.
      *
      * The `bitcoinjs/bip39` package's `entropyToMnemonic` function
      * validates the entropy value by parsing it, then builds the mnemonic
      * pass phrase by retrieving and joining words from the wordlist.
-     * 
+     *
      * @param   mnemonic    {string}    The mnemonic pass phrase to validate.
      * @param   language    {string}    (Optional) The language used for the wordlist.
      * @return  {string}    Returns the mnemonic pass phrase in plain text format.
@@ -164,7 +164,7 @@ export class MnemonicPassPhrase {
     /**
      * Validate a mnemonic pass phrase with optional `language`.
      *
-     * If the `language` argument is ommited, the default 
+     * If the `language` argument is ommited, the default
      * language 'english' will be used.
      *
      * The `bitcoinjs/bip39` package's `validateMnemonic` function
@@ -204,7 +204,7 @@ export class MnemonicPassPhrase {
      * If the `password` argument is ommited, an empty password will be assumed.
      *
      * The `bitcoinjs/bip39` package's `mnemonicToSeedSync` function
-     * will first *normalize* the mnemonic pass phrase Buffer to 
+     * will first *normalize* the mnemonic pass phrase Buffer to
      * [NFKD form](https://en.wikipedia.org/wiki/Unicode_equivalence#Normal_forms).
      * Afterwards the buffer will be *salted* with the `password` (or empty) prepend
      * by the string 'mnemonic'.
@@ -224,7 +224,7 @@ export class MnemonicPassPhrase {
     /**
      * Converts a mnemonic to hexadecimal entropy (of `strength` bits).
      *
-     * If the `language` argument is ommited, the default 
+     * If the `language` argument is ommited, the default
      * language 'english' will be used.
      *
      * The `bitcoinjs/bip39` package's `mnemonicToEntropy` function

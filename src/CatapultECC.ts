@@ -18,7 +18,9 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {array, nacl_catapult, sha3Hasher} from 'nem2-library';
+
+import * as nacl_catapult from 'nem2-sdk';
+import { RawArray as array }from 'nem2-sdk';
 
 // internal dependencies
 import {
@@ -34,7 +36,7 @@ export class CatapultECC {
     public static readonly HALF_HASH_SIZE: number = CatapultECC.HASH_SIZE / 2;
 
     /**
-     * 
+     *
      */
     protected static encodedSChecker = (function () {
         const Is_Reduced = 1;
@@ -43,7 +45,7 @@ export class CatapultECC {
         function validateEncodedSPart(
             s: Uint8Array
         ): number {
-            if (array.isZero(s))
+            if (array.isZeroFilled(s))
                 return Is_Zero | Is_Reduced;
 
             const copy = new Uint8Array(CatapultECC.SIGNATURE_SIZE);
@@ -64,8 +66,8 @@ export class CatapultECC {
     })();
 
     /**
-     * 
-     * @param d 
+     *
+     * @param d
      */
     protected static clamp(
         d: Uint8Array
@@ -76,9 +78,9 @@ export class CatapultECC {
     }
 
     /**
-     * 
-     * @param sk 
-     * @param hashfunc 
+     *
+     * @param sk
+     * @param hashfunc
      */
     protected static prepareForScalarMult(
         sk: Uint8Array,
@@ -164,7 +166,7 @@ export class CatapultECC {
             return false;
 
         // reject weak (zero) public key
-        if (array.isZero(pk))
+        if (array.isZeroFilled(pk))
             return false;
 
         const c = nacl_catapult;

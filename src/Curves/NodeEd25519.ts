@@ -18,13 +18,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {nacl_catapult, sha3Hasher} from 'nem2-library';
 const bs58check = require('bs58check');
 const createHash = require('create-hash');
 const createHmac = require('create-hmac');
 
 // internal dependencies
-import { 
+import {
     NodeInterface,
     Network,
     Cryptography,
@@ -84,7 +83,7 @@ const CKDPriv = (
  *
  *     https://cardanolaunch.com/assets/Ed25519_BIP.pdf
  *
- * It is an implementation of BIP32 that is adapted to work with 
+ * It is an implementation of BIP32 that is adapted to work with
  * ED25519 ellyptic curve keys rather than secp256k1 keys.
  *
  * This class *uses* features provided by the `bitcoinjs/bip32` package
@@ -110,7 +109,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      * binary seed.
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L258
-     * @param   seed    {Buffer} 
+     * @param   seed    {Buffer}
      * @param   network {Network}
      * @return  {NodeInterface}
      */
@@ -140,7 +139,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      * Decode a base58 extended key payload into its'
      * `NodeEd25519` object representation.
      *
-     * This method parses the base58 binary data and 
+     * This method parses the base58 binary data and
      * uses read fields to initialize a BIP32-ED25519
      * hyper-deterministic node.
      *
@@ -328,7 +327,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      * Derive a child node with `index`.
      *
      * When the node is *not neutered*, an extended private
-     * key will be created and when the node is *neutered*, 
+     * key will be created and when the node is *neutered*,
      * an extended public key will be created.
      *
      * This method  is an overload of the `bitcoinjs/bip32`
