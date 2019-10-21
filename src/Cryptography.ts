@@ -19,7 +19,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { SHA3Hasher as sha3Hasher } from 'nem2-sdk';
+import { 
+    SHA3Hasher as sha3Hasher,
+    SignSchema
+} from 'nem2-sdk';
 import { kmac256 } from 'js-sha3';
 const createHash = require('create-hash');
 const createHmac = require('create-hmac');
@@ -92,9 +95,10 @@ export class Cryptography {
     public static sha3Hash(
         dest: Uint8Array,
         data: Uint8Array,
-        length: number = 64
+        length: number = 64,
+        signSchema: SignSchema = SignSchema.SHA3
     ): Uint8Array {
-        sha3Hasher.func(dest, data, length);
+        sha3Hasher.func(dest, data, length, signSchema);
         return dest;
     }
 
@@ -104,8 +108,9 @@ export class Cryptography {
      * @returns {object} The hasher.
      */
     public static createSha3Hasher(
-        length: number = 64
+        length: number = 64,
+        signSchema: SignSchema = SignSchema.SHA3
     ): HasherInterface {
-        return sha3Hasher.createHasher(length);
+        return sha3Hasher.createHasher(length, signSchema);
     }
 }
