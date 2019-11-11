@@ -20,7 +20,10 @@
  */
 
 import * as nacl_catapult from 'nem2-sdk';
-import { RawArray as array }from 'nem2-sdk';
+import { 
+    RawArray as array,
+    SignSchema,
+}from 'nem2-sdk';
 
 // internal dependencies
 import {
@@ -84,20 +87,22 @@ export class CatapultECC {
      */
     protected static prepareForScalarMult(
         sk: Uint8Array,
-        hashfunc: Function
+        hashfunc: Function,
+        signSchema: SignSchema = SignSchema.SHA3
     ): Uint8Array {
         const d = new Uint8Array(CatapultECC.HASH_SIZE);
-        hashfunc(d, sk);
+        hashfunc(d, sk, CatapultECC.HASH_SIZE, signSchema);
         CatapultECC.clamp(d);
         return d;
     }
 
     public static extractPublicKey(
         sk: Uint8Array,
-        hashfunc: Function
+        hashfunc: Function,
+        signSchema: SignSchema = SignSchema.SHA3
     ): Uint8Array {
         const c = nacl_catapult;
-        const d = CatapultECC.prepareForScalarMult(sk, hashfunc);
+        const d = CatapultECC.prepareForScalarMult(sk, hashfunc, signSchema);
 
         const p = [c.gf(), c.gf(), c.gf(), c.gf()];
         const pk = new Uint8Array(CatapultECC.KEY_SIZE);
@@ -198,10 +203,11 @@ export class CatapultECC {
         salt: Uint8Array,
         sk: Uint8Array,
         pk: Uint8Array,
-        hashfunc: Function
+        hashfunc: Function,
+        signSchema: SignSchema = SignSchema.SHA3
     ): Uint8Array {
         const c = nacl_catapult;
-        const d = CatapultECC.prepareForScalarMult(sk, hashfunc);
+        const d = CatapultECC.prepareForScalarMult(sk, hashfunc, signSchema);
 
         // sharedKey = pack(p = d (derived from sk) * q (derived from pk))
         const q = [c.gf(), c.gf(), c.gf(), c.gf()];
@@ -217,7 +223,7 @@ export class CatapultECC {
 
         // return the hash of the result
         const sharedKeyHash = new Uint8Array(CatapultECC.KEY_SIZE);
-        hashfunc(sharedKeyHash, sharedKey, CatapultECC.KEY_SIZE);
+        hashfunc(sharedKeyHash, sharedKey, CatapultECC.KEY_SIZE, signSchema);
         return sharedKeyHash;
     }
 

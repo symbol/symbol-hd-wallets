@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.5.0
+
+- added Network.CATAPULT_PUBLIC to work with public networks
+- fixed Catapult private/public networks key compatibility
+- fixed `CatapultECC` implementation to resolve sign schema
+- fixed `NodeEd25519` to permit SHA3 and Keccak public key generation
+- added unit tests for nemtech/test-vectors compatibility
+
 ## v0.4.0
 
 - implement KMAC authentication codes for key derivation

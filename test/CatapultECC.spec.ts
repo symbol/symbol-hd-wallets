@@ -19,7 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import {expect} from "chai";
-import {Crypto} from 'nem2-sdk';
+import {Convert, Crypto, SignSchema} from 'nem2-sdk';
 
 // internal dependencies
 import {
@@ -56,8 +56,8 @@ describe('CatapultECC -->', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
             const privateKey_2 = CatapultECC.keyToUint8(Private_Keys[0]); // SAME
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
-            const publicKey_2 = CatapultECC.extractPublicKey(privateKey_2, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
+            const publicKey_2 = CatapultECC.extractPublicKey(privateKey_2, Cryptography.sha3Hash, SignSchema.SHA3);
             const payload = Crypto.randomBytes(100);
 
             // Act:
@@ -72,8 +72,8 @@ describe('CatapultECC -->', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
             const privateKey_2 = CatapultECC.keyToUint8(Private_Keys[1]); // DIFFERENT
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
-            const publicKey_2 = CatapultECC.extractPublicKey(privateKey_2, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
+            const publicKey_2 = CatapultECC.extractPublicKey(privateKey_2, Cryptography.sha3Hash, SignSchema.SHA3);
             const payload = Crypto.randomBytes(100);
 
             // Act:
@@ -87,7 +87,7 @@ describe('CatapultECC -->', () => {
         it('not allow signing unsupported data type', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
 
             // Assert:
             expect(() => {
@@ -100,7 +100,7 @@ describe('CatapultECC -->', () => {
         it('return true for data signed with same key pair', () => {
             // Arrange:
             const privateKey = CatapultECC.keyToUint8(Private_Keys[0]);
-            const publicKey = CatapultECC.extractPublicKey(privateKey, Cryptography.sha3Hash);
+            const publicKey = CatapultECC.extractPublicKey(privateKey, Cryptography.sha3Hash, SignSchema.SHA3);
             const payload = Crypto.randomBytes(100);
             const signature = CatapultECC.sign(payload, publicKey, privateKey, Cryptography.createSha3Hasher(64));
 
@@ -115,8 +115,8 @@ describe('CatapultECC -->', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
             const privateKey_2 = CatapultECC.keyToUint8(Private_Keys[1]); // DIFFERENT
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
-            const publicKey_2 = CatapultECC.extractPublicKey(privateKey_2, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
+            const publicKey_2 = CatapultECC.extractPublicKey(privateKey_2, Cryptography.sha3Hash, SignSchema.SHA3);
             const payload = Crypto.randomBytes(100);
             const signature = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
 
@@ -130,7 +130,7 @@ describe('CatapultECC -->', () => {
         it('returns false if signature has been modified', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
             const payload = Crypto.randomBytes(100);
 
             for (let i = 0; i < CatapultECC.SIGNATURE_SIZE; i += 4) {
@@ -148,7 +148,7 @@ describe('CatapultECC -->', () => {
         it('returns false if payload has been modified', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
             const payload = Crypto.randomBytes(44);
 
             for (let i = 0; i < payload.length; i += 4) {
@@ -166,7 +166,7 @@ describe('CatapultECC -->', () => {
         it('fails if public key is not on curve', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
             publicKey_1.fill(0);
             publicKey_1[publicKey_1.length - 1] = 1;
 
@@ -183,7 +183,7 @@ describe('CatapultECC -->', () => {
         it('fails if public key does not correspond to private key', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
             const payload = Crypto.randomBytes(100);
             const signature = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
 
@@ -200,7 +200,7 @@ describe('CatapultECC -->', () => {
         it('rejects zero public key', () => {
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
             publicKey_1.fill(0);
 
             const payload = Crypto.randomBytes(100);
@@ -231,7 +231,7 @@ describe('CatapultECC -->', () => {
 
             // Arrange:
             const privateKey_1 = CatapultECC.keyToUint8(Private_Keys[0]);
-            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash);
+            const publicKey_1 = CatapultECC.extractPublicKey(privateKey_1, Cryptography.sha3Hash, SignSchema.SHA3);
             const payload = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
             const canonicalSignature = CatapultECC.sign(payload, publicKey_1, privateKey_1, Cryptography.createSha3Hasher(64));
 
@@ -248,140 +248,31 @@ describe('CatapultECC -->', () => {
             expect(isNonCanonicalVerified).to.equal(false);
         });
     });
-/*
-    describe('test vectors', () => {
-        const Input_Data = [
-            '8ce03cd60514233b86789729102ea09e867fc6d964dea8c2018ef7d0a2e0e24bf7e348e917116690b9',
-            'e4a92208a6fc52282b620699191ee6fb9cf04daf48b48fd542c5e43daa9897763a199aaa4b6f10546109f47ac3564fade0',
-            '13ed795344c4448a3b256f23665336645a853c5c44dbff6db1b9224b5303b6447fbf8240a2249c55',
-            'a2704638434e9f7340f22d08019c4c8e3dbee0df8dd4454a1d70844de11694f4c8ca67fdcb08fed0cec9abb2112b5e5f89',
-            'd2488e854dbcdfdb2c9d16c8c0b2fdbc0abb6bac991bfe2b14d359a6bc99d66c00fd60d731ae06d0'
-        ];
-        const Expected_Signatures = [
-            'C9B1342EAB27E906567586803DA265CC15CCACA411E0AEF44508595ACBC47600D02527F2EED9AB3F28C856D27E30C3808AF7F22F5F243DE698182D373A9ADE03',
-            '0755E437ED4C8DD66F1EC29F581F6906AB1E98704ECA94B428A25937DF00EC64796F08E5FEF30C6F6C57E4A5FB4C811D617FA661EB6958D55DAE66DDED205501',
-            '15D6585A2A456E90E89E8774E9D12FE01A6ACFE09936EE41271AA1FBE0551264A9FF9329CB6FEE6AE034238C8A91522A6258361D48C5E70A41C1F1C51F55330D',
-            'F6FB0D8448FEC0605CF74CFFCC7B7AE8D31D403BCA26F7BD21CB4AC87B00769E9CC7465A601ED28CDF08920C73C583E69D621BA2E45266B86B5FCF8165CBE309',
-            'E88D8C32FE165D34B775F70657B96D8229FFA9C783E61198A6F3CCB92F487982D08F8B16AB9157E2EFC3B78F126088F585E26055741A9F25127AC13E883C9A05'
-        ];
 
-        function assertCanSignTestVectors(dataTransform) {
-            // Sanity:
-            expect(Private_Keys.length).equal(Input_Data.length);
-            expect(Private_Keys.length).equal(Expected_Signatures.length);
+    describe('extractPublicKey() should', () => {
+        it('extract correct public key from private key with SignSchema.SHA3', () => {
+            const privateKey = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
+            const expectPublicKey = 'BD8D3F8B7E1B3839C650F458234AB1FF87CDB1EDA36338D9E446E27D454717F2'.toLowerCase();
 
-            for (let i = 0; i < Private_Keys.length; ++i) {
-                // Arrange:
-                const inputData = dataTransform(Input_Data[i]);
-                const keyPair = createKeyPairFromPrivateKeyString(Private_Keys[i]);
+            const extract = CatapultECC.extractPublicKey(
+                Buffer.from(Convert.hexToUint8(privateKey)),
+                Cryptography.sha3Hash,
+                SignSchema.SHA3,
+            );
 
-                // Act:
-                const signature = sign(keyPair, inputData);
-
-                // Assert:
-                const message = `signing with ${Private_Keys[i]}`;
-                expect(convert.uint8ToHex(signature), message).equal(Expected_Signatures[i]);
-            }
-        }
-
-        it('can sign test vectors as hex string', () => {
-            // Assert:
-            assertCanSignTestVectors(data => data);
+            expect(Buffer.from(extract).toString('hex')).to.equal(expectPublicKey);
         });
+        it('extract correct public key from private key with SignSchema.KECCAK', () => {
+            const privateKey = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
+            const expectPublicKey = 'c5f54ba980fcbb657dbaaa42700539b207873e134d2375efeab5f1ab52f87844';
 
-        it('can sign test vectors as binary', () => {
-            // Assert:
-            assertCanSignTestVectors(data => convert.hexToUint8(data));
-        });
+            const extract = CatapultECC.extractPublicKey(
+                Buffer.from(Convert.hexToUint8Reverse(privateKey)), // REVERSE
+                Cryptography.sha3Hash,
+                SignSchema.KECCAK,
+            );
 
-        function assertCanVerifyTestVectors(dataTransform) {
-            // Sanity:
-            expect(Private_Keys.length).equal(Input_Data.length);
-            expect(Private_Keys.length).equal(Expected_Signatures.length);
-
-            for (let i = 0; i < Private_Keys.length; ++i) {
-                // Arrange:
-                const inputData = dataTransform(Input_Data[i]);
-                const keyPair = createKeyPairFromPrivateKeyString(Private_Keys[i]);
-                const signature = sign(keyPair, inputData);
-
-                // Act:
-                const isVerified = verify(keyPair.publicKey, inputData, signature);
-
-                // Assert:
-                const message = `verifying with ${Private_Keys[i]}`;
-                expect(isVerified, message).equal(true);
-            }
-        }
-
-        it('can verify test vectors as hex string', () => {
-            // Assert:
-            assertCanVerifyTestVectors(data => data);
-        });
-
-        it('can verify test vectors as binary', () => {
-            // Assert:
-            assertCanVerifyTestVectors(data => convert.hexToUint8(data));
+            expect(Buffer.from(extract).toString('hex')).to.equal(expectPublicKey);
         });
     });
-
-    describe('derive shared key', () => {
-        const Salt_Size = 32;
-
-        it('fails if salt is wrong size', () => {
-            // Arrange: create a salt that is too long
-            const keyPair = test.random.keyPair();
-            const publicKey = test.random.publicKey();
-            const salt = test.random.bytes(Salt_Size + 1);
-
-            // Act:
-            expect(() => {
-                deriveSharedKey(keyPair, publicKey, salt);
-            })
-                .to.throw('salt has unexpected size');
-        });
-
-        it('derives same shared key for both partners', () => {
-            // Arrange:
-            const keyPair1 = test.random.keyPair();
-            const keyPair2 = test.random.keyPair();
-            const salt = test.random.bytes(Salt_Size);
-
-            // Act:
-            const sharedKey1 = deriveSharedKey(keyPair1, keyPair2.publicKey, salt);
-            const sharedKey2 = deriveSharedKey(keyPair2, keyPair1.publicKey, salt);
-
-            // Assert:
-            expect(sharedKey1).to.deep.equal(sharedKey2);
-        });
-
-        it('derives different shared keys for different partners', () => {
-            // Arrange:
-            const keyPair = test.random.keyPair();
-            const publicKey1 = test.random.publicKey();
-            const publicKey2 = test.random.publicKey();
-            const salt = test.random.bytes(Salt_Size);
-
-            // Act:
-            const sharedKey1 = deriveSharedKey(keyPair, publicKey1, salt);
-            const sharedKey2 = deriveSharedKey(keyPair, publicKey2, salt);
-
-            // Assert:
-            expect(sharedKey1).to.not.deep.equal(sharedKey2);
-        });
-
-        it('can derive deterministic shared key from well known inputs', () => {
-            // Arrange:
-            const privateKey = convert.hexToUint8('8F545C2816788AB41D352F236D80DBBCBC34705B5F902EFF1F1D88327C7C1300');
-            const publicKey = convert.hexToUint8('BF684FB1A85A8C8091EE0442EDDB22E51683802AFA0C0E7C6FE3F3E3E87A8D72');
-            const salt = convert.hexToUint8('422C39DF16AAE42A74A5597D6EE2D59CFB4EEB6B3F26D98425B9163A03DAA3B5');
-
-            // Act:
-            const sharedKey = deriveSharedKey({ privateKey }, publicKey, salt);
-
-            // Assert:
-            expect(convert.uint8ToHex(sharedKey)).to.equal('FF9623D28FBC13B6F0E0659117FC7BE294DB3385C046055A6BAC39EDF198D50D');
-        });
-    });
-*/
 });

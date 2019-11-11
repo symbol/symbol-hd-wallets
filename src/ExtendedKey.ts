@@ -82,15 +82,7 @@ export class ExtendedKey {
                  */
                 public readonly macType: MACType = MACType.HMAC
     ) {
-        if (this.node instanceof NodeEd25519
-            && this.network !== Network.CATAPULT) {
-            throw new Error('Given node is of type NodeEd25519 but network does not match Network.CATAPULT.');
-        }
-        // } else if (this.node instanceof nist256p1) { ..
-        else if (! (this.node instanceof NodeEd25519)
-                 && this.network !== Network.BITCOIN) {
-            throw new Error('Given node is of type BIP32 but network does not match Network.BITCOIN.');
-        }
+
     }
 
     /**
@@ -109,7 +101,7 @@ export class ExtendedKey {
         macType: MACType = MACType.HMAC
     ): ExtendedKey {
 
-        if (network === Network.CATAPULT) {
+        if (network === Network.CATAPULT || network === Network.CATAPULT_PUBLIC) {
         // use NodeEd25519 node implementation
 
             // interpret payload
@@ -151,13 +143,13 @@ export class ExtendedKey {
         macType: MACType = MACType.HMAC
     ): ExtendedKey {
 
-        if (network === Network.CATAPULT) {
+        if (network === Network.CATAPULT || network === Network.CATAPULT_PUBLIC) {
         // use NodeEd25519 node implementation
 
             // use hexadecimal seed
             const node = NodeEd25519.fromSeed(
                 Buffer.from(seed, 'hex'),
-                Network.CATAPULT,
+                network,
                 macType
             );
 

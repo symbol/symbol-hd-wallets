@@ -4,11 +4,11 @@
 [![Build Status](https://travis-ci.org/nemfoundation/nem2-hd-wallets.svg?branch=master)](https://travis-ci.org/nemfoundation/nem2-hd-wallets)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-green.svg)](https://nem2.slack.com/messages/CB0UU89GS//)
 
-:warning: **This package is currently still in development, please do not use in production.** *The author of this package cannot be held responsible for any loss of money or any malintentioned usage forms of this package. Please use this package with caution.*
+*The author of this package cannot be held responsible for any loss of money or any malintentioned usage forms of this package. Please use this package with caution.*
 
 NEM HD Wallets generator to generate hyper-deterministic wallets for the Catapult (NEM2) platform.
 
-This is a PoC to validate the proposed [NIP? Multi-Account Hierarchy for Deterministic Wallets](https://github.com/nemtech/NIP/issues/12). When stable, the repository will be moved to the [nemtech](https://github.com/nemtech) organization.
+This is a PoC to validate the proposed [NIP6 Multi-Account Hierarchy for Deterministic Wallets](https://github.com/nemtech/NIP/issues/12). When stable, the repository will be moved to the [nemtech](https://github.com/nemtech) organization.
 
 ## Installation
 
@@ -64,7 +64,7 @@ const words = 'alpha pattern real admit vacuum wall ready code '
 const mnemonic = new MnemonicPassPhrase(words);
 
  // the following seed can be used with `ExtendedKey.createFromSeed()`
-const bip32Seed = mnemonic.toSeed();
+const bip32Seed = mnemonic.toEntropy();
 ```
 
 ### Generating an extended _private_ key from a mnemonic pass phrase
@@ -74,7 +74,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toSeed();
+const bip32Seed = mnemonic.toEntropy();
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // the extended private key (never share, base of private keys tree)
@@ -88,7 +88,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toSeed();
+const bip32Seed = mnemonic.toEntropy();
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // the extended public key (base of public keys tree)
@@ -102,7 +102,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toSeed();
+const bip32Seed = mnemonic.toEntropy();
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // derive BIP44 tree root
@@ -122,7 +122,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toSeed();
+const bip32Seed = mnemonic.toEntropy();
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // derive default wallet path "m/44'/43'/0'/0/0"
@@ -142,7 +142,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toSeed();
+const bip32Seed = mnemonic.toEntropy();
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // derive default wallet path "m/44'/43'/1'/0/0"
@@ -155,10 +155,33 @@ const xprvKey = secondWallet.toBase58();
 const xpubKey = secondWallet.getPublicNode().toBase58();
 ```
 
-### Generating a hyper-deterministic wallet (CATAPULT compatible)
+### Generating a hyper-deterministic wallet (CATAPULT **mijin** and **mijinTest** compatible)
 
 ```typescript
-const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f');
+const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT);
+const wallet = new Wallet(xkey);
+
+// get master account
+const masterAccount = wallet.getAccount();
+
+// get DEFAULT ACCOUNT
+const defaultAccount = wallet.getChildAccount();
+
+// derive specific child path
+const childAccount = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'');
+
+// get read-only wallet
+const readOnlyWallet = new Wallet(xkey.getPublicNode());
+const readOnlyAccount = readOnlyWallet.getPublicAccount();
+
+// get read-only DEFAULT ACCOUNT
+const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
+```
+
+### Generating a hyper-deterministic wallet (CATAPULT **public** and **publicTest** compatible)
+
+```typescript
+const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
 const wallet = new Wallet(xkey);
 
 // get master account
@@ -181,18 +204,18 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 ### Signing with a hyper-deterministic wallet (CATAPULT compatible)
 
 ```typescript
-    TBD
+const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
+const wallet = new Wallet(xkey);
+
+// derive specific child path
+const childAccount = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'');
+
+// create a transfer object
+const transfer = TransferTransaction.create(/*...*/);
+
+// sign the transaction with derived account
+const signedTx = childAccount.sign(transfer, generationHash);
 ```
-
-## Changelog
-
-Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
-
-- [0.4.0](CHANGELOG.md#v040) - 2019-05-08
-- [0.3.1](CHANGELOG.md#v031) - 2019-04-27
-- [0.3.0](CHANGELOG.md#v030) - 2019-04-26
-- [0.2.0](CHANGELOG.md#v020) - 2019-04-20
-- [0.1.0](CHANGELOG.md#v010) - 2019-03-08
 
 ## License
 

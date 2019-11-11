@@ -19,24 +19,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 const bs58check = require('bs58check');
-const createHash = require('create-hash');
-const createHmac = require('create-hmac');
+import { SignSchema } from 'nem2-sdk';
 
 // internal dependencies
 import {
-    NodeInterface,
-    Network,
     Cryptography,
     CatapultECC,
     DeterministicKey,
     MACType,
     MACImpl,
+    NodeInterface,
+    Network,
 } from '../../index';
 
-import {
-    Account,
-    NetworkType,
-} from 'nem2-sdk';
 
 /**
  * Implementation of CKDPriv() function as described in SLIP-10
@@ -66,22 +61,16 @@ const CKDPriv = (
 
     // derive with said `macType` MAC algorithm
     const I = MACImpl.create(macType, parent.chainCode, data);
-    // const I = createHmac('sha512', parent.chainCode)
-    //     .update(data)
-    //     .digest();
-    const IL = I.slice(0, 32);
-    const IR = I.slice(32);
 
     // IL = privateKey ; IR = chainCode
+    const IL = I.slice(0, 32);
+    const IR = I.slice(32);
     return new NodeEd25519(IL, undefined, IR);
 };
 
 /**
  * Class `NodeEd25519` describes a hyper-deterministic BIP32 node
- * implementation, compatible with ed25519 EC-curve as described in
- * following paper :
- *
- *     https://cardanolaunch.com/assets/Ed25519_BIP.pdf
+ * implementation, compatible with ed25519 EC-curve.
  *
  * It is an implementation of BIP32 that is adapted to work with
  * ED25519 ellyptic curve keys rather than secp256k1 keys.
@@ -103,6 +92,9 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      * @var number
      */
     public static readonly HIGHEST_BIT = 0x80000000;
+
+    // private readonly __D: Buffer | undefined // private Key
+    // private __Q: Buffer | undefined // public Key
 
     /**
      * Create a hyper-deterministic ED25519 node from a
@@ -234,7 +226,8 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         // if the publicKey is not set, derive from private key
         const extract = CatapultECC.extractPublicKey(
             (this.privateKey as Buffer),
-            Cryptography.sha3Hash
+            Cryptography.sha3Hash,
+            Network.resolveSignSchema(this.network)
         );
 
         return Buffer.from(extract);
