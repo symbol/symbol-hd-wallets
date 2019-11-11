@@ -75,7 +75,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
 const bip32Seed = mnemonic.toSeed();
-const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
+const bip32Node = ExtendedKey.createFromSeed(bip32Seed.toString('hex'));
 
 // the extended private key (never share, base of private keys tree)
 const xprvKey = bip32Node.toBase58();
@@ -89,7 +89,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
 const bip32Seed = mnemonic.toSeed();
-const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
+const bip32Node = ExtendedKey.createFromSeed(bip32Seed.toString('hex'));
 
 // the extended public key (base of public keys tree)
 const xpubKey = bip32Node.getPublicNode().toBase58();
@@ -103,7 +103,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
 const bip32Seed = mnemonic.toSeed();
-const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
+const bip32Node = ExtendedKey.createFromSeed(bip32Seed.toString('hex'));
 
 // derive BIP44 tree root
 const bip44Root = bip32Node.derivePath("m/44'");
@@ -123,7 +123,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
 const bip32Seed = mnemonic.toSeed();
-const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
+const bip32Node = ExtendedKey.createFromSeed(bip32Seed.toString('hex'));
 
 // derive default wallet path "m/44'/43'/0'/0/0"
 const defaultWallet = bip32Node.derivePath("m/44'/43'/0'/0'/0'");
@@ -143,7 +143,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
 const bip32Seed = mnemonic.toSeed();
-const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
+const bip32Node = ExtendedKey.createFromSeed(bip32Seed.toString('hex'));
 
 // derive default wallet path "m/44'/43'/1'/0/0"
 const secondWallet = bip32Node.derivePath("m/44'/43'/1'/0'/0'"); // second hardened account
