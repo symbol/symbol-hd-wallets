@@ -114,10 +114,9 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         if (seed.length < 16) throw new TypeError('Seed should be at least 128 bits');
         if (seed.length > 64) throw new TypeError('Seed should be at most 512 bits');
 
-        // (1) Create KMAC seeded with `ed25519 seed`
-        const I = MACImpl.create(macType, Buffer.from('ed25519 seed', 'utf8'), seed);
-        // const hmac = createHmac('sha512', Buffer.from('ed25519 seed', 'utf8'));
-        // const I = hmac.update(seed).digest();
+        // (1) H/KMAC the seed with prefix
+        const prefix = network == Network.CATAPULT ? 'ed25519 seed' : 'ed25519-keccak seed'
+        const I = MACImpl.create(macType, Buffer.from(prefix, 'utf8'), seed);
 
         // (2) Split in 2 parts: privateKey and chainCode
         const kL = I.slice(0, 32);
