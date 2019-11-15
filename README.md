@@ -64,7 +64,7 @@ const words = 'alpha pattern real admit vacuum wall ready code '
 const mnemonic = new MnemonicPassPhrase(words);
 
  // the following seed can be used with `ExtendedKey.createFromSeed()`
-const bip32Seed = mnemonic.toEntropy();
+const bip32Seed = mnemonic.toSeed(); // using empty password
 ```
 
 ### Generating an extended _private_ key from a mnemonic pass phrase
@@ -74,7 +74,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toEntropy();
+const bip32Seed = mnemonic.toSeed(); // using empty password
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // the extended private key (never share, base of private keys tree)
@@ -88,7 +88,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toEntropy();
+const bip32Seed = mnemonic.toSeed(); // using empty password
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // the extended public key (base of public keys tree)
@@ -102,7 +102,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toEntropy();
+const bip32Seed = mnemonic.toSeed(); // using empty password
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // derive BIP44 tree root
@@ -122,7 +122,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toEntropy();
+const bip32Seed = mnemonic.toSeed(); // using empty password
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // derive default wallet path "m/44'/43'/0'/0/0"
@@ -142,7 +142,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toEntropy();
+const bip32Seed = mnemonic.toSeed(); // using empty password
 const bip32Node = ExtendedKey.createFromSeed(bip32Seed);
 
 // derive default wallet path "m/44'/43'/1'/0/0"

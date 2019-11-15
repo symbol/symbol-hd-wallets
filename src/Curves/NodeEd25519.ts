@@ -25,13 +25,13 @@ import { SignSchema } from 'nem2-sdk';
 import {
     Cryptography,
     CatapultECC,
+    CurveAlgorithm,
     DeterministicKey,
     MACType,
     MACImpl,
     NodeInterface,
     Network,
 } from '../../index';
-
 
 /**
  * Implementation of CKDPriv() function as described in SLIP-10
@@ -100,6 +100,11 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      * Create a hyper-deterministic ED25519 node from a
      * binary seed.
      *
+     * Depending on the curve algorithm, the seed is prepended with one of:
+     *
+     * - `ed25519-keccak seed` for ed25519-keccak implementation (Network.CATAPULT_PUBLIC)
+     * - `ed25519 seed` for ed25519[-sha3] implementation (Network.CATAPULT)
+     *
      * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L258
      * @param   seed    {Buffer}
      * @param   network {Network}
@@ -114,8 +119,10 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         if (seed.length < 16) throw new TypeError('Seed should be at least 128 bits');
         if (seed.length > 64) throw new TypeError('Seed should be at most 512 bits');
 
-        // (1) H/KMAC the seed with prefix
-        const prefix = network == Network.CATAPULT ? 'ed25519 seed' : 'ed25519-keccak seed'
+        // (1) depending on curve algorithm, prepend the seed with one of:
+        // `ed25519-keccak seed` for ed25519-keccak implementation (Network.CATAPULT_PUBLIC)
+        // `ed25519 seed` for ed25519[-sha3] implementation (Network.CATAPULT)
+        const prefix = network.curve == CurveAlgorithm.ed25519 ? 'ed25519 seed' : 'ed25519-keccak seed';
         const I = MACImpl.create(macType, Buffer.from(prefix, 'utf8'), seed);
 
         // (2) Split in 2 parts: privateKey and chainCode

@@ -356,7 +356,7 @@ describe('ExtendedKey -->', () => {
             expect(bip32Node.publicKey.toString('hex')).to.be.equal(expectPub);
         });
 
-        it('produce KECCAK public key given Network.CATAPULT_PUBLIC', () => {
+        it('produce correct KECCAK public key given Network.CATAPULT_PUBLIC and private key', () => {
             const privateHex = '52019c4235e2a7e1473b9ccacdf8e3ce7053388ab00bd316cd8614535b9e341e';
             const expectPub = 'a8f70e4d5c357273968b12417ae8b742e35e530623c2488d0a73306b41271500';
 
@@ -364,6 +364,18 @@ describe('ExtendedKey -->', () => {
             const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);
 
             expect(bip32Node.privateKey.toString('hex')).to.be.equal(privateKey.toString('hex'));
+            expect(bip32Node.publicKey.toString('hex')).to.be.equal(expectPub);
+        });
+
+        it('produce correct KECCAK public key given Network.CATAPULT_PUBLIC and REVERSED private key', () => {
+            const privateHex = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
+            const expectPub = 'c5f54ba980fcbb657dbaaa42700539b207873e134d2375efeab5f1ab52f87844';
+
+            // NIS compatibility requires "key reversal".
+            const reversedKey = Buffer.from(Convert.hexToUint8Reverse(privateHex));
+            const bip32Node = new NodeEd25519(reversedKey, undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);
+
+            expect(bip32Node.privateKey.toString('hex')).to.be.equal(reversedKey.toString('hex'));
             expect(bip32Node.publicKey.toString('hex')).to.be.equal(expectPub);
         });
     });
