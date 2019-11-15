@@ -22,14 +22,15 @@ import {expect} from "chai";
 import * as bip32 from 'bip32';
 import {
     Account,
+    Convert,
     NetworkType,
 } from 'nem2-sdk';
 
 // internal dependencies
 import {
     ExtendedKey,
-    KeyEncoding,
     Network,
+    NodeEd25519,
 } from "../index";
 
 /**
@@ -210,6 +211,49 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
                     expect(childDerived.getPrivateKey()).to.be.equal(nonNeuteredKey.key);
                 });
             });
+        });
+    });
+
+    describe('NodeEd25519 should', () => {
+        it('forward network property in CKDPriv (derivePath) and derive correct public key with SHA3', () => {
+            const privateKey = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
+            const expectPublicKey = 'BD8D3F8B7E1B3839C650F458234AB1FF87CDB1EDA36338D9E446E27D454717F2'.toLowerCase();
+
+            const privateBytes = Convert.hexToUint8(privateKey);
+            const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.CATAPULT);
+
+            expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);
+        });
+
+        it('forward network property in CKDPriv (derivePath) and derive correct public key with KECCAK', () => {
+            const privateKey = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
+            const expectPublicKey = 'd6c3845431236c5a5a907a9e45bd60da0e12efd350b970e7f58e3499e2e7a2f0';
+
+            const privateBytes = Convert.hexToUint8(privateKey);
+            const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);
+
+            expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);
+        });
+
+        it('forward network property in CKDPriv (derivePath) and derive correct public key with KECCAK and trezor private key', () => {
+            const privateKey = '52019c4235e2a7e1473b9ccacdf8e3ce7053388ab00bd316cd8614535b9e341e';
+            const expectPublicKey = 'a8f70e4d5c357273968b12417ae8b742e35e530623c2488d0a73306b41271500';
+
+            const privateBytes = Convert.hexToUint8(privateKey);
+            const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);
+
+            expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);
+        });
+
+        it('forward network property in CKDPriv (derivePath) and derive correct public key with KECCAK and REVERSED private key', () => {
+            const privateKey = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
+            const expectPublicKey = 'c5f54ba980fcbb657dbaaa42700539b207873e134d2375efeab5f1ab52f87844';
+
+            // REVERSED private key (NIS)
+            const privateBytes = Convert.hexToUint8Reverse(privateKey);
+            const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);
+
+            expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);
         });
     });
 

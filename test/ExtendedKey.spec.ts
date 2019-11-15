@@ -357,8 +357,8 @@ describe('ExtendedKey -->', () => {
         });
 
         it('produce correct KECCAK public key given Network.CATAPULT_PUBLIC and private key', () => {
-            const privateHex = '52019c4235e2a7e1473b9ccacdf8e3ce7053388ab00bd316cd8614535b9e341e';
-            const expectPub = 'a8f70e4d5c357273968b12417ae8b742e35e530623c2488d0a73306b41271500';
+            const privateHex = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
+            const expectPub = 'd6c3845431236c5a5a907a9e45bd60da0e12efd350b970e7f58e3499e2e7a2f0';
 
             const privateKey = Buffer.from(Convert.hexToUint8(privateHex));
             const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);

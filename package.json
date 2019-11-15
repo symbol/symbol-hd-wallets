@@ -17,11 +17,11 @@
     "create-hash": "^1.2.0",
     "create-hmac": "^1.1.7",
     "js-sha3": "^0.8.0",
-    "nem2-sdk": "^0.14.3",
+    "nem2-sdk": "^0.14.4",
     "rxjs": "^6.5.3"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.3",
+    "@types/chai": "^4.2.5",
     "@types/mocha": "^5.2.7",
     "chai": "^4.1.2",
     "coveralls": "^3.0.7",

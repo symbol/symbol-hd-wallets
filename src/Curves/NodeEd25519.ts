@@ -65,7 +65,7 @@ const CKDPriv = (
     // IL = privateKey ; IR = chainCode
     const IL = I.slice(0, 32);
     const IR = I.slice(32);
-    return new NodeEd25519(IL, undefined, IR);
+    return new NodeEd25519(IL, undefined, IR, parent.network);
 };
 
 /**

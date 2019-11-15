@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v0.5.2
+
+- fixed `CKDPriv()` implementation to forward `network` property
+- added unit tests for Trezor key generation compatibility
+- now passes unit tests for SHA3 and Keccak hash algorithm for derivations
+- fixed `README.md` to hold correct `toSeed();` usage
+- updated nem2-sdk dependency and other packages
+
+## v0.5.1
+
+- fixed Trezor compatibility for public key generation
+- added unit tests for keccak reversed private keys (NIS compatibility mode)
+
 ## v0.5.0
 
 - added Network.CATAPULT_PUBLIC to work with public networks
