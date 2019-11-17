@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.3
+
+- added unit tests for Network class (BIP32 "network")
+- added unit tests for inconsistent network usage
+- added Error `Inconsistent networkType.` given non-matching network and catapult network type
+
 ## v0.5.2
 
 - fixed `CKDPriv()` implementation to forward `network` property
