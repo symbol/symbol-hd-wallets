@@ -130,4 +130,17 @@ export class Network {
 
         return SignSchema.SHA3;
     }
+
+    /**
+     * Checks whether current network instance **is identical**
+     * to given `b` network instance.
+     *
+     * @param   b       {Network}   The network object to compare against
+     * @return  {boolean}   Returns whether the two objects are identical
+     */
+    public equals(b: Network): boolean {
+        return this.privateKeyPrefix === b.privateKeyPrefix
+            && this.publicKeyPrefix === b.publicKeyPrefix
+            && this.curve === b.curve
+    }
 }

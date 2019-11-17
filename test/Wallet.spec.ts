@@ -91,6 +91,15 @@ describe('Wallet -->', () => {
             })).to.throw('Missing private key, please use method getPublicAccount().');
         });
 
+        it('throw when extended key network does not match requested networkType', () => {
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const wallet = new Wallet(xkey);
+
+            expect((function () {
+                wallet.getAccount(NetworkType.TEST_NET);
+            })).to.throw('Inconsistent networkType.');
+        });
+
         it('get catapult compatible private key / public key pair (keypair)', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
@@ -111,6 +120,15 @@ describe('Wallet -->', () => {
             expect((function () {
                 wallet.getChildAccount();
             })).to.throw('Missing private key, please use method getChildPublicAccount().');
+        });
+
+        it('throw when extended key network does not match requested networkType', () => {
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const wallet = new Wallet(xkey);
+
+            expect((function () {
+                wallet.getChildAccount("m/44'/43'/0'/0'/0'", NetworkType.TEST_NET);
+            })).to.throw('Inconsistent networkType.');
         });
 
         it('derive default account when given no path', () => {
@@ -134,6 +152,15 @@ describe('Wallet -->', () => {
 
     describe('getPublicAccount() should', () => {
 
+        it('throw when extended key network does not match requested networkType', () => {
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const wallet = new Wallet(xkey);
+
+            expect((function () {
+                const account = wallet.getPublicAccount(NetworkType.TEST_NET);
+            })).to.throw('Inconsistent networkType.');
+        });
+
         it('get catapult compatible read-only account given extended private key', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
@@ -155,6 +182,15 @@ describe('Wallet -->', () => {
     });
 
     describe('getChildPublicAccount() should', () => {
+
+        it('throw when extended key network does not match requested networkType', () => {
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const wallet = new Wallet(xkey);
+
+            expect((function () {
+                wallet.getChildPublicAccount("m/44'/43'/0'/0'/0'", NetworkType.TEST_NET);
+            })).to.throw('Inconsistent networkType.');
+        });
 
         it('derive default account when given no path', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
