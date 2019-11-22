@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.5.5
+- fixed readme samples
+
+## v0.5.4
+
+- updated nem2-sdk dependency to 0.15.0
+- updated other dependencies including bip44-constants
+
 ## v0.5.3
 
 - added unit tests for Network class (BIP32 "network")
