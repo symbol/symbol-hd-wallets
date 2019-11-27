@@ -144,4 +144,39 @@ describe('MnemonicPassPhrase -->', () => {
         });
     });
 
+    describe('createFromEntropy() should', () => {
+        it('return a valid mnemonic', () => {
+            const mnemonic = new MnemonicPassPhrase(words.join(' '));
+            const fromEntropy = MnemonicPassPhrase.createFromEntropy(
+                '07142acb81df09ed6cb16830957cebf865a2267ea2bae7aafac51c037474929c'
+            );
+            expect(fromEntropy.toArray().length).to.be.equal(24);
+            expect(fromEntropy.plain).to.be.equal(mnemonic.plain);
+        });
+        it('produce mnemonic with relative length to the input entropy', () => {
+            const m12 = MnemonicPassPhrase.createRandom('english', 128);
+            const m18 = MnemonicPassPhrase.createRandom('english', 192);
+            const fromEntropyM12 = MnemonicPassPhrase.createFromEntropy(
+                m12.toEntropy()
+            );
+            const fromEntropyM18 = MnemonicPassPhrase.createFromEntropy(
+                m18.toEntropy()
+            );
+            expect(fromEntropyM12.toArray().length).to.not.be.equal(
+                fromEntropyM18.toArray().length
+            );
+            expect(fromEntropyM12.toArray().length).to.be.equal(12);
+            expect(fromEntropyM18.toArray().length).to.be.equal(18);
+        });
+
+        it('throw given language not supported by BIP39', () => {
+            const invalidLanguage = 'arabic';
+            const mnemonic = new MnemonicPassPhrase(words.join(' '));
+            const entropy = mnemonic.toEntropy();
+            expect(function() {
+                MnemonicPassPhrase.createFromEntropy(entropy, invalidLanguage);
+            }).to.throw('Language "' + invalidLanguage + '" is not supported.');
+        });
+    });
+
 });
