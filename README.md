@@ -53,7 +53,7 @@ const secureSeedHex = mnemonic.toSeed('your-password');
 // examples/GeneratePasswordProtectedSeedForRandomPassPhraseEmptyPassword.ts
 
 // Example 2: empty password for password-protected seed
-import {MnemonicPassPhrase} from "nem2-hd-wallets";
+import {MnemonicPassPhrase} from 'nem2-hd-wallets';
 
 const mnemonic = MnemonicPassPhrase.createRandom();
 const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: ''
@@ -94,8 +94,8 @@ const bip32Seed = mnemonic.toSeed();
 ```ts
 // examples/GeneratingAHDWalletPrivateNetworkCompatible.ts
 
-import {ExtendedKey, Network, Wallet} from "nem2-hd-wallets";
-import {NetworkType} from "nem2-sdk";
+import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
+import {NetworkType} from 'nem2-sdk';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT);
 const wallet = new Wallet(xkey);
@@ -123,8 +123,8 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 ```ts
 // examples/GeneratingAHDWalletPublicNetworkCompatible.ts
 
-import {ExtendedKey, Network, Wallet} from "nem2-hd-wallets";
-import {NetworkType} from "nem2-sdk";
+import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
+import {NetworkType} from 'nem2-sdk';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
 const wallet = new Wallet(xkey);
