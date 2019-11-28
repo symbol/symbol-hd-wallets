@@ -65,7 +65,7 @@ import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 // using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
 
-// Example 1: create extended key from mnemonic seed
+// Example 1: create extended key from mnemonic seed (network parameter is optional)
 const bip32Seed = mnemonic.toSeed(); // using empty password
 const hexSeed = bip32Seed.toString('hex')
 const xkey = ExtendedKey.createFromSeed(hexSeed, Network.CATAPULT);
