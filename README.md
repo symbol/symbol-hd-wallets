@@ -37,9 +37,9 @@ const mnemonic = MnemonicPassPhrase.createRandom('japanese');
 const words = 'alpha pattern real admit vacuum wall ready code '
             + 'correct program depend valid focus basket whisper firm '
             + 'tray fit rally day dance demise engine mango';
-const mnemonic = new MnemonicPassPhrase(words);
+const mnemonic = new MnemonicPassPhrase(words.join(' '));
 
-// another way to create mnemonic is from Entropy(seed Hex string). providing a language is also optional
+// another way to create mnemonic is from Entropy(seed Hex string). language is optional
 const mnemonic = MnemonicPassPhrase.createFromEntropy('07142acb81df09ed6cb16830957cebf865a2267ea2bae7aafac51c037474929c','english')
 ```
 
