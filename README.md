@@ -32,6 +32,15 @@ const mnemonic = MnemonicPassPhrase.createRandom('french');
 
 // random 24-words mnemonic with japanese wordlist
 const mnemonic = MnemonicPassPhrase.createRandom('japanese');
+
+// create mnemonic from 24 known words
+const words = 'alpha pattern real admit vacuum wall ready code '
+            + 'correct program depend valid focus basket whisper firm '
+            + 'tray fit rally day dance demise engine mango';
+const mnemonic = new MnemonicPassPhrase(words);
+
+// another way to create mnemonic is from Entropy(seed Hex string). providing a language is also optional
+const mnemonic = MnemonicPassPhrase.createFromEntropy('07142acb81df09ed6cb16830957cebf865a2267ea2bae7aafac51c037474929c','english')
 ```
 
 ### Generating a password-protected mnemonic pass phrase seed (for storage)
@@ -48,23 +57,22 @@ const mnemonic = MnemonicPassPhrase.createRandom();
 const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: ''
 ```
 
-### Generating a root (master) extended key
+### Generating an extended key from a mnemonic pass phrase
 
 ```typescript
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
 
-// Example 1: generate BIP32 master seed for random pass phrase
+// using BIP39 mnemonic pass phrase for BIP32 extended keys generation
 const mnemonic = MnemonicPassPhrase.createRandom();
-const bip32Seed = mnemonic.toSeed();
 
-// Example 2: generate BIP32 master seed for known pass phrase
-const words = 'alpha pattern real admit vacuum wall ready code '
-            + 'correct program depend valid focus basket whisper firm '
-            + 'tray fit rally day dance demise engine mango';
-const mnemonic = new MnemonicPassPhrase(words);
-
- // the following seed can be used with `ExtendedKey.createFromSeed()`
+// Example 1: create extended key from mnemonic seed
 const bip32Seed = mnemonic.toSeed(); // using empty password
+const hexSeed = bip32Seed.toString('hex')
+const xkey = ExtendedKey.createFromSeed(hexSeed, Network.CATAPULT);
+
+// Example 2: create extended key from hex Entropy
+const hexEntropy = mnemonic.toEntropy(); // using empty password
+const xkey = ExtendedKey.createFromEntropy(hexEntropy, Network.CATAPULT);
 ```
 
 ### Generating a hyper-deterministic wallet (CATAPULT **mijin** and **mijinTest** compatible)
