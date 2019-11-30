@@ -36,6 +36,7 @@ MnemonicPassPhrase.createRandom('french');
 MnemonicPassPhrase.createRandom('japanese');
 
 ```
+
 ### Generating a password-protected mnemonic pass phrase seed (for storage)
 
 ```ts
@@ -59,7 +60,7 @@ const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: 
 
 ```
 
-### Generating an extended key from a mnemonic pass phrase
+### Generating a root (master) extended key
 
 ```ts
 // examples/GeneratingARootMasterExtendedKeyForKnownPassPhrase.ts
