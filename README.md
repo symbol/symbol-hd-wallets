@@ -18,66 +18,84 @@ This is a PoC to validate the proposed [NIP6 Multi-Account Hierarchy for Determi
 
 ### Generating a mnemonic pass phrase
 
-```typescript
+```ts
+// examples/GeneratingAMnemonicPassPhrase.ts
+
 import {MnemonicPassPhrase} from 'nem2-hd-wallets';
 
 // random 24-words mnemonic
-const mnemonic = MnemonicPassPhrase.createRandom();
+MnemonicPassPhrase.createRandom();
 
 // random 12-words mnemonic
-const mnemonic = MnemonicPassPhrase.createRandom('english', 128);
+MnemonicPassPhrase.createRandom('english', 128);
 
 // random 24-words mnemonic with french wordlist
-const mnemonic = MnemonicPassPhrase.createRandom('french');
+MnemonicPassPhrase.createRandom('french');
 
 // random 24-words mnemonic with japanese wordlist
-const mnemonic = MnemonicPassPhrase.createRandom('japanese');
+MnemonicPassPhrase.createRandom('japanese');
 
-// create mnemonic from 24 known words
-const words = 'alpha pattern real admit vacuum wall ready code '
-            + 'correct program depend valid focus basket whisper firm '
-            + 'tray fit rally day dance demise engine mango';
-const mnemonic = new MnemonicPassPhrase(words.join(' '));
-
-// another way to create mnemonic is from Entropy(seed Hex string). language is optional
-const mnemonic = MnemonicPassPhrase.createFromEntropy('07142acb81df09ed6cb16830957cebf865a2267ea2bae7aafac51c037474929c','english')
 ```
-
 ### Generating a password-protected mnemonic pass phrase seed (for storage)
 
-```typescript
+```ts
+// examples/GeneratePasswordProtectedSeedForRandomPassPhrase.ts
+
 import {MnemonicPassPhrase} from 'nem2-hd-wallets';
 
-// Example 1: generate password-protected seed for random pass phrase
 const mnemonic = MnemonicPassPhrase.createRandom();
 const secureSeedHex = mnemonic.toSeed('your-password');
 
+```
+
+```ts
+// examples/GeneratePasswordProtectedSeedForRandomPassPhraseEmptyPassword.ts
+
 // Example 2: empty password for password-protected seed
+import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+
 const mnemonic = MnemonicPassPhrase.createRandom();
 const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: ''
+
 ```
 
 ### Generating an extended key from a mnemonic pass phrase
 
-```typescript
-import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
+```ts
+// examples/GeneratingARootMasterExtendedKeyForKnownPassPhrase.ts
 
-// using BIP39 mnemonic pass phrase for BIP32 extended keys generation
-const mnemonic = MnemonicPassPhrase.createRandom();
+import {MnemonicPassPhrase} from 'nem2-hd-wallets';
 
-// Example 1: create extended key from mnemonic seed (network parameter is optional)
+// Example 2: generate BIP32 master seed for known pass phrase
+const words = 'alpha pattern real admit vacuum wall ready code '
+    + 'correct program depend valid focus basket whisper firm '
+    + 'tray fit rally day dance demise engine mango';
+const mnemonic = new MnemonicPassPhrase(words);
+
+// the following seed can be used with `ExtendedKey.createFromSeed()`
 const bip32Seed = mnemonic.toSeed(); // using empty password
-const hexSeed = bip32Seed.toString('hex')
-const xkey = ExtendedKey.createFromSeed(hexSeed, Network.CATAPULT);
 
-// Example 2: create extended key from hex Entropy
-const hexEntropy = mnemonic.toEntropy(); // using empty password
-const xkey = ExtendedKey.createFromEntropy(hexEntropy, Network.CATAPULT);
+```
+
+```ts
+// examples/GeneratingARootMasterExtendedKeyForRandomPassPhrase.ts
+
+import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+
+// Example 1: generate BIP32 master seed for random pass phrase
+const mnemonic = MnemonicPassPhrase.createRandom();
+const bip32Seed = mnemonic.toSeed();
+
 ```
 
 ### Generating a hyper-deterministic wallet (CATAPULT **mijin** and **mijinTest** compatible)
 
-```typescript
+```ts
+// examples/GeneratingAHDWalletPrivateNetworkCompatible.ts
+
+import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
+import {NetworkType} from 'nem2-sdk';
+
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT);
 const wallet = new Wallet(xkey);
 
@@ -96,11 +114,17 @@ const readOnlyAccount = readOnlyWallet.getPublicAccount(NetworkType.MIJIN_TEST);
 
 // get read-only DEFAULT ACCOUNT
 const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
+
 ```
 
 ### Generating a hyper-deterministic wallet (CATAPULT **public** and **publicTest** compatible)
 
-```typescript
+```ts
+// examples/GeneratingAHDWalletPublicNetworkCompatible.ts
+
+import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
+import {NetworkType} from 'nem2-sdk';
+
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
 const wallet = new Wallet(xkey);
 
@@ -119,11 +143,17 @@ const readOnlyAccount = readOnlyWallet.getPublicAccount(NetworkType.TEST_NET);
 
 // get read-only DEFAULT ACCOUNT
 const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
+
 ```
 
 ### Signing with a hyper-deterministic wallet (CATAPULT compatible)
 
-```typescript
+```ts
+// examples/SigningWithAHDWalletPrivateNetworkCompatible.ts
+
+import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
+import {Account, Deadline, EmptyMessage, NetworkType, TransferTransaction} from "nem2-sdk";
+
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
 const wallet = new Wallet(xkey);
 
@@ -131,12 +161,18 @@ const wallet = new Wallet(xkey);
 const childAccount = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'', NetworkType.TEST_NET);
 
 // create a transfer object
-const transfer = TransferTransaction.create(/*...*/);
+const transfer = TransferTransaction.create(
+    Deadline.create(),
+    Account.generateNewAccount(NetworkType.TEST_NET).address,
+    [],
+    EmptyMessage,
+    NetworkType.TEST_NET);
 
 // sign the transaction with derived account
+const generationHash = ''; // replace with network generation hash
 const signedTx = childAccount.sign(transfer, generationHash);
-```
 
+```
 ## License
 
 Licensed under the [BSD-2 License](LICENSE).
