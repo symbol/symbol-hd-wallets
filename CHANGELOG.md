@@ -1,6 +1,16 @@
 # CHANGELOG
 
+# v0.6.1
+
+- added embedme examples embedded in readme
+- upgraded upstream nem2-sdk@v0.15.0
+
+# v0.6.0
+
+- updated dependency tree
+
 ## v0.5.5
+
 - fixed readme samples
 
 ## v0.5.4
