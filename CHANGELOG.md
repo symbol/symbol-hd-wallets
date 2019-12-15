@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# v0.7.0
+
+- upgraded upstream nem2-sdk@v0.16.0
+
 # v0.6.1
 
 - added embedme examples embedded in readme
