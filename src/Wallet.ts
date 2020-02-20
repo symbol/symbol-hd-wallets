@@ -129,12 +129,6 @@ export class Wallet {
             throw new Error("Missing private key, please use method getPublicAccount().");
         }
 
-        // in case of Network.CATAPULT, only MIJIN_TEST and MIJIN can be used
-        // in case of Network.CATAPULT_PUBLIC, only TEST_NET AND MAIN_NET can be used
-        if (!this.canDeriveForNetworkType(networkType)) {
-            throw new Error("Inconsistent networkType.");
-        }
-
         // note: do not store private key in memory longer than function call
         return Account.createFromPrivateKey(
             this.extendedKey.getPrivateKey(KeyEncoding.ENC_HEX) as string,
@@ -154,12 +148,6 @@ export class Wallet {
     getPublicAccount(
         networkType: NetworkType = NetworkType.MIJIN_TEST
     ): PublicAccount {
-
-        // in case of Network.CATAPULT, only MIJIN_TEST and MIJIN can be used
-        // in case of Network.CATAPULT_PUBLIC, only TEST_NET AND MAIN_NET can be used
-        if (!this.canDeriveForNetworkType(networkType)) {
-            throw new Error("Inconsistent networkType.");
-        }
 
         return PublicAccount.createFromPublicKey(
             this.publicKey.toString('hex'),
@@ -189,12 +177,6 @@ export class Wallet {
             throw new Error("Missing private key, please use method getChildPublicAccount().");
         }
 
-        // in case of Network.CATAPULT, only MIJIN_TEST and MIJIN can be used
-        // in case of Network.CATAPULT_PUBLIC, only TEST_NET AND MAIN_NET can be used
-        if (!this.canDeriveForNetworkType(networkType)) {
-            throw new Error("Inconsistent networkType.");
-        }
-
         // child key derivation with `ExtendedKeyNode.derivePath()`
         const childKeyNode = this.extendedKey.derivePath(path);
 
@@ -221,37 +203,12 @@ export class Wallet {
         networkType: NetworkType = NetworkType.MIJIN_TEST
     ): PublicAccount {
 
-        // in case of Network.CATAPULT, only MIJIN_TEST and MIJIN can be used
-        // in case of Network.CATAPULT_PUBLIC, only TEST_NET AND MAIN_NET can be used
-        if (!this.canDeriveForNetworkType(networkType)) {
-            throw new Error("Inconsistent networkType.");
-        }
-
         // child key derivation with `ExtendedKeyNode.derivePath()`
         const childKeyNode = this.extendedKey.derivePath(path);
         return PublicAccount.createFromPublicKey(
             childKeyNode.getPublicKey(KeyEncoding.ENC_HEX) as string,
             networkType
         );
-    }
-
-    /**
-     * Checks whether said `networkType` network type can be used
-     * to derive an (child) account or not.
-     *
-     * @param   networkType     {NetworkType}   The network type to test.
-     */
-    protected canDeriveForNetworkType(networkType: NetworkType): boolean {
-        if (this.extendedKey.network.equals(Network.CATAPULT)) {
-            return networkType === NetworkType.MIJIN_TEST
-                || networkType === NetworkType.MIJIN
-        }
-        else if (this.extendedKey.network.equals(Network.CATAPULT_PUBLIC)) {
-            return networkType === NetworkType.TEST_NET
-                || networkType === NetworkType.MAIN_NET
-        }
-
-        return false
     }
 
 }
