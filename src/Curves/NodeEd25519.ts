@@ -18,13 +18,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import * as nacl from 'tweetnacl'
 const bs58check = require('bs58check');
-import { SignSchema } from 'nem2-sdk';
 
 // internal dependencies
 import {
     Cryptography,
-    CatapultECC,
     CurveAlgorithm,
     DeterministicKey,
     MACType,
@@ -102,8 +101,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      *
      * Depending on the curve algorithm, the seed is prepended with one of:
      *
-     * - `ed25519-keccak seed` for ed25519-keccak implementation (Network.CATAPULT_PUBLIC)
-     * - `ed25519 seed` for ed25519[-sha3] implementation (Network.CATAPULT)
+     * - `ed25519 seed` for ed25519[-sha512] implementation (Network.CATAPULT|Network.CATAPULT_PUBLIC)
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L258
      * @param   seed    {Buffer}
@@ -120,9 +118,8 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         if (seed.length > 64) throw new TypeError('Seed should be at most 512 bits');
 
         // (1) depending on curve algorithm, prepend the seed with one of:
-        // `ed25519-keccak seed` for ed25519-keccak implementation (Network.CATAPULT_PUBLIC)
-        // `ed25519 seed` for ed25519[-sha3] implementation (Network.CATAPULT)
-        const prefix = network.curve == CurveAlgorithm.ed25519 ? 'ed25519 seed' : 'ed25519-keccak seed';
+        // `ed25519 seed` for ed25519[-sha512] implementation (Network.CATAPULT|Network.CATAPULT_PUBLIC)
+        const prefix = 'ed25519 seed';
         const I = MACImpl.create(macType, Buffer.from(prefix, 'utf8'), seed);
 
         // (2) Split in 2 parts: privateKey and chainCode
@@ -229,14 +226,9 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
             return this.getQ()!;
         }
 
-        // if the publicKey is not set, derive from private key
-        const extract = CatapultECC.extractPublicKey(
-            (this.privateKey as Buffer),
-            Cryptography.sha3Hash,
-            Network.resolveSignSchema(this.network)
-        );
-
-        return Buffer.from(extract);
+        // use tweetnacl to generate key pair (SHA512)
+        const keyPair = nacl.sign.keyPair.fromSeed(this.privateKey as Buffer);
+        return Buffer.from(keyPair.publicKey)
     }
 
     /**
@@ -368,22 +360,27 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      * Sign binary data with current node.
      *
      * Overloads the `bitcoinjs/bip32` method named `sign` in order to
-     * be ED25519 compliant and use `CatapultECC` with ed25519 instead
+     * be ED25519 compliant and use `tweetnacl` with ed25519 instead
      * of secp256k1.
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts#L277
      * @param   hash    {Buffer}    The binary data to sign.
-     * @param   length  {number}    (Optional) The byte size of the produced SHA3 hash, defaults to 64
      * @return  {NodeInterface}
      */
     public sign(
         hash: Buffer
     ): Buffer {
-        const secretKey = this.privateKey as Buffer;
-        const hasher = Cryptography.createSha3Hasher(64); // 64=size
-        const signature = CatapultECC.sign(hash, this.publicKey, secretKey, hasher);
+        // use tweetnacl to generate key pair (SHA512)
+        const keyPair = nacl.sign.keyPair.fromSeed(this.privateKey as Buffer);
 
-        return Buffer.from(signature);
+        // generate shared secret
+        const secretKey = new Uint8Array(64);
+        secretKey.set(this.privateKey);
+        secretKey.set(keyPair.publicKey, 32);
+
+        // use tweetnacl to sign
+        const signature = nacl.sign.detached(hash, secretKey);
+        return Buffer.from(signature)
     }
 
     /**
@@ -391,7 +388,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      * `hash` with the current node.
      *
      * Overloads the `bitcoinjs/bip32` method named `verify` in order to
-     * be ED25519 compliant and use `CatapultECC` with ed25519 instead
+     * be ED25519 compliant and use `tweetnacl` with ed25519 instead
      * of secp256k1.
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts#L281
@@ -403,9 +400,8 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         hash: Buffer,
         signature: Buffer
     ): boolean {
-        const length = signature.byteLength === 32 ? 32 : 64;
-        const hasher = Cryptography.createSha3Hasher(length);
-        return CatapultECC.verify(hash, this.publicKey, signature, hasher);
+        // use tweetnacl to verify signature
+        return nacl.sign.detached.verify(hash, signature, this.publicKey);
     }
 
     /**

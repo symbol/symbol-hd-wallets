@@ -97,8 +97,8 @@ describe('ExtendedKey -->', () => {
             const nodeEd25519 = neuteredMaster.node as NodeEd25519;
 
             expect(nodeEd25519).to.be.instanceof(NodeEd25519);
-            expect(neuteredMaster.network.curve).to.be.equal(CurveAlgorithm.ed25519_keccak);
-            expect(nodeEd25519.network.curve).to.be.equal(CurveAlgorithm.ed25519_keccak);
+            expect(neuteredMaster.network.curve).to.be.equal(CurveAlgorithm.ed25519);
+            expect(nodeEd25519.network.curve).to.be.equal(CurveAlgorithm.ed25519);
         });
 
         it('create master key with payload for "m" path', () => {
@@ -163,7 +163,7 @@ describe('ExtendedKey -->', () => {
             // check that Network.CATAPULT was used correctly
             expect(neuteredNode.network.privateKeyPrefix).to.be.equal(Network.CATAPULT_PUBLIC.privateKeyPrefix);
             expect(neuteredNode.network.publicKeyPrefix).to.be.equal(Network.CATAPULT_PUBLIC.publicKeyPrefix);
-            expect(neuteredNode.network.curve).to.be.equal(CurveAlgorithm.ed25519_keccak);
+            expect(neuteredNode.network.curve).to.be.equal(CurveAlgorithm.ed25519);
 
             // also check node implementation that was used
             expect(neuteredNode.node).to.be.instanceof(NodeEd25519);
@@ -217,7 +217,7 @@ describe('ExtendedKey -->', () => {
             // check that Network.CATAPULT was used correctly
             expect(masterFromSeed.network.privateKeyPrefix).to.be.equal(Network.CATAPULT_PUBLIC.privateKeyPrefix);
             expect(masterFromSeed.network.publicKeyPrefix).to.be.equal(Network.CATAPULT_PUBLIC.publicKeyPrefix);
-            expect(masterFromSeed.network.curve).to.be.equal(CurveAlgorithm.ed25519_keccak);
+            expect(masterFromSeed.network.curve).to.be.equal(CurveAlgorithm.ed25519);
 
             // also check node implementation that was used
             expect(masterFromSeed.node).to.be.instanceof(NodeEd25519);
@@ -346,9 +346,44 @@ describe('ExtendedKey -->', () => {
             expect(Array.from(uintArray)).to.be.deep.equal(expectedBytes);
         });
 
-        it('produce SHA3 public key given Network.CATAPULT', () => {
+        // http://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=tests/t-ed25519.inp
+        // - extracted vectors: #1, #2, #3, #166, #218, #219. #220, #337, #500, #501
+        const vectorED25519 = [
+            {sk: '9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60',
+             pk: 'd75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a'},
+            {sk: '4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb',
+             pk: '3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c'},
+            {sk: 'c5aa8df43f9f837bedb7442f31dcb7b166d38535076f094b85ce3a2e0b4458f7',
+             pk: 'fc51cd8e6218a1a38da47ed00230f0580816ed13ba3303ac5deb911548908025'},
+            {sk: '3558d3a74395bdcba560e2c45a91960cec6cb3edbcd30e722f7f055210f37b51',
+             pk: '534f43eba403a84f25967c152d93a0175ec8293e6f4375319eadf957401fbbd2'},
+            {sk: 'bfbcd867027a199978d53e359d70318fc78c7cc7bb5c7996ba797c8554f3f0f0',
+             pk: '7c5ae3bab9201199dfbe74b7d1ec157125bdbaa4520f501da3f248579dc6c22d'},
+            {sk: 'df2df8a9d66d5638cdee09324e7b10f8ed29ab91387e3147b7dc03f7cd800508',
+             pk: '5c042e157fb7fb12d4d4fef2847141ecfb57c1253e14eaf3004d6513f52fe625'},
+            {sk: 'e8ee065f9907f1efa2daecb23a0425f353094da02bc2c931f0a587efc0d13de1',
+             pk: 'c72651b7fb7ac0337a172977496fd7f2a72aea889385835e563c6b6053a32dc1'},
+            {sk: 'c57a43dcd7bab8516009546918d71ad459b7345efdca8d4f19929875c839d722',
+             pk: '2083b444236b9ab31d4e00c89d55c6260fee71ac1a47c4b5ba227404d382b82d'},
+            {sk: 'afcecea92439e44a43ed61b673043dcbc4e360f2f30cd07896cda20cb988d4e3',
+             pk: 'd231f69235a2e3a1dd5f6c2a9aaf20c03454b9a29f4e3a29ab94689d0d723e50'},
+            {sk: 'b834c6e0facbff580dd3b23753959a4c2154c219521b3d27035d071f6599bd02',
+             pk: 'd1c384715e3b3d02c13e090605534c7db740da2aa560f53200a3ced8beae8cf8'},
+        ]
+        it('produce SHA512 ED25519 compliant public key', () => {
+            // http://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=tests/t-ed25519.inp
+            vectorED25519.map(vec => {
+                const privateKey = Buffer.from(Convert.hexToUint8(vec.sk));
+                const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.CATAPULT);
+
+                expect(bip32Node.privateKey.toString('hex')).to.be.equal(vec.sk);
+                expect(bip32Node.publicKey.toString('hex')).to.be.equal(vec.pk);
+            })
+        })
+
+        it('produce SHA512 public key given Network.CATAPULT', () => {
             const privateHex = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
-            const expectPub = 'BD8D3F8B7E1B3839C650F458234AB1FF87CDB1EDA36338D9E446E27D454717F2'.toLowerCase();
+            const expectPub = '2e834140fd66cf87b254a693a2c7862c819217b676d3943267156625e816ec6f';
             const privateKey = Buffer.from(Convert.hexToUint8(privateHex));
             const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.CATAPULT);
 
@@ -356,20 +391,9 @@ describe('ExtendedKey -->', () => {
             expect(bip32Node.publicKey.toString('hex')).to.be.equal(expectPub);
         });
 
-        it('produce correct KECCAK public key given Network.CATAPULT_PUBLIC and private key', () => {
+        it('produce correct SHA512 public key given REVERSED private key', () => {
             const privateHex = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
-            const expectPub = 'd6c3845431236c5a5a907a9e45bd60da0e12efd350b970e7f58e3499e2e7a2f0';
-
-            const privateKey = Buffer.from(Convert.hexToUint8(privateHex));
-            const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);
-
-            expect(bip32Node.privateKey.toString('hex')).to.be.equal(privateKey.toString('hex'));
-            expect(bip32Node.publicKey.toString('hex')).to.be.equal(expectPub);
-        });
-
-        it('produce correct KECCAK public key given Network.CATAPULT_PUBLIC and REVERSED private key', () => {
-            const privateHex = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
-            const expectPub = 'c5f54ba980fcbb657dbaaa42700539b207873e134d2375efeab5f1ab52f87844';
+            const expectPub = '5112ba143b78132af616af1a94e911ead890fdb51b164a1b57c352ecd9ca1894';
 
             // NIS compatibility requires "key reversal".
             const reversedKey = Buffer.from(Convert.hexToUint8Reverse(privateHex));

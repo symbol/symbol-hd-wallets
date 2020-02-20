@@ -22,7 +22,6 @@ const bs58check = require('bs58check');
 
 // internal dependencies
 import {
-    CatapultECC,
     Cryptography,
     Network,
     NodeInterface,
@@ -124,7 +123,7 @@ export abstract class DeterministicKey implements NodeInterface {
      * Sign binary data with current node.
      *
      * Overloads the `bitcoinjs/bip32` method named `sign` in order to
-     * be ED25519 compliant and use `CatapultECC` with ed25519 instead
+     * be ED25519 compliant and use `tweetnacl` with ed25519 instead
      * of secp256k1.
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts#L277
@@ -140,7 +139,7 @@ export abstract class DeterministicKey implements NodeInterface {
      * `hash` with the current node.
      * 
      * Overloads the `bitcoinjs/bip32` method named `verify` in order to
-     * be ED25519 compliant and use `CatapultECC` with ed25519 instead
+     * be ED25519 compliant and use `tweetnacl` with ed25519 instead
      * of secp256k1.
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts#L281
