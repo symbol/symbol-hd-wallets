@@ -1,18 +1,18 @@
-# nem2-hd-wallets
+# symbol-hd-wallets
 
-[![npm version](https://badge.fury.io/js/nem2-hd-wallets.svg)](https://badge.fury.io/js/nem2-hd-wallets)
-[![Build Status](https://travis-ci.org/nemfoundation/nem2-hd-wallets.svg?branch=master)](https://travis-ci.org/nemfoundation/nem2-hd-wallets)
-[![Slack](https://img.shields.io/badge/chat-on%20slack-green.svg)](https://nem2.slack.com/messages/CB0UU89GS//)
+[![npm version](https://badge.fury.io/js/symbol-hd-wallets.svg)](https://badge.fury.io/js/symbol-hd-wallets)
+[![Build Status](https://travis-ci.org/nemfoundation/symbol-hd-wallets.svg?branch=master)](https://travis-ci.org/nemfoundation/symbol-hd-wallets)
+[![Slack](https://img.shields.io/badge/chat-on%20slack-green.svg)](https://symbol.slack.com/messages/CB0UU89GS//)
 
 *The author of this package cannot be held responsible for any loss of money or any malintentioned usage forms of this package. Please use this package with caution.*
 
-NEM HD Wallets generator to generate hyper-deterministic wallets for the Catapult (NEM2) platform.
+NEM HD Wallets generator to generate hyper-deterministic wallets for the Catapult (symbol) platform.
 
 This is a PoC to validate the proposed [NIP6 Multi-Account Hierarchy for Deterministic Wallets](https://github.com/nemtech/NIP/issues/12). When stable, the repository will be moved to the [nemtech](https://github.com/nemtech) organization.
 
 ## Installation
 
-`npm install nem2-hd-wallets`
+`npm install symbol-hd-wallets`
 
 ## Examples
 
@@ -21,7 +21,7 @@ This is a PoC to validate the proposed [NIP6 Multi-Account Hierarchy for Determi
 ```ts
 // examples/GeneratingAMnemonicPassPhrase.ts
 
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 // random 24-words mnemonic
 MnemonicPassPhrase.createRandom();
@@ -42,7 +42,7 @@ MnemonicPassPhrase.createRandom('japanese');
 ```ts
 // examples/GeneratePasswordProtectedSeedForRandomPassPhrase.ts
 
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 const mnemonic = MnemonicPassPhrase.createRandom();
 const secureSeedHex = mnemonic.toSeed('your-password');
@@ -53,7 +53,7 @@ const secureSeedHex = mnemonic.toSeed('your-password');
 // examples/GeneratePasswordProtectedSeedForRandomPassPhraseEmptyPassword.ts
 
 // Example 2: empty password for password-protected seed
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 const mnemonic = MnemonicPassPhrase.createRandom();
 const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: ''
@@ -65,7 +65,7 @@ const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: 
 ```ts
 // examples/GeneratingARootMasterExtendedKeyForKnownPassPhrase.ts
 
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 // Example 2: generate BIP32 master seed for known pass phrase
 const words = 'alpha pattern real admit vacuum wall ready code '
@@ -81,7 +81,7 @@ const bip32Seed = mnemonic.toSeed(); // using empty password
 ```ts
 // examples/GeneratingARootMasterExtendedKeyForRandomPassPhrase.ts
 
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 // Example 1: generate BIP32 master seed for random pass phrase
 const mnemonic = MnemonicPassPhrase.createRandom();
@@ -94,7 +94,7 @@ const bip32Seed = mnemonic.toSeed();
 ```ts
 // examples/GeneratingAHDWalletPrivateNetworkCompatible.ts
 
-import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
+import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
 import {NetworkType} from 'nem2-sdk';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT);
@@ -123,7 +123,7 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 ```ts
 // examples/GeneratingAHDWalletPublicNetworkCompatible.ts
 
-import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
+import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
 import {NetworkType} from 'nem2-sdk';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
@@ -152,7 +152,7 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 ```ts
 // examples/SigningWithAHDWalletPrivateNetworkCompatible.ts
 
-import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
+import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
 import {Account, Deadline, EmptyMessage, NetworkType, TransferTransaction} from "nem2-sdk";
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
