@@ -239,10 +239,6 @@ export class Wallet {
      * Checks whether said `networkType` network type can be used
      * to derive an (child) account or not.
      *
-     * Extended Keys for `Network.CATAPULT` and `Network.CATAPULT_PUBLIC`
-     * networks are different because the first uses SHA3 and the latter
-     * uses Keccak (NIS compatibility).
-     *
      * @param   networkType     {NetworkType}   The network type to test.
      */
     protected canDeriveForNetworkType(networkType: NetworkType): boolean {

@@ -18,8 +18,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { SignSchema } from 'nem2-sdk';
-
 // internal dependencies
 import {
     CurveAlgorithm,
@@ -81,7 +79,7 @@ export class Network {
     public static readonly CATAPULT_PUBLIC: Network = new Network(
         0x0488b21e, // base58 'xpub'
         0x0488ade4, // base58 'xprv'
-        CurveAlgorithm.ed25519_keccak
+        CurveAlgorithm.ed25519
     );
 
     /**
@@ -107,28 +105,6 @@ export class Network {
                  */
                 public readonly curve: CurveAlgorithm = CurveAlgorithm.secp256k1) {
 
-    }
-
-    /**
-     * Resolve the signature schema that must be used. This method is only
-     * relevant for Catapult key derivation and will/must not affect BITCOIN
-     * key derivation.
-     *
-     * In case of a `curve` field set to `CurveAlgorithm.ed25519_keccak`, the
-     * underlying SHA3 hasher should use Keccak ; This is to be compatible with
-     * Catapult public network implementations.
-     *
-     * @param   network    {Network}    The network object to interpret
-     * @return  {SignSchema}    Returns the signature schema needed.
-     */
-    public static resolveSignSchema(
-        network: Network
-    ): SignSchema {
-        if (network.curve === CurveAlgorithm.ed25519_keccak) {
-            return SignSchema.KECCAK;
-        }
-
-        return SignSchema.SHA3;
     }
 
     /**

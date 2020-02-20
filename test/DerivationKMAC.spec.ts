@@ -46,15 +46,13 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
     const HMAC = {
         chainCode: '90046a93de5380a72b5e45010748567d5ea02bbf6522f979e05c0d8d8ca9fffb',
         masterPrv: '2b4be7f19ee27bbf30c667b642d5f4aa69fd169872f8fc3059c08ebae2eb19e7',
-        masterPub: '398d57dda0faae646097435e648a2c10f0f367b67e9a1e99a3d9170948d85750',
+        masterPub: 'a4b2856bfec510abab89753fac1ac0e1112364e7d250545963f135f2a33188ed',
         neutered: [
             {path: 'm/0\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: 'b133c1d14999199ddefb03e815072f6fb14f1c22b201dab15f3373da8e26b17f',
+             key: '8c8a13df77a28f3445213a0f432fde644acaa215fc72dcdf300d5efaa85d350c',
              chain: '8b59aa11380b624e81507a27fedda59fea6d0b779a778918a2fd3590e16e9c69'},
             {path: 'm/0\'/1\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: 'b4f591ac319f122425eaf5eb25f8d2b729d4009c59e56eebb54e697328f07fea',
+             key: '1932a5270f335bed617d5b935c80aedb1a35bd9fc1e31acafd5372c30f5c1187',
              chain: 'a320425f77d1b5c2505a6b1b27382b37368ee640e3557c315416801243552f14'}
         ],
         nonNeutered: [
@@ -70,15 +68,13 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
     const KMAC = {
         chainCode: '0589895ba87aa5d28d6e5d9d94f3323d22414ce3c91d5c63a223e1b045b0549f',
         masterPrv: '8297bf032455d6b42e544cbe3d4861a28c94a75071905c516a1a16ef17ecac5c',
-        masterPub: 'aa16cb5de7b47df9eb805715d871c4ad9d346fa89b5874aa19a7765b681052dd',
+        masterPub: 'fef030d292cf1bd09258109b836763ad447c3061f95c0e8af37737c6f5635ba0',
         neutered: [
             {path: 'm/0\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: '6d282315ad30a08184f01ec1fa3453f814155b151c09c31de4853ec69d47df40',
+             key: 'b464e285d624970a10e48ae91e0e3f8da84a77b856e7b631f8401f6a739b190b',
              chain: '1d615993bde463a451d6553f4deac7488a54062a0aebe09ecc35c3d01d47d08a'},
             {path: 'm/0\'/1\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: '888b147936663c7eca406450f69951f190c7c4ca19dede9f5a8493843119c3ab',
+             key: '3497dcad20d3fa850754cce887e9d2bd1912644d02103a10d5fe3103801a36be',
              chain: 'a408fef3c6fd2aac83bbdd6b48eb865dc844793be117a90b86be215d2c163127'}
         ],
         nonNeutered: [

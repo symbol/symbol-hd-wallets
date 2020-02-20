@@ -21,7 +21,6 @@
 
 import { 
     SHA3Hasher as sha3Hasher,
-    SignSchema
 } from 'nem2-sdk';
 import { kmac256 } from 'js-sha3';
 const createHash = require('create-hash');
@@ -96,9 +95,8 @@ export class Cryptography {
         dest: Uint8Array,
         data: Uint8Array,
         length: number = 64,
-        signSchema: SignSchema = SignSchema.SHA3
     ): Uint8Array {
-        sha3Hasher.func(dest, data, length, signSchema);
+        sha3Hasher.func(dest, data, length);
         return dest;
     }
 
@@ -109,8 +107,7 @@ export class Cryptography {
      */
     public static createSha3Hasher(
         length: number = 64,
-        signSchema: SignSchema = SignSchema.SHA3
     ): HasherInterface {
-        return sha3Hasher.createHasher(length, signSchema);
+        return sha3Hasher.createHasher(length);
     }
 }

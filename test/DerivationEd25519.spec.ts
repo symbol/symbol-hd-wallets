@@ -50,45 +50,33 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
     // https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vectors
     const extendedKeys = [
     // Test vector 1: https://github.com/satoshilabs/slips/blob/master/slip-0010.md#test-vector-1-for-ed25519
-    // Catapult neutered nodes are different from SLIP-10 because of SHA3-256 usage.
-    // Extended Private Keys (nonNeutered nodes) are copied from SLIP-10 but Public Keys
-    // in SLIP-10 are generated with SHA512 while for Catapult we use SHA3-256
     {
         label: 'Vector #1',
         seedHex: '000102030405060708090a0b0c0d0e0f',
         chainCode: '90046a93de5380a72b5e45010748567d5ea02bbf6522f979e05c0d8d8ca9fffb',
         masterPub: 'a4b2856bfec510abab89753fac1ac0e1112364e7d250545963f135f2a33188ed',
         masterPrv: '2b4be7f19ee27bbf30c667b642d5f4aa69fd169872f8fc3059c08ebae2eb19e7',
-        catapultPub: '398d57dda0faae646097435e648a2c10f0f367b67e9a1e99a3d9170948d85750',
-        // Catapult neutered nodes are different from SLIP-10 because of SHA3-256 usage.
         neutered: [
             {path: 'm/0\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: 'b133c1d14999199ddefb03e815072f6fb14f1c22b201dab15f3373da8e26b17f',
+             key: '8c8a13df77a28f3445213a0f432fde644acaa215fc72dcdf300d5efaa85d350c',
              chain: '8b59aa11380b624e81507a27fedda59fea6d0b779a778918a2fd3590e16e9c69'},
             {path: 'm/0\'/1\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: 'b4f591ac319f122425eaf5eb25f8d2b729d4009c59e56eebb54e697328f07fea',
+             key: '1932a5270f335bed617d5b935c80aedb1a35bd9fc1e31acafd5372c30f5c1187',
              chain: 'a320425f77d1b5c2505a6b1b27382b37368ee640e3557c315416801243552f14'},
             {path: 'm/0\'/1\'/2\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: 'e51e8260001a2788cbf3e9dd89d21cef34080670c2b182236f85ee48cdabfec1',
+             key: 'ae98736566d30ed0e9d2f4486a64bc95740d89c7db33f52121f8ea8f76ff0fc1',
              chain: '2e69929e00b5ab250f49c3fb1c12f252de4fed2c1db88387094a0f8c4c9ccd6c'},
             {path: 'm/0\'/1\'/2\'/2\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: '3a14558899d4ebcc220afff7012f690e9f625006686b4eef3f1d7125e3e87222',
+             key: '8abae2d66361c879b900d204ad2cc4984fa2aa344dd7ddc46007329ac76c429c',
              chain: '8f6d87f93d750e0efccda017d662a1b31a266e4a6f5993b15f5c1f07f74dd5cc'},
             {path: 'm/0\'/1\'/2\'/2\'/1000000000\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: 'c53618757b76cc34376b7464902b18e495651c69f47cd2e7a2910d401fba2f94',
+             key: '3c24da049451555d51a7014a37337aa4e12d41e485abccfa46b47dfb2af54b7a',
              chain: '68789923a0cac2cd5a29172a475fe9e0fb14cd6adb5ad98a3fa70333e7afa230'},
              {path: 'm/44\'/43\'/0\'/0\'/0\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: '81357c2d65be8b12aa2506fc315b6e1e2b6ab847727d460c3c7d13755ab62395',
+             key: '2daecee59b39e0e1095005162cf2879c30a21c1868f0474eba02d41bd1d0f969',
              chain: 'c428a9ed5355167f312292c4e4ef3aae680145009197c4f6b23bfeed0780643e'},
              {path: 'm/44\'/43\'/1\'/0\'/0\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: 'af0868a6edcc3e768854fae2e3534bed3cce222893b16fdc5d780f82cd8990dd',
+             key: '0ad5eb7d7c2d0f0e673651732d415b54333adb8a5a67fbce7b07852b355d457a',
              chain: '5619e49ec9c210ac75e89000e9c3266a388ae913615449790c4cbefff990b00e'},
         ],
         nonNeutered: [
@@ -108,11 +96,9 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
              key: '8f94d394a8e8fd6b1bc2f3f49f5c47e385281d5c17e65324b0f62483e37e8793',
              chain: '68789923a0cac2cd5a29172a475fe9e0fb14cd6adb5ad98a3fa70333e7afa230'},
              {path: 'm/44\'/43\'/0\'/0\'/0\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
              key: '4ce1c399f5f72acf16e7231a406f6e8284033f686d565100fed376960ea8c871',
              chain: 'c428a9ed5355167f312292c4e4ef3aae680145009197c4f6b23bfeed0780643e'},
              {path: 'm/44\'/43\'/1\'/0\'/0\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
              key: '1b05cb9db696df7216bd6a551c0e2b441234a59b23d785f4c803a41d64ce4d69',
              chain: '5619e49ec9c210ac75e89000e9c3266a388ae913615449790c4cbefff990b00e'},
         ],
@@ -124,27 +110,21 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
         chainCode: 'ef70a74db9c3a5af931b5fe73ed8e1a53464133654fd55e7a66f8570b8e33c3b',
         masterPub: '8fe9693f8fa62a4305a140b9764c5ee01e455963744fe18204b4fb948249308a',
         masterPrv: '171cb88b1b3c1db25add599712e36245d75bc65a1a5c9e18d76f9f2b1eab4012',
-        catapultPub: '8d806491b531735af494d211d801cc87c0c66703634a016cd1e3dd188b4ca1e6',
         neutered: [
             {path: 'm/0\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: '5e2d0e53f031fc783a664ab03a7e0c6e980e87c515b968590eff09eb34de6db3',
+             key: '86fab68dcb57aa196c77c5f264f215a112c22a912c10d123b0d03c3c28ef1037',
              chain: '0b78a3226f915c082bf118f83618a618ab6dec793752624cbeb622acb562862d'},
             {path: 'm/0\'/2147483647\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: '4fd948675902bf11678bda28ba3faec9798bedfd8c8d702652d5a5e6ea73c8b2',
+             key: '5ba3b9ac6e90e83effcd25ac4e58a1365a9e35a3d3ae5eb07b9e4d90bcf7506d',
              chain: '138f0b2551bcafeca6ff2aa88ba8ed0ed8de070841f0c4ef0165df8181eaad7f'},
             {path: 'm/0\'/2147483647\'/1\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: '8a326dd01e22229d043434140982b1f538332ae4e745b15f0b359501c2b9bb9a',
+             key: '2e66aa57069c86cc18249aecf5cb5a9cebbfd6fadeab056254763874a9352b45',
              chain: '73bd9fff1cfbde33a1b846c27085f711c0fe2d66fd32e139d3ebc28e5a4a6b90'},
             {path: 'm/0\'/2147483647\'/1\'/2147483646\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: 'd774ca736001d91d8048e102702ffe32b306d43103dfb54df7d3869a0d1cc3b7',
+             key: 'e33c0f7d81d843c572275f287498e8d408654fdf0d1e065b84e2e6f157aab09b',
              chain: '0902fe8a29f9140480a00ef244bd183e8a13288e4412d8389d140aac1794825a'},
             {path: 'm/0\'/2147483647\'/1\'/2147483646\'/2\'',
-             // Ed25519-compliant SHA3-256 instead of SHA512!! (different from SLIP-10)
-             key: 'f3fd8f892731eda80e8c21f2b4167ea8b9b59bda85101f8595f78041cde1d303',
+             key: '47150c75db263559a70d5778bf36abbab30fb061ad69f69ece61a72b0cfa4fc0',
              chain: '5d70af781f3a37b829f0d060924d5e960bdc02e85423494afc0b1a41bbe196d4'},
         ],
         nonNeutered: [
@@ -180,7 +160,7 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
             });
 
             it (extendedKey.label + ': create correct master extended public key', () => {
-                expect(masterKey.getPublicKey()).to.be.equal(extendedKey.catapultPub);
+                expect(masterKey.getPublicKey()).to.be.equal(extendedKey.masterPub);
             });
 
             it(extendedKey.label + ': derive correct extended public key given seed (' + (extendedKey.seedHex.length/2) + ' bytes) and paths', () => {
@@ -217,7 +197,7 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
     describe('NodeEd25519 should', () => {
         it('forward network property in CKDPriv (derivePath) and derive correct public key with SHA3', () => {
             const privateKey = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
-            const expectPublicKey = 'BD8D3F8B7E1B3839C650F458234AB1FF87CDB1EDA36338D9E446E27D454717F2'.toLowerCase();
+            const expectPublicKey = '2e834140fd66cf87b254a693a2c7862c819217b676d3943267156625e816ec6f';
 
             const privateBytes = Convert.hexToUint8(privateKey);
             const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.CATAPULT);
@@ -225,29 +205,9 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
             expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);
         });
 
-        it('forward network property in CKDPriv (derivePath) and derive correct public key with KECCAK', () => {
+        it('forward network property in CKDPriv (derivePath) and derive correct public key with REVERSED private key', () => {
             const privateKey = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
-            const expectPublicKey = 'd6c3845431236c5a5a907a9e45bd60da0e12efd350b970e7f58e3499e2e7a2f0';
-
-            const privateBytes = Convert.hexToUint8(privateKey);
-            const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);
-
-            expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);
-        });
-
-        it('forward network property in CKDPriv (derivePath) and derive correct public key with KECCAK and trezor private key', () => {
-            const privateKey = '52019c4235e2a7e1473b9ccacdf8e3ce7053388ab00bd316cd8614535b9e341e';
-            const expectPublicKey = 'a8f70e4d5c357273968b12417ae8b742e35e530623c2488d0a73306b41271500';
-
-            const privateBytes = Convert.hexToUint8(privateKey);
-            const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);
-
-            expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);
-        });
-
-        it('forward network property in CKDPriv (derivePath) and derive correct public key with KECCAK and REVERSED private key', () => {
-            const privateKey = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
-            const expectPublicKey = 'c5f54ba980fcbb657dbaaa42700539b207873e134d2375efeab5f1ab52f87844';
+            const expectPublicKey = '5112ba143b78132af616af1a94e911ead890fdb51b164a1b57c352ecd9ca1894';
 
             // REVERSED private key (NIS)
             const privateBytes = Convert.hexToUint8Reverse(privateKey);

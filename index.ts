@@ -25,7 +25,6 @@ export { KeyEncoding } from './src/KeyEncoding';
 export { Network } from './src/Network';
 export { Cryptography } from './src/Cryptography';
 export { HasherInterface } from './src/HasherInterface';
-export { CatapultECC } from './src/CatapultECC';
 export { NodeInterface } from './src/NodeInterface';
 export { DeterministicKey } from './src/Compat/DeterministicKey';
 export { NodeEd25519 } from './src/Curves/NodeEd25519';

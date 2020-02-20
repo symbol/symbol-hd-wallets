@@ -19,7 +19,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import {expect} from "chai";
-import {SignSchema} from "nem2-sdk"
 
 // internal dependencies
 import {
@@ -44,38 +43,24 @@ describe('Network -->', () => {
         it('set correct curve algorithm', () => {
             const network1 = new Network(1, 2, CurveAlgorithm.secp256k1)
             const network2 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
-            const network3 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519_keccak)
+            const network3 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
 
             expect(network1.curve).to.be.equal(CurveAlgorithm.secp256k1)
             expect(network2.curve).to.be.equal(CurveAlgorithm.ed25519)
-            expect(network3.curve).to.be.equal(CurveAlgorithm.ed25519_keccak)
-        });
-    });
-
-    describe('resolveSignSchema() should', () => {
-
-        it('set correct signature schema Keccak given curve ed25519-keccak', () => {
-            const network = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519_keccak)
-            expect(Network.resolveSignSchema(network)).to.be.equal(SignSchema.KECCAK)
-        });
-
-        it('set correct signature schema SHA3 given curve ed25519', () => {
-            const network = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
-            expect(Network.resolveSignSchema(network)).to.be.equal(SignSchema.SHA3)
+            expect(network3.curve).to.be.equal(CurveAlgorithm.ed25519)
         });
     });
 
     describe('equals() should', () => {
-
         it('return false given non-identical object', () => {
-            const network1 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519_keccak)
-            const network2 = new Network(1, 2, CurveAlgorithm.ed25519_keccak)
+            const network1 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
+            const network2 = new Network(1, 2, CurveAlgorithm.ed25519)
             expect(network1.equals(network2)).to.be.equal(false)
         });
 
-        it('return true given non-identical object', () => {
-            const network1 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519_keccak)
-            const network2 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519_keccak)
+        it('return true given identical object', () => {
+            const network1 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
+            const network2 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
             expect(network1.equals(network2)).to.be.equal(true)
         });
     });

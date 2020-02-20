@@ -43,15 +43,15 @@ describe('Wallet -->', () => {
 
     // m
     const masterPriv = '2b4be7f19ee27bbf30c667b642d5f4aa69fd169872f8fc3059c08ebae2eb19e7';
-    const masterPub  = '398d57dda0faae646097435e648a2c10f0f367b67e9a1e99a3d9170948d85750';
+    const masterPub  = 'a4b2856bfec510abab89753fac1ac0e1112364e7d250545963f135f2a33188ed';
 
     // m/44'/43'/0'/0'/0'
     const defaultPriv = '4ce1c399f5f72acf16e7231a406f6e8284033f686d565100fed376960ea8c871';
-    const defaultPub = '81357c2d65be8b12aa2506fc315b6e1e2b6ab847727d460c3c7d13755ab62395';
+    const defaultPub = '2daecee59b39e0e1095005162cf2879c30a21c1868f0474eba02d41bd1d0f969';
 
     // m/44'/43'/1'/0'/0'
     const secondPriv = '1b05cb9db696df7216bd6a551c0e2b441234a59b23d785f4c803a41d64ce4d69';
-    const secondPub = 'af0868a6edcc3e768854fae2e3534bed3cce222893b16fdc5d780f82cd8990dd';
+    const secondPub = '0ad5eb7d7c2d0f0e673651732d415b54333adb8a5a67fbce7b07852b355d457a';
 
     describe('constructor should', () => {
 
