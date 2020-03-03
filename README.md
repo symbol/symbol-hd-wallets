@@ -95,7 +95,7 @@ const bip32Seed = mnemonic.toSeed();
 // examples/GeneratingAHDWalletPrivateNetworkCompatible.ts
 
 import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
-import {NetworkType} from 'nem2-sdk';
+import {NetworkType} from 'symbol-sdk';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT);
 const wallet = new Wallet(xkey);
@@ -124,7 +124,7 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 // examples/GeneratingAHDWalletPublicNetworkCompatible.ts
 
 import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
-import {NetworkType} from 'nem2-sdk';
+import {NetworkType} from 'symbol-sdk';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
 const wallet = new Wallet(xkey);
@@ -153,7 +153,7 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 // examples/SigningWithAHDWalletPrivateNetworkCompatible.ts
 
 import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
-import {Account, Deadline, EmptyMessage, NetworkType, TransferTransaction} from "nem2-sdk";
+import {Account, Deadline, EmptyMessage, NetworkType, TransferTransaction} from "symbol-sdk";
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
 const wallet = new Wallet(xkey);

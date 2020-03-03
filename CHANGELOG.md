@@ -1,6 +1,10 @@
 # CHANGELOG
 
-# v0.9.0
+# v0.9.2
+
+- updated examples
+
+# v0.9.1
 
 - replaced nem2-sdk with symbol-sdk@v0.17.2
 - renamed package from nem2-hd-wallets to symbol-hd-wallets
