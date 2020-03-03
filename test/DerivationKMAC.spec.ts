@@ -23,7 +23,7 @@ import * as bip32 from 'bip32';
 import {
     Account,
     NetworkType,
-} from 'nem2-sdk';
+} from 'symbol-sdk';
 
 // internal dependencies
 import {

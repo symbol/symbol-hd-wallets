@@ -19,7 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import * as bip39 from 'bip39';
-import {Crypto} from 'nem2-sdk';
+import {Crypto} from 'symbol-sdk';
 
 /**
  * Class `MnemonicPassPhrase` describes a mnemonic pass phrase generator
