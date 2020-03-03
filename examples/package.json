@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nem2-hd-wallets": "^0.6.0",
-    "nem2-sdk": "^0.15.0"
+    "symbol-hd-wallets": "^0.9.1",
+    "symbol-sdk": "^0.17.2"
   }
 }
