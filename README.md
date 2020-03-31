@@ -1,20 +1,28 @@
-# nem2-hd-wallets
+# Symbol HD Wallets
 
-[![npm version](https://badge.fury.io/js/nem2-hd-wallets.svg)](https://badge.fury.io/js/nem2-hd-wallets)
-[![Build Status](https://travis-ci.org/nemfoundation/nem2-hd-wallets.svg?branch=master)](https://travis-ci.org/nemfoundation/nem2-hd-wallets)
+[![npm version](https://badge.fury.io/js/symbol-hd-wallets.svg)](https://badge.fury.io/js/symbol-hd-wallets)
+[![Build Status](https://travis-ci.com/nemfoundation/symbol-hd-wallets.svg?branch=master)](https://travis-ci.com/nemfoundation/symbol-hd-wallets)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-green.svg)](https://nem2.slack.com/messages/CB0UU89GS//)
 
-*The author of this package cannot be held responsible for any loss of money or any malintentioned usage forms of this package. Please use this package with caution.*
-
-NEM HD Wallets generator to generate hyper-deterministic wallets for the Catapult (NEM2) platform.
+Hyper-deterministic wallets generator for Symbol.
 
 This is a PoC to validate the proposed [NIP6 Multi-Account Hierarchy for Deterministic Wallets](https://github.com/nemtech/NIP/issues/12). When stable, the repository will be moved to the [nemtech](https://github.com/nemtech) organization.
+
+**NOTE**: The author of this package cannot be held responsible for any loss of money or any malintentioned usage forms of this package. Please use this package with caution.
+
+## Requirements
+
+### NodeJS
+
+- NodeJS 8.9.X
+- NodeJS 9.X.X
+- NodeJS 10.X.X
 
 ## Installation
 
 `npm install nem2-hd-wallets`
 
-## Examples
+## Usage
 
 ### Generating a mnemonic pass phrase
 
@@ -174,6 +182,28 @@ const generationHash = ''; // replace with network generation hash
 const signedTx = childAccount.sign(transfer, generationHash);
 
 ```
+## Getting help
+
+Use the following available resources to get help:
+
+- [Symbol Documentation][docs]
+- Join the community [slack group (#sig-client)][slack] 
+- If you found a bug, [open a new issue][issues]
+
+## Contributing
+
+This project is developed and maintained by NEM Foundation.
+
+Contributions are welcome and appreciated. 
+Check [CONTRIBUTING](CONTRIBUTING.md) for information on how to contribute.
+
 ## License
 
+Copyright (c) 2019, Grégory Saive
+
 Licensed under the [BSD-2 License](LICENSE).
+
+[self]: https://github.com/nemfoundation/symbol-hd-wallets
+[docs]: https://nemtech.github.io
+[issues]: https://github.com/nemfoundation/symbol-hd-wallets/issues
+[slack]: https://join.slack.com/t/nem2/shared_invite/enQtMzY4MDc2NTg0ODgyLWZmZWRiMjViYTVhZjEzOTA0MzUyMTA1NTA5OWQ0MWUzNTA4NjM5OTJhOGViOTBhNjkxYWVhMWRiZDRkOTE0YmU
