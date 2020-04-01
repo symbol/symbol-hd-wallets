@@ -12,11 +12,7 @@ This is a PoC to validate the proposed [NIP6 Multi-Account Hierarchy for Determi
 
 ## Requirements
 
-### NodeJS
-
-- NodeJS 8.9.X
-- NodeJS 9.X.X
-- NodeJS 10.X.X
+- NodeJS 12 LTS
 
 ## Installation
 
