@@ -1,7 +1,7 @@
 {
-  "name": "nem2-hd-wallets",
-  "version": "0.8.1",
-  "description": "nem2 library to handle hyper-deterministic wallets",
+  "name": "symbol-hd-wallets",
+  "version": "0.9.3",
+  "description": "Symbol library to handle hyper-deterministic wallets",
   "author": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -36,20 +36,22 @@
   "scripts": {
     "pretest": "npm run build",
     "build": "rm -rf dist/ && tsc",
+    "lint:all": "tslint --project .",
     "test": "mocha --ui bdd --recursive ./dist/test",
-    "test:cov-html": "nyc --reporter=html npm t",
-    "test:coverage": "nyc --reporter=text-lcov npm t",
-    "report-coverage": "nyc report --reporter=text-lcov | coveralls"
+    "test:cov": "nyc --reporter=lcov --reporter=text-summary npm t",
+    "test:coveralls": "npm run test:cov | coveralls",
+    "coveralls-report": "cat ./coverage/lcov.info | coveralls",
+    "version": "echo $npm_package_version"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/evias/nem2-hd-wallets.git"
+    "url": "git+https://github.com/nemfoundation/symbol-hd-wallets.git"
   },
-  "license": "Apache 2.0",
+  "license": "BSD 2-Clause License",
   "bugs": {
-    "url": "https://github.com/evias/nem2-hd-wallets/issues"
+    "url": "https://github.com/nemfoundation/symbol-hd-wallets/issues"
   },
-  "homepage": "https://github.com/evias/nem2-hd-wallets#readme",
+  "homepage": "https://github.com/nemfoundation/symbol-hd-wallets#readme",
   "nyc": {
     "exclude": [
       "**/*.spec.js"
