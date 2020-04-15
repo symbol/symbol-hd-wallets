@@ -1,4 +1,4 @@
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 // random 24-words mnemonic
 MnemonicPassPhrase.createRandom();

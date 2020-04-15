@@ -21,7 +21,7 @@
 
 import { 
     SHA3Hasher as sha3Hasher,
-} from 'nem2-sdk';
+} from 'symbol-sdk';
 import { kmac256 } from 'js-sha3';
 const createHash = require('create-hash');
 const createHmac = require('create-hmac');

@@ -31,7 +31,7 @@ import {
     NodeInterface,
     NodeEd25519,
 } from "../index";
-import { Convert } from "nem2-sdk";
+import { Convert } from "symbol-sdk";
 
 describe('ExtendedKey -->', () => {
 

@@ -16,7 +16,7 @@ This is a PoC to validate the proposed [NIP6 Multi-Account Hierarchy for Determi
 
 ## Installation
 
-`npm install nem2-hd-wallets`
+`npm install symbol-hd-wallets`
 
 ## Usage
 
@@ -25,7 +25,7 @@ This is a PoC to validate the proposed [NIP6 Multi-Account Hierarchy for Determi
 ```ts
 // examples/GeneratingAMnemonicPassPhrase.ts
 
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 // random 24-words mnemonic
 MnemonicPassPhrase.createRandom();
@@ -46,7 +46,7 @@ MnemonicPassPhrase.createRandom('japanese');
 ```ts
 // examples/GeneratePasswordProtectedSeedForRandomPassPhrase.ts
 
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 const mnemonic = MnemonicPassPhrase.createRandom();
 const secureSeedHex = mnemonic.toSeed('your-password');
@@ -57,7 +57,7 @@ const secureSeedHex = mnemonic.toSeed('your-password');
 // examples/GeneratePasswordProtectedSeedForRandomPassPhraseEmptyPassword.ts
 
 // Example 2: empty password for password-protected seed
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 const mnemonic = MnemonicPassPhrase.createRandom();
 const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: ''
@@ -69,7 +69,7 @@ const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: 
 ```ts
 // examples/GeneratingARootMasterExtendedKeyForKnownPassPhrase.ts
 
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 // Example 2: generate BIP32 master seed for known pass phrase
 const words = 'alpha pattern real admit vacuum wall ready code '
@@ -85,7 +85,7 @@ const bip32Seed = mnemonic.toSeed(); // using empty password
 ```ts
 // examples/GeneratingARootMasterExtendedKeyForRandomPassPhrase.ts
 
-import {MnemonicPassPhrase} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase} from 'symbol-hd-wallets';
 
 // Example 1: generate BIP32 master seed for random pass phrase
 const mnemonic = MnemonicPassPhrase.createRandom();
@@ -98,8 +98,8 @@ const bip32Seed = mnemonic.toSeed();
 ```ts
 // examples/GeneratingAHDWalletPrivateNetworkCompatible.ts
 
-import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
-import {NetworkType} from 'nem2-sdk';
+import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
+import {NetworkType} from 'symbol-sdk';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT);
 const wallet = new Wallet(xkey);
@@ -127,8 +127,8 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 ```ts
 // examples/GeneratingAHDWalletPublicNetworkCompatible.ts
 
-import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
-import {NetworkType} from 'nem2-sdk';
+import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
+import {NetworkType} from 'symbol-sdk';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
 const wallet = new Wallet(xkey);
@@ -156,8 +156,8 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 ```ts
 // examples/SigningWithAHDWalletPrivateNetworkCompatible.ts
 
-import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
-import {Account, Deadline, EmptyMessage, NetworkType, TransferTransaction} from "nem2-sdk";
+import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
+import {Account, Deadline, EmptyMessage, NetworkType, TransferTransaction} from "symbol-sdk";
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
 const wallet = new Wallet(xkey);

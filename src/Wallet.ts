@@ -22,7 +22,7 @@ import {
     Account,
     PublicAccount,
     NetworkType,
-} from 'nem2-sdk';
+} from 'symbol-sdk';
 
 // internal dependencies
 import { 
@@ -36,7 +36,7 @@ import {
  * produces _Catapult-ED25519_-compatible accounts.
  *
  * This class provides with a bridge between BIP32-ED25519 compatible
- * key pairs and the nem2-sdk `Account` or `PublicAccount` objects.
+ * key pairs and the symbol-sdk `Account` or `PublicAccount` objects.
  *
  * @example Usage of hierarchical deterministic wallets
  * 
@@ -109,7 +109,7 @@ export class Wallet {
     }
 
     /**
-     * Get a nem2-sdk `Account` object with the extended
+     * Get a symbol-sdk `Account` object with the extended
      * key property.
      *
      * No derivation is done in this step. Derivation must be done either before
@@ -137,7 +137,7 @@ export class Wallet {
     }
 
     /**
-     * Get a nem2-sdk `PublicAccount` object with the extended key property.
+     * Get a symbol-sdk `PublicAccount` object with the extended key property.
      *
      * No derivation is done in this step. Derivation must be done either before
      * calling this method or using the `getChildPublicAccount` method.
@@ -156,7 +156,7 @@ export class Wallet {
     }
 
     /**
-     * Get a nem2-sdk `Account` object with the derived child account.
+     * Get a symbol-sdk `Account` object with the derived child account.
      *
      * In case no derivation path is provided, the default wallet path
      * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
@@ -188,7 +188,7 @@ export class Wallet {
     }
 
     /**
-     * Get a nem2-sdk `PublicAccount` object with the derived child account.
+     * Get a symbol-sdk `PublicAccount` object with the derived child account.
      *
      * In case no derivation path is provided, the default wallet path
      * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
