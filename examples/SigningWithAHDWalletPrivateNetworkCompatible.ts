@@ -1,5 +1,7 @@
-import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
 import {Account, Deadline, EmptyMessage, NetworkType, TransferTransaction} from "symbol-sdk";
+import {Wallet} from "../src/Wallet";
+import {ExtendedKey} from "../src/ExtendedKey";
+import {Network} from "../src/Network";
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
 const wallet = new Wallet(xkey);
