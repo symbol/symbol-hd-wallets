@@ -1,5 +1,5 @@
-import {ExtendedKey, Network, Wallet} from 'nem2-hd-wallets';
-import {NetworkType} from 'nem2-sdk';
+import {ExtendedKey, Network, Wallet} from 'symbol-hd-wallets';
+import {NetworkType} from 'symbol-sdk';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT);
 const wallet = new Wallet(xkey);
