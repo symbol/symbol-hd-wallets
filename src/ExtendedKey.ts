@@ -19,18 +19,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import * as bip32 from 'bip32';
-import { BIP32 } from 'bip32';
-const bs58check = require('bs58check');
-
+import {BIP32} from 'bip32';
 // internal dependencies
-import { 
-    CurveAlgorithm,
-    KeyEncoding,
-    Network,
-    NodeInterface,
-    NodeEd25519,
-    MACType,
-} from '../index';
+import {KeyEncoding, MACType, Network, NodeEd25519,} from '../index';
+
+const bs58check = require('bs58check');
 
 /**
  * Class `ExtendedKey` describes a hierarchical deterministic extended
@@ -43,7 +36,7 @@ import {
  * This class *uses* features provided by the `bitcoinjs/bip32` package
  * and therefor is licensed under the BSD-2 Clause License as mentioned
  * [here](https://github.com/bitcoinjs/bip32/blob/master/LICENSE).
- * 
+ *
  * @see https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
  * @see https://github.com/bitcoinjs/bip32
  * @see https://github.com/nemtech/NIP/issues/12
@@ -52,7 +45,7 @@ import {
 export class ExtendedKey {
 
     /**
-     * Static property to define which type of 
+     * Static property to define which type of
      * message authentication code must be used.
      *
      * @var {MACType}
@@ -61,7 +54,7 @@ export class ExtendedKey {
 
     /**
      * Construct an `ExtendedKey` object out of its' base58 payload.
-     * 
+     *
      * @see https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts
      * @param   node   {BIP32}
      */
@@ -93,7 +86,7 @@ export class ExtendedKey {
      * and creates an extended key node by parsing the Base58 binary
      * representation.
      *
-     * @param payload 
+     * @param payload
      */
     public static createFromBase58(
         payload: string,
@@ -105,19 +98,19 @@ export class ExtendedKey {
         // use NodeEd25519 node implementation
 
             // interpret payload
-            const node = NodeEd25519.fromBase58(payload);
+            const ed25519Node = NodeEd25519.fromBase58(payload);
 
             // instanciate our ExtendedKey
-            return new ExtendedKey(node, network, macType);
+            return new ExtendedKey(ed25519Node, network, macType);
         }
         // else {
         // use BIP32 node implementation
 
         // interpret payload
-        const node = bip32.fromBase58(payload);
+        const bip32Node = bip32.fromBase58(payload);
 
         // instanciate our ExtendedKey
-        return new ExtendedKey(node, network, macType);
+        return new ExtendedKey(bip32Node, network, macType);
     }
 
     /**
@@ -147,23 +140,23 @@ export class ExtendedKey {
         // use NodeEd25519 node implementation
 
             // use hexadecimal seed
-            const node = NodeEd25519.fromSeed(
+            const ed25519Node = NodeEd25519.fromSeed(
                 Buffer.from(seed, 'hex'),
                 network,
                 macType
             );
 
             // instanciate our ExtendedKey
-            return new ExtendedKey(node, network, macType);
+            return new ExtendedKey(ed25519Node, network, macType);
         }
         // else {
         // use BIP32 node implementation
 
         // use hexadecimal seed
-        const node = bip32.fromSeed(Buffer.from(seed, 'hex'));
+        const bip32Node = bip32.fromSeed(Buffer.from(seed, 'hex'));
 
         // instanciate our ExtendedKey
-        return new ExtendedKey(node, network, macType);
+        return new ExtendedKey(bip32Node, network, macType);
     }
 
     /**
@@ -172,7 +165,7 @@ export class ExtendedKey {
      * Default account layer should derive path `m/44'/43'/0'/0/0`.
      *
      * @see https://github.com/nemtech/NIP/issues/12
-     * @param path 
+     * @param path
      */
     public derivePath(
         path: string
@@ -210,7 +203,7 @@ export class ExtendedKey {
      * @return {boolean}
      */
     public isMaster(): boolean {
-        //XXX read parentFingerprint instead of decode
+        // XXX read parentFingerprint instead of decode
         const base58 = this.node.toBase58();
         const buffer = bs58check.decode(base58);
         const parent = buffer.readUInt32BE(5);
@@ -221,7 +214,7 @@ export class ExtendedKey {
     /**
      * Get a neutered hyper-deterministic node. This corresponds to
      * a public key only extended key.
-     * 
+     *
      * From a neutered HD-node, users can only generate **public child
      * keys** and no **private child keys**.
      *
@@ -260,7 +253,7 @@ export class ExtendedKey {
      *
      * This method defaults to returning the hexadecimal notation of
      * the key. Use `KeyEncoding.ENC_BIN` if you need the binary form.
-     * 
+     *
      * @see {KeyEncoding}
      * @return  {string}
      * @throws  {Error}     On use of this method with neutered extended keys (public keys).
@@ -306,8 +299,8 @@ export class ExtendedKey {
      * Encode a key into `encoding`. Default `encoding` is `KeyEncoding.ENC_HEX`
      * which results in a hexadecimal notation of the key.
      *
-     * @param key 
-     * @param encoding 
+     * @param key
+     * @param encoding
      */
     protected encodeAs(
         key: Buffer,

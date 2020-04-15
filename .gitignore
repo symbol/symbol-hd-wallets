@@ -1,4 +1,7 @@
 .idea/
+.nyc_output/
 dist/
 node_modules/
+ts-docs/
 examples/node_modules/
+coverage/

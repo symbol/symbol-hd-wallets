@@ -30,10 +30,10 @@ import {
 /**
  * Class `DeterministicKey` describes hierarchical deterministic
  * keys that are compatible with the `bitcoinjs/bip32` implementation.
- * 
+ *
  * This class is used to provide with compatibility for both schemes:
  * BIP32 and NIP6.
- * 
+ *
  * @see https://github.com/nemtech/NIP/issues/12
  * @since 0.2.0
  */
@@ -94,7 +94,7 @@ export abstract class DeterministicKey implements NodeInterface {
      * Derive a child node with `index`.
      *
      * When the node is *not neutered*, an extended private
-     * key will be created and when the node is *neutered*, 
+     * key will be created and when the node is *neutered*,
      * an extended public key will be created.
      *
      * This method  is an overload of the `bitcoinjs/bip32`
@@ -137,7 +137,7 @@ export abstract class DeterministicKey implements NodeInterface {
     /**
      * Verify a signature `signature` for data
      * `hash` with the current node.
-     * 
+     *
      * Overloads the `bitcoinjs/bip32` method named `verify` in order to
      * be ED25519 compliant and use `tweetnacl` with ed25519 instead
      * of secp256k1.
@@ -239,7 +239,7 @@ export abstract class DeterministicKey implements NodeInterface {
      * Return whether the node is neutered or not.
      *
      * Neutered keys = Extended Public Keys
-     * Non-Neutered keys = Extended Private Keys 
+     * Non-Neutered keys = Extended Private Keys
      *
      * @access public
      * @return {Buffer}
@@ -332,7 +332,7 @@ export abstract class DeterministicKey implements NodeInterface {
      * specification (with `||` concatenation operator) :
      *
      * `version || depth || parent || index || chain code || priv/pub`
-     * 
+     *
      * Private keys are prepended with `0x00`, public keys are encoded
      * in X9.62 format.
      *
@@ -381,8 +381,8 @@ export abstract class DeterministicKey implements NodeInterface {
         return bs58check.encode(buffer);
     }
 
-    //XXX hidden usage of toHex() ?
+    // XXX hidden usage of toHex() ?
     public toWIF(): string {
-        throw new TypeError("Catapult BIP32 keys cannot be converted to WIF. Please use the toHex() method.");
+        throw new TypeError('Catapult BIP32 keys cannot be converted to WIF. Please use the toHex() method.');
     }
 }

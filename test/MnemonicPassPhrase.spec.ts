@@ -18,8 +18,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {expect} from "chai";
-import {MnemonicPassPhrase} from "../index";
+import {expect} from 'chai';
+import {MnemonicPassPhrase} from '../index';
 
 describe('MnemonicPassPhrase -->', () => {
 
@@ -107,30 +107,26 @@ describe('MnemonicPassPhrase -->', () => {
     describe('MnemonicPassPhrase.createRandom() should', () => {
         it('be created randomly without arguments', () => {
             const mnemonic = MnemonicPassPhrase.createRandom();
-            const words = mnemonic.toArray();
-
-            expect(words.length).to.be.equal(24);
+            expect(mnemonic.toArray().length).to.be.equal(24);
         });
 
         it('be created randomly with valid arguments', () => {
             const mnemonic = MnemonicPassPhrase.createRandom('english', 256);
-            const words = mnemonic.toArray();
-
-            expect(words.length).to.be.equal(24);
+            expect(mnemonic.toArray().length).to.be.equal(24);
         });
 
         it('throw given invalid pass phrase strength', () => {
-            expect((function () {
+            expect( () => {
                 const invalidStrength = 64;
                 MnemonicPassPhrase.createRandom('english', invalidStrength);
-            })).to.throw('Invalid strength, must be multiple of 32 with: 128 >= strength <= 256.');
+            }).to.throw('Invalid strength, must be multiple of 32 with: 128 >= strength <= 256.');
         });
 
         it('throw given language not supported by BIP39', () => {
             const invalidLanguage = 'belgian';
-            expect((function () {
+            expect( () => {
                 MnemonicPassPhrase.createRandom(invalidLanguage);
-            })).to.throw('Language "' + invalidLanguage + '" is not supported.');
+            }).to.throw('Language "' + invalidLanguage + '" is not supported.');
         });
 
         it('accept strength to change number of words', () => {
@@ -173,7 +169,7 @@ describe('MnemonicPassPhrase -->', () => {
             const invalidLanguage = 'arabic';
             const mnemonic = new MnemonicPassPhrase(words.join(' '));
             const entropy = mnemonic.toEntropy();
-            expect(function() {
+            expect(() => {
                 MnemonicPassPhrase.createFromEntropy(entropy, invalidLanguage);
             }).to.throw('Language "' + invalidLanguage + '" is not supported.');
         });

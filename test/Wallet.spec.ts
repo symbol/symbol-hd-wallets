@@ -18,7 +18,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {expect} from "chai";
+import {expect} from 'chai';
 import {
     Account,
     NetworkType,
@@ -34,7 +34,7 @@ import {
     NodeInterface,
     NodeEd25519,
     Wallet,
-} from "../index";
+} from '../index';
 
 describe('Wallet -->', () => {
 
@@ -86,9 +86,9 @@ describe('Wallet -->', () => {
             const xpub = xkey.getPublicNode();
             const wallet = new Wallet(xpub);
 
-            expect((function () {
+            expect(() => {
                 wallet.getAccount();
-            })).to.throw('Missing private key, please use method getPublicAccount().');
+            }).to.throw('Missing private key, please use method getPublicAccount().');
         });
 
         it('get catapult compatible private key / public key pair (keypair)', () => {
@@ -108,9 +108,9 @@ describe('Wallet -->', () => {
             const xpub = xkey.getPublicNode();
             const wallet = new Wallet(xpub);
 
-            expect((function () {
+            expect(() => {
                 wallet.getChildAccount();
-            })).to.throw('Missing private key, please use method getChildPublicAccount().');
+            }).to.throw('Missing private key, please use method getChildPublicAccount().');
         });
 
         it('derive default account when given no path', () => {

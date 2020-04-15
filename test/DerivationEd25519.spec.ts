@@ -18,7 +18,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {expect} from "chai";
+import {expect} from 'chai';
 import * as bip32 from 'bip32';
 import {
     Account,
@@ -31,19 +31,19 @@ import {
     ExtendedKey,
     Network,
     NodeEd25519,
-} from "../index";
+} from '../index';
 
 /**
  * BIP32-Ed25519 Extended Keys Unit Tests
- * 
+ *
  * Catapult neutered nodes are different from SLIP-10 because of
  * SHA3-256 usage. Extended Private Keys (nonNeutered nodes) are
  * copied from SLIP-10 but Public Keys in SLIP-10 are generated
  * with SHA512 while for Catapult we use SHA3-256.
  *
  * @see BIP32 Test Vectors: https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vectors
- * @see Test vector 1: https://github.com/satoshilabs/slips/blob/master/slip-0010.md#test-vector-1-for-ed25519 
- * @see Test vector 2: https://github.com/satoshilabs/slips/blob/master/slip-0010.md#test-vector-2-for-ed25519 
+ * @see Test vector 1: https://github.com/satoshilabs/slips/blob/master/slip-0010.md#test-vector-1-for-ed25519
+ * @see Test vector 2: https://github.com/satoshilabs/slips/blob/master/slip-0010.md#test-vector-2-for-ed25519
  */
 describe('BIP32-Ed15519 Extended Keys -->', () => {
 
@@ -80,7 +80,7 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
              chain: '5619e49ec9c210ac75e89000e9c3266a388ae913615449790c4cbefff990b00e'},
         ],
         nonNeutered: [
-            {path: 'm/0\'', 
+            {path: 'm/0\'',
              key: '68e0fe46dfb67e368c75379acec591dad19df3cde26e63b93a8e704f1dade7a3',
              chain: '8b59aa11380b624e81507a27fedda59fea6d0b779a778918a2fd3590e16e9c69'},
             {path: 'm/0\'/1\'',

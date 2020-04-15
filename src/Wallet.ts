@@ -25,7 +25,7 @@ import {
 } from 'symbol-sdk';
 
 // internal dependencies
-import { 
+import {
     ExtendedKey,
     KeyEncoding,
     Network,
@@ -39,17 +39,17 @@ import {
  * key pairs and the symbol-sdk `Account` or `PublicAccount` objects.
  *
  * @example Usage of hierarchical deterministic wallets
- * 
+ *
  * ```typescript
  * const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f');
  * const wallet = new Wallet(xkey);
- * 
+ *
  * // get master account
  * const masterAccount = wallet.getAccount();
- * 
+ *
  * // get DEFAULT WALLET
  * const defaultWallet = wallet.getChildAccount();
- * 
+ *
  * // derive specific child path
  * const childWallet = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'');
  * ```
@@ -126,7 +126,7 @@ export class Wallet {
         // in case of read-only wallet, not possible to initiate Account
         // only PublicAccount can be used, see getPublicAccount().
         if (this.readOnly) {
-            throw new Error("Missing private key, please use method getPublicAccount().");
+            throw new Error('Missing private key, please use method getPublicAccount().');
         }
 
         // note: do not store private key in memory longer than function call
@@ -174,7 +174,7 @@ export class Wallet {
 
         // in case of read-only wallet, get PublicAccount instance
         if (this.readOnly) {
-            throw new Error("Missing private key, please use method getChildPublicAccount().");
+            throw new Error('Missing private key, please use method getChildPublicAccount().');
         }
 
         // child key derivation with `ExtendedKeyNode.derivePath()`

@@ -41,7 +41,7 @@ export class MACImpl {
     /**
      * Create a message authentication code with given `type`.
      * This will use either of HMAC or KMAC code generation.
-     * 
+     *
      * @access public
      * @param   type        {MACType}
      * @param   key         {Buffer}
@@ -52,7 +52,7 @@ export class MACImpl {
         type: MACType,
         key: Buffer,
         data: Buffer,
-        publicSalt: Buffer | undefined = undefined,
+        publicSalt?: Buffer,
     ) {
         if (MACType.KMAC === type) {
             // use KMAC256

@@ -29,9 +29,9 @@ import {
  * integer value of the prefix.
  *
  * For the BITCOIN protocol, the prefixes result to `xprv` and `xpub`
- * for the mainnet network. 
+ * for the mainnet network.
  *
- * For the CATAPULT protocol, we will be using the same prefixes and 
+ * For the CATAPULT protocol, we will be using the same prefixes and
  * extended key sizes and formats.
  *
  * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L19
