@@ -18,7 +18,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {expect} from "chai";
+import {expect} from 'chai';
 import * as bip32 from 'bip32';
 import {
     Account,
@@ -31,7 +31,7 @@ import {
     KeyEncoding,
     MACType,
     Network,
-} from "../index";
+} from '../index';
 
 /**
  * BIP32-Ed25519 KMAC derivation Unit Tests
@@ -56,7 +56,7 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
              chain: 'a320425f77d1b5c2505a6b1b27382b37368ee640e3557c315416801243552f14'}
         ],
         nonNeutered: [
-            {path: 'm/0\'', 
+            {path: 'm/0\'',
              key: '68e0fe46dfb67e368c75379acec591dad19df3cde26e63b93a8e704f1dade7a3',
              chain: '8b59aa11380b624e81507a27fedda59fea6d0b779a778918a2fd3590e16e9c69'},
             {path: 'm/0\'/1\'',
@@ -78,7 +78,7 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
              chain: 'a408fef3c6fd2aac83bbdd6b48eb865dc844793be117a90b86be215d2c163127'}
         ],
         nonNeutered: [
-            {path: 'm/0\'', 
+            {path: 'm/0\'',
              key: 'fc58d8f1989084e76ea3c51acf7f5417f101b0c9b0f91afdb823c3fd2adda695',
              chain: '1d615993bde463a451d6553f4deac7488a54062a0aebe09ecc35c3d01d47d08a'},
             {path: 'm/0\'/1\'',
@@ -87,13 +87,13 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
         ]
     };
 
-    // create HMAC and KMAC master keys 
-    const HMAC_masterKey = ExtendedKey.createFromSeed(
+    // create HMAC and KMAC master keys
+    const HMACMasterKey = ExtendedKey.createFromSeed(
         seed,
         Network.CATAPULT
     );
 
-    const KMAC_masterKey = ExtendedKey.createFromSeed(
+    const KMACMasterKey = ExtendedKey.createFromSeed(
         seed,
         Network.CATAPULT,
         MACType.KMAC
@@ -101,37 +101,37 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
 
     describe('ExtendedKey.createFromSeed() should', () => {
         it('use MACType.HMAC as default MAC type', () => {
-            expect(HMAC_masterKey.macType).to.be.equal(MACType.HMAC);
+            expect(HMACMasterKey.macType).to.be.equal(MACType.HMAC);
         });
 
         it('permit specialization of macType property', () => {
-            expect(KMAC_masterKey.macType).to.be.equal(MACType.KMAC);
+            expect(KMACMasterKey.macType).to.be.equal(MACType.KMAC);
         });
     });
 
     describe('Switching MAC type should', () => {
         it('define correct HMAC master private key', () => {
-            expect(HMAC_masterKey.node.chainCode.toString('hex')).to.be.equal(HMAC.chainCode);
-            expect(HMAC_masterKey.getPrivateKey()).to.be.equal(HMAC.masterPrv);
-            expect(HMAC_masterKey.getPublicKey()).to.be.equal(HMAC.masterPub);
+            expect(HMACMasterKey.node.chainCode.toString('hex')).to.be.equal(HMAC.chainCode);
+            expect(HMACMasterKey.getPrivateKey()).to.be.equal(HMAC.masterPrv);
+            expect(HMACMasterKey.getPublicKey()).to.be.equal(HMAC.masterPub);
         });
 
         it('create different KMAC master private key', () => {
-            expect(KMAC_masterKey.node.chainCode.toString('hex')).to.not.be.equal(HMAC.chainCode);
-            expect(KMAC_masterKey.getPrivateKey()).to.not.be.equal(HMAC.masterPrv);
-            expect(KMAC_masterKey.getPublicKey()).to.not.be.equal(HMAC.masterPub);
+            expect(KMACMasterKey.node.chainCode.toString('hex')).to.not.be.equal(HMAC.chainCode);
+            expect(KMACMasterKey.getPrivateKey()).to.not.be.equal(HMAC.masterPrv);
+            expect(KMACMasterKey.getPublicKey()).to.not.be.equal(HMAC.masterPub);
         });
 
         it('define correct KMAC master private key', () => {
-            expect(KMAC_masterKey.node.chainCode.toString('hex')).to.be.equal(KMAC.chainCode);
-            expect(KMAC_masterKey.getPrivateKey()).to.be.equal(KMAC.masterPrv);
-            expect(KMAC_masterKey.getPublicKey()).to.be.equal(KMAC.masterPub);
+            expect(KMACMasterKey.node.chainCode.toString('hex')).to.be.equal(KMAC.chainCode);
+            expect(KMACMasterKey.getPrivateKey()).to.be.equal(KMAC.masterPrv);
+            expect(KMACMasterKey.getPublicKey()).to.be.equal(KMAC.masterPub);
         });
 
         it('derive correct HMAC extended public key given seed and path', () => {
             // iterate through paths to derive
             HMAC.neutered.map((neuteredKey) => {
-                const childDerived = HMAC_masterKey.derivePath(neuteredKey.path);
+                const childDerived = HMACMasterKey.derivePath(neuteredKey.path);
 
                 // test chain code of derived node
                 expect(childDerived.node.chainCode.toString('hex')).to.be.equal(neuteredKey.chain);
@@ -145,7 +145,7 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
         it('derive correct HMAC extended private key given seed and path', () => {
             // iterate through paths to derive
             HMAC.nonNeutered.map((nonNeuteredKey) => {
-                const childDerived = HMAC_masterKey.derivePath(nonNeuteredKey.path);
+                const childDerived = HMACMasterKey.derivePath(nonNeuteredKey.path);
 
                 // test chain code of derived node
                 expect(childDerived.node.chainCode.toString('hex')).to.be.equal(nonNeuteredKey.chain);
@@ -159,7 +159,7 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
         it('derive correct KMAC extended public key given seed and path', () => {
             // iterate through paths to derive
             KMAC.neutered.map((neuteredKey) => {
-                const childDerived = KMAC_masterKey.derivePath(neuteredKey.path);
+                const childDerived = KMACMasterKey.derivePath(neuteredKey.path);
 
                 // test chain code of derived node
                 expect(childDerived.node.chainCode.toString('hex')).to.be.equal(neuteredKey.chain);
@@ -173,7 +173,7 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
         it('derive correct KMAC extended private key given seed and path', () => {
             // iterate through paths to derive
             KMAC.nonNeutered.map((nonNeuteredKey) => {
-                const childDerived = KMAC_masterKey.derivePath(nonNeuteredKey.path);
+                const childDerived = KMACMasterKey.derivePath(nonNeuteredKey.path);
 
                 // test chain code of derived node
                 expect(childDerived.node.chainCode.toString('hex')).to.be.equal(nonNeuteredKey.chain);

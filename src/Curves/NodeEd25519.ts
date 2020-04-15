@@ -353,7 +353,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         // (2) Public parent key -> public child key
         // This is not possible with our implementation
 
-        throw new Error("Non-Hardened key derivation is not permitted with ED25519 curve.");
+        throw new Error('Non-Hardened key derivation is not permitted with ED25519 curve.');
     }
 
     /**

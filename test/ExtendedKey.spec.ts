@@ -18,7 +18,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {expect} from "chai";
+import {expect} from 'chai';
 import * as bip32 from 'bip32';
 import {BIP32} from 'bip32';
 
@@ -30,8 +30,8 @@ import {
     Network,
     NodeInterface,
     NodeEd25519,
-} from "../index";
-import { Convert } from "symbol-sdk";
+} from '../index';
+import { Convert } from 'symbol-sdk';
 
 describe('ExtendedKey -->', () => {
 
@@ -71,7 +71,7 @@ describe('ExtendedKey -->', () => {
             const neuteredMaster = new ExtendedKey(node, Network.BITCOIN);
             const nodeBIP32 = neuteredMaster.node as BIP32;
 
-            //XXX `BIP32` class cannot be used as a right-hand operator of instanceof
+            // XXX `BIP32` class cannot be used as a right-hand operator of instanceof
             expect(nodeBIP32).to.not.be.instanceof(NodeEd25519);
             expect(neuteredMaster.network.curve).to.be.equal(CurveAlgorithm.secp256k1);
 
@@ -268,10 +268,10 @@ describe('ExtendedKey -->', () => {
 
     describe('getPrivateKey() should', () => {
         it('throw error with neutered nodes', () => {
-            expect((function () {
+            expect(() => {
                 const neuteredMaster = new ExtendedKey(bip32.fromBase58(extendedKeys.neutered[1].key));
-                const privateKey = neuteredMaster.getPrivateKey();
-            })).to.throw('Cannot read private key out of extended public key.');
+                const ignored = neuteredMaster.getPrivateKey();
+            }).to.throw('Cannot read private key out of extended public key.');
         });
 
         it('return hexadecimal notation by default', () => {
@@ -407,7 +407,7 @@ describe('ExtendedKey -->', () => {
     describe('derivePath() should', () => {
         it('derive first chain with path "m/0\'"', () => {
             const masterKey = ExtendedKey.createFromSeed(extendedKeys.seedHex);
-            const fstChainNode = masterKey.derivePath("m/0'");
+            const fstChainNode = masterKey.derivePath('m/0\'');
             expect(fstChainNode.isMaster()).to.be.equal(false);
 
             // check XPUB and XPRV
@@ -417,7 +417,7 @@ describe('ExtendedKey -->', () => {
 
         it('derive child chain with path "m/0\'/1"', () => {
             const masterKey = ExtendedKey.createFromSeed(extendedKeys.seedHex);
-            const childChainNode = masterKey.derivePath("m/0'/1");
+            const childChainNode = masterKey.derivePath('m/0\'/1');
             expect(childChainNode.isMaster()).to.be.equal(false);
 
             // check XPUB and XPRV

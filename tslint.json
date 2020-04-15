@@ -9,7 +9,8 @@
         "curly": false,
         "member-ordering": false,
         "interface-name": false,
-        "no-unused-expression": false
+        "no-unused-expression": false,
+        "no-var-requires": false
     },
     "rulesDirectory": []
 }

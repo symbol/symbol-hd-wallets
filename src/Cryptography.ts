@@ -19,7 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { 
+import {
     SHA3Hasher as sha3Hasher,
 } from 'symbol-sdk';
 import { kmac256 } from 'js-sha3';
