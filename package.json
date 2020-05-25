@@ -1,6 +1,6 @@
 {
   "name": "symbol-hd-wallets",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Symbol library to handle hyper-deterministic wallets",
   "author": "",
   "main": "dist/index.js",
