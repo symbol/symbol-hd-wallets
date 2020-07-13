@@ -10,7 +10,6 @@ script:
   - npm run test:cov
   - npm run lint:all
   - npx embedme README.md --verify
-  - npm run coveralls-report
   - CURRENT_VERSION=$(npm run version --silent)
   - npx typedoc --out "ts-docs/$CURRENT_VERSION" src
   - touch ./ts-docs/.nojekyll
