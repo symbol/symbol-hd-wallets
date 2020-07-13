@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.com/nemfoundation/symbol-hd-wallets.svg?branch=master)](https://travis-ci.com/nemfoundation/symbol-hd-wallets)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-green.svg)](https://nem2.slack.com/messages/CB0UU89GS//)
 
-Hyper-deterministic wallets generator library for Symbol.
+Hierarchical-deterministic (HD) wallets generator library for Symbol.
 
 This is a PoC to validate the proposed [NIP6 Multi-Account Hierarchy for Deterministic Wallets](https://github.com/nemtech/NIP/issues/12). When stable, the repository will be moved to the [nemtech](https://github.com/nemtech) organization.
 
@@ -93,7 +93,7 @@ const bip32Seed = mnemonic.toSeed();
 
 ```
 
-### Generating a hyper-deterministic wallet (CATAPULT **mijin** and **mijinTest** compatible)
+### Generating a HD wallet (CATAPULT **mijin** and **mijinTest** compatible)
 
 ```ts
 // examples/GeneratingAHDWalletPrivateNetworkCompatible.ts
@@ -124,7 +124,7 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 
 ```
 
-### Generating a hyper-deterministic wallet (CATAPULT **public** and **publicTest** compatible)
+### Generating a HD wallet (CATAPULT **public** and **publicTest** compatible)
 
 ```ts
 // examples/GeneratingAHDWalletPublicNetworkCompatible.ts
@@ -155,7 +155,7 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 
 ```
 
-### Signing with a hyper-deterministic wallet (CATAPULT compatible)
+### Signing with a HD wallet (CATAPULT compatible)
 
 ```ts
 // examples/SigningWithAHDWalletPrivateNetworkCompatible.ts
