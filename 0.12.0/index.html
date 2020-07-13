@@ -70,7 +70,7 @@
 				<p><a href="https://badge.fury.io/js/symbol-hd-wallets"><img src="https://badge.fury.io/js/symbol-hd-wallets.svg" alt="npm version"></a>
 					<a href="https://travis-ci.com/nemfoundation/symbol-hd-wallets"><img src="https://travis-ci.com/nemfoundation/symbol-hd-wallets.svg?branch=master" alt="Build Status"></a>
 				<a href="https://nem2.slack.com/messages/CB0UU89GS//"><img src="https://img.shields.io/badge/chat-on%20slack-green.svg" alt="Slack"></a></p>
-				<p>Hyper-deterministic wallets generator library for Symbol.</p>
+				<p>Hierarchical-deterministic (HD) wallets generator library for Symbol.</p>
 				<p>This is a PoC to validate the proposed <a href="https://github.com/nemtech/NIP/issues/12">NIP6 Multi-Account Hierarchy for Deterministic Wallets</a>. When stable, the repository will be moved to the <a href="https://github.com/nemtech">nemtech</a> organization.</p>
 				<p><strong>NOTE</strong>: The author of this package cannot be held responsible for any loss of money or any malintentioned usage forms of this package. Please use this package with caution.</p>
 				<a href="#requirements" id="requirements" style="color: inherit; text-decoration: none;">
@@ -147,8 +147,8 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-keyword">const</span> mnemonic = MnemonicPassPhrase.createRandom();
 <span class="hljs-keyword">const</span> bip32Seed = mnemonic.toSeed();
 </code></pre>
-				<a href="#generating-a-hyper-deterministic-wallet-catapult-mijin-and-mijintest-compatible" id="generating-a-hyper-deterministic-wallet-catapult-mijin-and-mijintest-compatible" style="color: inherit; text-decoration: none;">
-					<h3>Generating a hyper-deterministic wallet (CATAPULT <strong>mijin</strong> and <strong>mijinTest</strong> compatible)</h3>
+				<a href="#generating-a-hd-wallet-catapult-mijin-and-mijintest-compatible" id="generating-a-hd-wallet-catapult-mijin-and-mijintest-compatible" style="color: inherit; text-decoration: none;">
+					<h3>Generating a HD wallet (CATAPULT <strong>mijin</strong> and <strong>mijinTest</strong> compatible)</h3>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-comment">// examples/GeneratingAHDWalletPrivateNetworkCompatible.ts</span>
 
@@ -176,8 +176,8 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-comment">// get read-only DEFAULT ACCOUNT</span>
 <span class="hljs-keyword">const</span> readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 </code></pre>
-				<a href="#generating-a-hyper-deterministic-wallet-catapult-public-and-publictest-compatible" id="generating-a-hyper-deterministic-wallet-catapult-public-and-publictest-compatible" style="color: inherit; text-decoration: none;">
-					<h3>Generating a hyper-deterministic wallet (CATAPULT <strong>public</strong> and <strong>publicTest</strong> compatible)</h3>
+				<a href="#generating-a-hd-wallet-catapult-public-and-publictest-compatible" id="generating-a-hd-wallet-catapult-public-and-publictest-compatible" style="color: inherit; text-decoration: none;">
+					<h3>Generating a HD wallet (CATAPULT <strong>public</strong> and <strong>publicTest</strong> compatible)</h3>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-comment">// examples/GeneratingAHDWalletPublicNetworkCompatible.ts</span>
 
@@ -205,8 +205,8 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-comment">// get read-only DEFAULT ACCOUNT</span>
 <span class="hljs-keyword">const</span> readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 </code></pre>
-				<a href="#signing-with-a-hyper-deterministic-wallet-catapult-compatible" id="signing-with-a-hyper-deterministic-wallet-catapult-compatible" style="color: inherit; text-decoration: none;">
-					<h3>Signing with a hyper-deterministic wallet (CATAPULT compatible)</h3>
+				<a href="#signing-with-a-hd-wallet-catapult-compatible" id="signing-with-a-hd-wallet-catapult-compatible" style="color: inherit; text-decoration: none;">
+					<h3>Signing with a HD wallet (CATAPULT compatible)</h3>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-comment">// examples/SigningWithAHDWalletPrivateNetworkCompatible.ts</span>
 
