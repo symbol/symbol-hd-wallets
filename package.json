@@ -47,13 +47,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nemfoundation/symbol-hd-wallets.git"
+    "url": "git+https://github.com/nemtech/symbol-hd-wallets.git"
   },
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/nemfoundation/symbol-hd-wallets/issues"
+    "url": "https://github.com/nemtech/symbol-hd-wallets/issues"
   },
-  "homepage": "https://github.com/nemfoundation/symbol-hd-wallets#readme",
+  "homepage": "https://github.com/nemtech/symbol-hd-wallets#readme",
   "nyc": {
     "exclude": [
       "**/*.spec.js"
