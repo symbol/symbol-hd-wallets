@@ -1,7 +1,7 @@
 # Symbol HD Wallets
 
 [![npm version](https://badge.fury.io/js/symbol-hd-wallets.svg)](https://badge.fury.io/js/symbol-hd-wallets)
-[![Build Status](https://travis-ci.com/nemfoundation/symbol-hd-wallets.svg?branch=master)](https://travis-ci.com/nemfoundation/symbol-hd-wallets)
+[![Build Status](https://travis-ci.com/nemtech/symbol-hd-wallets.svg?branch=master)](https://travis-ci.com/nemtech/symbol-hd-wallets)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-green.svg)](https://nem2.slack.com/messages/CB0UU89GS//)
 
 Hierarchical-deterministic (HD) wallets generator library for Symbol.
@@ -194,8 +194,6 @@ Use the following available resources to get help:
 
 ## Contributing
 
-This project is developed and maintained by NEM Foundation.
-
 Contributions are welcome and appreciated. 
 Check [CONTRIBUTING](CONTRIBUTING.md) for information on how to contribute.
 
@@ -205,7 +203,7 @@ Copyright (c) 2019, Grégory Saive
 
 Licensed under the [BSD-2 License](LICENSE).
 
-[self]: https://github.com/nemfoundation/symbol-hd-wallets
+[self]: https://github.com/nemtech/symbol-hd-wallets
 [docs]: https://nemtech.github.io
-[issues]: https://github.com/nemfoundation/symbol-hd-wallets/issues
+[issues]: https://github.com/nemtech/symbol-hd-wallets/issues
 [slack]: https://join.slack.com/t/nem2/shared_invite/enQtMzY4MDc2NTg0ODgyLWZmZWRiMjViYTVhZjEzOTA0MzUyMTA1NTA5OWQ0MWUzNTA4NjM5OTJhOGViOTBhNjkxYWVhMWRiZDRkOTE0YmU

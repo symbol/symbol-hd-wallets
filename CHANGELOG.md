@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# v0.13.0
+
+- upgraded symbol-sdk to v0.20.8
+
 # v0.12.0
 
 - upgraded symbol-sdk to v0.20.6
