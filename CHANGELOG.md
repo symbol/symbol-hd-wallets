@@ -2,7 +2,7 @@
 
 # v0.13.0
 
-- upgraded symbol-sdk to v0.20.8
+- upgraded symbol-sdk to v0.21.0
 
 # v0.12.0
 
