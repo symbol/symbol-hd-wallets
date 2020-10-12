@@ -19,9 +19,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-    SHA3Hasher as sha3Hasher,
-} from 'symbol-sdk';
 import { kmac256 } from 'js-sha3';
 const createHash = require('create-hash');
 const createHmac = require('create-hmac');
@@ -83,31 +80,5 @@ export class Cryptography {
     ): Buffer {
         const hex = kmac256(key, data, 512, publicSalt || '');
         return Buffer.from(hex, 'hex');
-    }
-
-    /**
-     * Calculates the hash of data.
-     * @param {Uint8Array} dest The computed hash destination.
-     * @param {Uint8Array} data The data to hash.
-     * @param {numeric} length The hash length in bytes.
-     */
-    public static sha3Hash(
-        dest: Uint8Array,
-        data: Uint8Array,
-        length: number = 64,
-    ): Uint8Array {
-        sha3Hasher.func(dest, data, length);
-        return dest;
-    }
-
-    /**
-     * Creates a SHA3 hasher object.
-     * @param {numeric} length The hash length in bytes.
-     * @returns {object} The hasher.
-     */
-    public static createSha3Hasher(
-        length: number = 64,
-    ): HasherInterface {
-        return sha3Hasher.createHasher(length);
     }
 }

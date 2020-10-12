@@ -18,17 +18,11 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {
-    Account,
-    PublicAccount,
-    NetworkType,
-} from 'symbol-sdk';
 
 // internal dependencies
 import {
     ExtendedKey,
     KeyEncoding,
-    Network,
 } from '../index';
 
 /**
@@ -36,7 +30,7 @@ import {
  * produces _Catapult-ED25519_-compatible accounts.
  *
  * This class provides with a bridge between BIP32-ED25519 compatible
- * key pairs and the symbol-sdk `Account` or `PublicAccount` objects.
+ * key pairs and symbol ready private and public keys.
  *
  * @example Usage of hierarchical deterministic wallets
  *
@@ -45,13 +39,13 @@ import {
  * const wallet = new Wallet(xkey);
  *
  * // get master account
- * const masterAccount = wallet.getAccount();
+ * const masterAccount = wallet.getAccountPrivateKey();
  *
  * // get DEFAULT WALLET
- * const defaultWallet = wallet.getChildAccount();
+ * const defaultWallet = wallet.getChildAccountPrivateKey();
  *
  * // derive specific child path
- * const childWallet = wallet.getChildAccount('m/44\'/4343\'/0\'/0\'/0\'');
+ * const childWallet = wallet.getChildAccountPrivateKey('m/44\'/4343\'/0\'/0\'/0\'');
  * ```
  *
  * @see https://github.com/nemtech/NIP/issues/12
@@ -109,106 +103,82 @@ export class Wallet {
     }
 
     /**
-     * Get a symbol-sdk `Account` object with the extended
+     * Get a symbol private key string with the extended
      * key property.
      *
      * No derivation is done in this step. Derivation must be done either before
      * calling this method or using the `getChildAccount` method.
      *
-     * @param   networkType {NetworkType}   Which network type to use, defaults to MIJIN_TEST.
-     * @return  {Account}
-     * @throws  {Error}     On call of this method with a read-only wallet.
+     * @return  {string} main account private key.
+     * @throws  {Error}  On call of this method with a read-only wallet.
      */
-    getAccount(
-        networkType: NetworkType = NetworkType.MIJIN_TEST
-    ): Account {
+    getAccountPrivateKey(): string {
 
         // in case of read-only wallet, not possible to initiate Account
         // only PublicAccount can be used, see getPublicAccount().
         if (this.readOnly) {
-            throw new Error('Missing private key, please use method getPublicAccount().');
+            throw new Error('Missing private key, please use method getAccountPublicKey().');
         }
-
         // note: do not store private key in memory longer than function call
-        return Account.createFromPrivateKey(
-            this.extendedKey.getPrivateKey(KeyEncoding.ENC_HEX) as string,
-            networkType
-        );
+       return this.extendedKey.getPrivateKey(KeyEncoding.ENC_HEX) as string
+
     }
 
     /**
-     * Get a symbol-sdk `PublicAccount` object with the extended key property.
+     * Get a symbol public key string with the extended key property.
      *
      * No derivation is done in this step. Derivation must be done either before
      * calling this method or using the `getChildPublicAccount` method.
      *
-     * @param   networkType {NetworkType}   Which network type to use, defaults to MIJIN_TEST.
-     * @return  {PublicAccount}
+     * @return  {string} the account public key.
      */
-    getPublicAccount(
-        networkType: NetworkType = NetworkType.MIJIN_TEST
-    ): PublicAccount {
-
-        return PublicAccount.createFromPublicKey(
-            this.publicKey.toString('hex'),
-            networkType
-        );
+    getAccountPublicKey(): string {
+        return this.publicKey.toString('hex');
     }
 
     /**
-     * Get a symbol-sdk `Account` object with the derived child account.
+     * Get a symbol private key string with the derived child account.
      *
      * In case no derivation path is provided, the default wallet path
      * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
      *
      * @see Wallet.DEFAULT_WALLET_PATH
      * @param   path        {string}        Child derivation path, default to `Wallet.DEFAULT_WALLET_PATH`.
-     * @param   networkType {NetworkType}   Which network type to use, defaults to MIJIN_TEST.
-     * @return  {Account | PublicAccount}
+     * @return  {string} the private key
      * @throws  {Error}     On call of this method with a read-only wallet.
      */
-    getChildAccount(
-        path: string = Wallet.DEFAULT_WALLET_PATH,
-        networkType: NetworkType = NetworkType.MIJIN_TEST
-    ): Account {
+    getChildAccountPrivateKey(
+        path: string = Wallet.DEFAULT_WALLET_PATH
+    ): string {
 
         // in case of read-only wallet, get PublicAccount instance
         if (this.readOnly) {
-            throw new Error('Missing private key, please use method getChildPublicAccount().');
+            throw new Error('Missing private key, please use method getChildAccountPublicKey().');
         }
 
         // child key derivation with `ExtendedKeyNode.derivePath()`
         const childKeyNode = this.extendedKey.derivePath(path);
 
         // non-read-only, get Account instance
-        return Account.createFromPrivateKey(
-            childKeyNode.getPrivateKey(KeyEncoding.ENC_HEX) as string,
-            networkType
-        );
+        return childKeyNode.getPrivateKey(KeyEncoding.ENC_HEX) as string;
     }
 
     /**
-     * Get a symbol-sdk `PublicAccount` object with the derived child account.
+     * Get a symbol public key with the derived child account.
      *
      * In case no derivation path is provided, the default wallet path
      * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
      *
      * @see Wallet.DEFAULT_WALLET_PATH
      * @param   path        {string}        Child derivation path, default to `Wallet.DEFAULT_WALLET_PATH`.
-     * @param   networkType {NetworkType}   Which network type to use, defaults to MIJIN_TEST.
-     * @return  {Account | PublicAccount}
+     * @return string the child public key.
      */
-    getChildPublicAccount(
-        path: string = Wallet.DEFAULT_WALLET_PATH,
-        networkType: NetworkType = NetworkType.MIJIN_TEST
-    ): PublicAccount {
-
+    getChildAccountPublicKey(
+        path: string = Wallet.DEFAULT_WALLET_PATH
+    ): string {
         // child key derivation with `ExtendedKeyNode.derivePath()`
         const childKeyNode = this.extendedKey.derivePath(path);
-        return PublicAccount.createFromPublicKey(
-            childKeyNode.getPublicKey(KeyEncoding.ENC_HEX) as string,
-            networkType
-        );
+        return  childKeyNode.getPublicKey(KeyEncoding.ENC_HEX) as string;
     }
 
 }

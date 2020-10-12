@@ -19,7 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import * as bip39 from 'bip39';
-import {Crypto} from 'symbol-sdk';
+import * as crypto from 'crypto';
 
 /**
  * Class `MnemonicPassPhrase` describes a mnemonic pass phrase generator
@@ -65,7 +65,7 @@ export class MnemonicPassPhrase {
      * @return  {Buffer}
      */
     public static CATAPULT_RNG = (bytes: number) => {
-        return Buffer.from(Crypto.randomBytes(bytes).buffer);
+        return Buffer.from(crypto.randomBytes(bytes).buffer);
     };
 
     /**
