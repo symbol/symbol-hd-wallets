@@ -113,7 +113,7 @@ const masterAccount = wallet.getAccount();
 const defaultAccount = wallet.getChildAccount();
 
 // derive specific child path
-const childAccount = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'', NetworkType.MIJIN_TEST);
+const childAccount = wallet.getChildAccount('m/44\'/4343\'/0\'/0\'/0\'', NetworkType.MIJIN_TEST);
 
 // get read-only wallet
 const readOnlyWallet = new Wallet(xkey.getPublicNode());
@@ -144,7 +144,7 @@ const masterAccount = wallet.getAccount();
 const defaultAccount = wallet.getChildAccount();
 
 // derive specific child path
-const childAccount = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'', NetworkType.TEST_NET);
+const childAccount = wallet.getChildAccount('m/44\'/4343\'/0\'/0\'/0\'', NetworkType.TEST_NET);
 
 // get read-only wallet
 const readOnlyWallet = new Wallet(xkey.getPublicNode());
@@ -169,7 +169,7 @@ const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Netw
 const wallet = new Wallet(xkey);
 
 // derive specific child path
-const childAccount = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'', NetworkType.TEST_NET);
+const childAccount = wallet.getChildAccount('m/44\'/4343\'/0\'/0\'/0\'', NetworkType.TEST_NET);
 
 // create a transfer object
 const transfer = TransferTransaction.create(
