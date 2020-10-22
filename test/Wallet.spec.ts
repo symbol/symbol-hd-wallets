@@ -45,13 +45,13 @@ describe('Wallet -->', () => {
     const masterPriv = '2b4be7f19ee27bbf30c667b642d5f4aa69fd169872f8fc3059c08ebae2eb19e7';
     const masterPub  = 'a4b2856bfec510abab89753fac1ac0e1112364e7d250545963f135f2a33188ed';
 
-    // m/44'/43'/0'/0'/0'
-    const defaultPriv = '4ce1c399f5f72acf16e7231a406f6e8284033f686d565100fed376960ea8c871';
-    const defaultPub = '2daecee59b39e0e1095005162cf2879c30a21c1868f0474eba02d41bd1d0f969';
+    // m/44'/4343'/0'/0'/0'
+    const defaultPriv = 'bb2724a538cfd64e4366feb36bb982b954d58ea78f7163451b3b514edd692159';
+    const defaultPub = '36f81b855a4bf5ab675867ac4d2705d4304a09c0a79a63d734dde0926ab27eee';
 
-    // m/44'/43'/1'/0'/0'
-    const secondPriv = '1b05cb9db696df7216bd6a551c0e2b441234a59b23d785f4c803a41d64ce4d69';
-    const secondPub = '0ad5eb7d7c2d0f0e673651732d415b54333adb8a5a67fbce7b07852b355d457a';
+    // m/44'/4343'/1'/0'/0'
+    const secondPriv = '8c91d9f5d214a2e80a275e75a165f7022712f7ad52b7ecd45b3b6cc76154b571';
+    const secondPub = 'ecba28a413d60d37387eb19dd881b1e9ca4e2aba0f759fde735ce8969e129347';
 
     describe('constructor should', () => {
 
@@ -122,10 +122,10 @@ describe('Wallet -->', () => {
             expect(account.publicKey.toLowerCase()).to.be.equal(defaultPub);
         });
 
-        it('derive second account when given path m/44\'/43\'/1\'/0\'/0\'', () => {
+        it('derive second account when given path m/44\'/4343\'/1\'/0\'/0\'', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
-            const account = wallet.getChildAccount('m/44\'/43\'/1\'/0\'/0\'');
+            const account = wallet.getChildAccount('m/44\'/4343\'/1\'/0\'/0\'');
 
             expect(account.privateKey.toLowerCase()).to.be.equal(secondPriv);
             expect(account.publicKey.toLowerCase()).to.be.equal(secondPub);
@@ -165,10 +165,10 @@ describe('Wallet -->', () => {
             expect(account.publicKey.toLowerCase()).to.be.equal(defaultPub);
         });
 
-        it('derive second account when given path m/44\'/43\'/1\'/0\'/0\'', () => {
+        it('derive second account when given path m/44\'/4343\'/1\'/0\'/0\'', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
-            const account = wallet.getChildPublicAccount('m/44\'/43\'/1\'/0\'/0\'');
+            const account = wallet.getChildPublicAccount('m/44\'/4343\'/1\'/0\'/0\'');
 
             expect(account).to.be.instanceof(PublicAccount);
             expect(account.publicKey.toLowerCase()).to.be.equal(secondPub);
