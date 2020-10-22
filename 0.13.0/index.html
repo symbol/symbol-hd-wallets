@@ -167,7 +167,7 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-keyword">const</span> defaultAccount = wallet.getChildAccount();
 
 <span class="hljs-comment">// derive specific child path</span>
-<span class="hljs-keyword">const</span> childAccount = wallet.getChildAccount(<span class="hljs-string">'m/44\'/43\'/0\'/0\'/0\''</span>, NetworkType.MIJIN_TEST);
+<span class="hljs-keyword">const</span> childAccount = wallet.getChildAccount(<span class="hljs-string">'m/44\'/4343\'/0\'/0\'/0\''</span>, NetworkType.MIJIN_TEST);
 
 <span class="hljs-comment">// get read-only wallet</span>
 <span class="hljs-keyword">const</span> readOnlyWallet = <span class="hljs-keyword">new</span> Wallet(xkey.getPublicNode());
@@ -196,7 +196,7 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-keyword">const</span> defaultAccount = wallet.getChildAccount();
 
 <span class="hljs-comment">// derive specific child path</span>
-<span class="hljs-keyword">const</span> childAccount = wallet.getChildAccount(<span class="hljs-string">'m/44\'/43\'/0\'/0\'/0\''</span>, NetworkType.TEST_NET);
+<span class="hljs-keyword">const</span> childAccount = wallet.getChildAccount(<span class="hljs-string">'m/44\'/4343\'/0\'/0\'/0\''</span>, NetworkType.TEST_NET);
 
 <span class="hljs-comment">// get read-only wallet</span>
 <span class="hljs-keyword">const</span> readOnlyWallet = <span class="hljs-keyword">new</span> Wallet(xkey.getPublicNode());
@@ -219,7 +219,7 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-keyword">const</span> wallet = <span class="hljs-keyword">new</span> Wallet(xkey);
 
 <span class="hljs-comment">// derive specific child path</span>
-<span class="hljs-keyword">const</span> childAccount = wallet.getChildAccount(<span class="hljs-string">'m/44\'/43\'/0\'/0\'/0\''</span>, NetworkType.TEST_NET);
+<span class="hljs-keyword">const</span> childAccount = wallet.getChildAccount(<span class="hljs-string">'m/44\'/4343\'/0\'/0\'/0\''</span>, NetworkType.TEST_NET);
 
 <span class="hljs-comment">// create a transfer object</span>
 <span class="hljs-keyword">const</span> transfer = TransferTransaction.create(
