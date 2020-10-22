@@ -13,7 +13,7 @@ const masterAccount = wallet.getAccount();
 const defaultAccount = wallet.getChildAccount();
 
 // derive specific child path
-const childAccount = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'', NetworkType.TEST_NET);
+const childAccount = wallet.getChildAccount('m/44\'/4343\'/0\'/0\'/0\'', NetworkType.TEST_NET);
 
 // get read-only wallet
 const readOnlyWallet = new Wallet(xkey.getPublicNode());
