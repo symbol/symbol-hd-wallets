@@ -51,7 +51,7 @@ import {
  * const defaultWallet = wallet.getChildAccount();
  *
  * // derive specific child path
- * const childWallet = wallet.getChildAccount('m/44\'/43\'/0\'/0\'/0\'');
+ * const childWallet = wallet.getChildAccount('m/44\'/4343\'/0\'/0\'/0\'');
  * ```
  *
  * @see https://github.com/nemtech/NIP/issues/12
@@ -63,7 +63,7 @@ export class Wallet {
      * The default wallet derivaton path.
      * @var {string}
      */
-    public static DEFAULT_WALLET_PATH = 'm/44\'/43\'/0\'/0\'/0\'';
+    public static DEFAULT_WALLET_PATH = 'm/44\'/4343\'/0\'/0\'/0\'';
 
     /**
      * Whether the wallet is read-only or not.
