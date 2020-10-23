@@ -19,22 +19,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import {expect} from 'chai';
-import {
-    Account,
-    NetworkType,
-    PublicAccount,
-} from 'symbol-sdk';
-
+import {Account, NetworkType, PublicAccount,} from 'symbol-sdk';
 // internal dependencies
-import {
-    CurveAlgorithm,
-    ExtendedKey,
-    KeyEncoding,
-    Network,
-    NodeInterface,
-    NodeEd25519,
-    Wallet,
-} from '../index';
+import {ExtendedKey, Network, Wallet,} from '../index';
+
+const networkType = NetworkType.MIJIN_TEST;
+
+function getChildAccount(wallet: Wallet, path: string = Wallet.DEFAULT_WALLET_PATH) {
+    return Account.createFromPrivateKey(wallet.getChildAccountPrivateKey(path), networkType)
+}
+
+function getAccount(wallet: Wallet) {
+    return Account.createFromPrivateKey(wallet.getAccountPrivateKey(), networkType)
+}
+
+function getPublicAccount(wallet: Wallet) {
+    return PublicAccount.createFromPublicKey(wallet.getAccountPublicKey(), networkType)
+}
+
+function getChildPublicAccount(wallet: Wallet, path: string = Wallet.DEFAULT_WALLET_PATH) {
+    return PublicAccount.createFromPublicKey(wallet.getChildAccountPublicKey(path), networkType)
+}
 
 describe('Wallet -->', () => {
 
@@ -73,7 +78,7 @@ describe('Wallet -->', () => {
         it('take extended key to create wallet and get correct private key', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
-            const account = wallet.getAccount();
+            const account = getAccount(wallet);
 
             expect(account.privateKey.toLowerCase()).to.be.equal(masterPriv);
         });
@@ -87,14 +92,14 @@ describe('Wallet -->', () => {
             const wallet = new Wallet(xpub);
 
             expect(() => {
-                wallet.getAccount();
-            }).to.throw('Missing private key, please use method getPublicAccount().');
+                getAccount(wallet);
+            }).to.throw('Missing private key, please use method getAccountPublicKey().');
         });
 
         it('get catapult compatible private key / public key pair (keypair)', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
-            const account = wallet.getAccount();
+            const account = getAccount(wallet);
 
             expect(account.privateKey.toLowerCase()).to.be.equal(masterPriv);
             expect(account.publicKey.toLowerCase()).to.be.equal(masterPub);
@@ -109,14 +114,14 @@ describe('Wallet -->', () => {
             const wallet = new Wallet(xpub);
 
             expect(() => {
-                wallet.getChildAccount();
-            }).to.throw('Missing private key, please use method getChildPublicAccount().');
+                getChildAccount(wallet);
+            }).to.throw('Missing private key, please use method getChildAccountPublicKey().');
         });
 
         it('derive default account when given no path', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
-            const account = wallet.getChildAccount();
+            const account = getChildAccount(wallet);
 
             expect(account.privateKey.toLowerCase()).to.be.equal(defaultPriv);
             expect(account.publicKey.toLowerCase()).to.be.equal(defaultPub);
@@ -125,7 +130,7 @@ describe('Wallet -->', () => {
         it('derive second account when given path m/44\'/4343\'/1\'/0\'/0\'', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
-            const account = wallet.getChildAccount('m/44\'/4343\'/1\'/0\'/0\'');
+            const account = getChildAccount(wallet, 'm/44\'/4343\'/1\'/0\'/0\'');
 
             expect(account.privateKey.toLowerCase()).to.be.equal(secondPriv);
             expect(account.publicKey.toLowerCase()).to.be.equal(secondPub);
@@ -137,7 +142,7 @@ describe('Wallet -->', () => {
         it('get catapult compatible read-only account given extended private key', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
-            const account = wallet.getPublicAccount();
+            const account = getPublicAccount(wallet);
 
             expect(account).to.be.instanceof(PublicAccount);
             expect(account.publicKey.toLowerCase()).to.be.equal(masterPub);
@@ -147,7 +152,7 @@ describe('Wallet -->', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const xpub = xkey.getPublicNode();
             const wallet = new Wallet(xpub);
-            const account = wallet.getPublicAccount();
+            const account = getPublicAccount(wallet);
 
             expect(account).to.be.instanceof(PublicAccount);
             expect(account.publicKey.toLowerCase()).to.be.equal(masterPub);
@@ -159,7 +164,7 @@ describe('Wallet -->', () => {
         it('derive default account when given no path', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
-            const account = wallet.getChildPublicAccount();
+            const account = getChildPublicAccount(wallet);
 
             expect(account).to.be.instanceof(PublicAccount);
             expect(account.publicKey.toLowerCase()).to.be.equal(defaultPub);
@@ -168,7 +173,7 @@ describe('Wallet -->', () => {
         it('derive second account when given path m/44\'/4343\'/1\'/0\'/0\'', () => {
             const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
             const wallet = new Wallet(xkey);
-            const account = wallet.getChildPublicAccount('m/44\'/4343\'/1\'/0\'/0\'');
+            const account = getChildPublicAccount(wallet, 'm/44\'/4343\'/1\'/0\'/0\'');
 
             expect(account).to.be.instanceof(PublicAccount);
             expect(account.publicKey.toLowerCase()).to.be.equal(secondPub);

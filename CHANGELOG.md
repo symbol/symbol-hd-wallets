@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# v0.14.0
+
+- removed symbol-sdk dependency
+
 # v0.13.0
 
 - upgraded symbol-sdk to v0.21.0
