@@ -9,7 +9,6 @@
     "test": "test"
   },
   "dependencies": {
-    "@types/bip32": "^1.0.2",
     "bip32": "^1.0.4",
     "bip39": "^3.0.2",
     "bip44-constants": "^8.0.5",
@@ -22,11 +21,12 @@
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
+    "@types/bip32": "^1.0.2",
     "@types/chai": "^4.2.9",
     "@types/mocha": "^5.2.7",
     "chai": "^4.1.2",
     "coveralls": "^3.0.9",
-    "mocha": "^5.2.0",
+    "mocha": "^8.2.1",
     "nyc": "^14.1.1",
     "symbol-sdk": "^0.21.0",
     "ts-node": "^7.0.0",
