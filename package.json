@@ -1,6 +1,6 @@
 {
   "name": "symbol-hd-wallets",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "Symbol library to handle hyper-deterministic wallets",
   "author": "Grégory Saive from Using Blockchain Ltd <greg@ubc.digital>",
   "main": "dist/index.js",
