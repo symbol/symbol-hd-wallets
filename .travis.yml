@@ -4,28 +4,42 @@ node_js:
 cache:
   directories:
     - node_modules
+env:
+  global:
+    - RELEASE_BRANCH=main
+    - POST_RELEASE_BRANCH=main
+    - RELEASE_MESSAGE=release
 before_script:
+  - . ./travis/node-functions.sh
+  - VERSION="$(node_load_version)"
+  - log_env_variables
   - npm run build
-script:
-  - npm run test:cov
-  - npm run lint:all
   - npx embedme README.md --verify
-  - CURRENT_VERSION=$(npm run version --silent)
-  - npx typedoc --out "ts-docs/$CURRENT_VERSION" src
-  - touch ./ts-docs/.nojekyll
-deploy:
-  - provider: script
-    skip_cleanup: true
-    script: /bin/sh travis/githubPages.sh
-    on:
-      branch: main
-  - provider: script
-    skip_cleanup: true
-    script: /bin/sh travis/uploadArchives.sh
-    on:
-      branch: main
-  - provider: script
-    skip_cleanup: true
-    script: /bin/sh travis/release.sh
-    on:
-      branch: $RELEASE_BRANCH
+jobs:
+  include:
+    - stage: test
+      name: test
+      script: npm run test:cov && npm run coveralls-report
+    - stage: test
+      name: lint and doc
+      script: npm run lint:all && npm run doc
+    - stage: publish
+      name: github alpha pages
+      script: node_push_github_pages
+      if: branch = env(DEV_BRANCH) AND type = push
+    - name: alpha npm
+      script: npm run build && node_publish_alpha
+      if: branch = env(DEV_BRANCH) AND type = push
+    - stage: release
+      name: release npm
+      script: npm run build && node_publish_release
+      if: branch = env(RELEASE_BRANCH) AND type = api AND commit_message = env(RELEASE_MESSAGE)
+    - stage: release
+      name: github release pages
+      script: node_push_github_pages
+      if: branch = env(RELEASE_BRANCH) AND type = api AND commit_message = env(RELEASE_MESSAGE)
+    - stage: post release
+      name: tag and version upgrade
+      script: node_post_release
+      if: branch = env(RELEASE_BRANCH) AND type = api AND commit_message = env(RELEASE_MESSAGE)
+
