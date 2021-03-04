@@ -18,22 +18,21 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {expect} from 'chai';
-import * as bip32 from 'bip32';
-
+import { expect } from 'chai';
 // internal dependencies
 import {
-    ExtendedKey,
-    KeyEncoding
+    ExtendedKey
 } from '../index';
+import { Network } from '../src/Network';
+
 
 describe('BIP32 Compatibility -->', () => {
 
     describe('ExtendedKey should', () => {
-        it ('throw for hardened derivation with extended public key', () => {
+        it('throw for hardened derivation with extended public key', () => {
             expect(() => {
                 // create master key node
-                const masterKey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f');
+                const masterKey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.BITCOIN);
                 const masterPub = masterKey.getPublicNode();
 
                 // use hardened path to produce error because `masterPub` is neutered
@@ -41,17 +40,17 @@ describe('BIP32 Compatibility -->', () => {
             }).to.throw('Missing private key for hardened child key');
         });
 
-        it ('throw given seed length smaller than 16 (seed of 8 bytes)', () => {
+        it('throw given seed length smaller than 16 (seed of 8 bytes)', () => {
             expect(() => {
                 // create master key node
-                const ignored = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f'.substr(0, 16));
+                const ignored = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f'.substr(0, 16), Network.BITCOIN);
             }).to.throw('Seed should be at least 128 bits');
         });
 
-        it ('throw given seed length bigger than 64 (seed of 96 bytes)', () => {
+        it('throw given seed length bigger than 64 (seed of 96 bytes)', () => {
             expect(() => {
                 // create master key node
-                const ignored = ExtendedKey.createFromSeed('00'.repeat(96));
+                const ignored = ExtendedKey.createFromSeed('00'.repeat(96), Network.BITCOIN);
             }).to.throw('Seed should be at most 512 bits');
         });
     });
