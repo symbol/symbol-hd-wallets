@@ -81,9 +81,9 @@ describe('ExtendedKey -->', () => {
             expect(node.chainCode).to.not.be.undefined;
         });
 
-        it('should create NodeEd25519 node object given Network.CATAPULT', () => {
-            const node = NodeEd25519.fromBase58(extendedKeys.neutered[0].key, Network.CATAPULT);
-            const neuteredMaster = new ExtendedKey(node, Network.CATAPULT);
+        it('should create NodeEd25519 node object given Network.MIJIN', () => {
+            const node = NodeEd25519.fromBase58(extendedKeys.neutered[0].key, Network.MIJIN);
+            const neuteredMaster = new ExtendedKey(node, Network.MIJIN);
             const nodeEd25519 = neuteredMaster.node as NodeEd25519;
 
             expect(nodeEd25519).to.be.instanceof(NodeEd25519);
@@ -91,9 +91,9 @@ describe('ExtendedKey -->', () => {
             expect(nodeEd25519.network.curve).to.be.equal(CurveAlgorithm.ed25519);
         });
 
-        it('should create NodeEd25519 node object given Network.CATAPULT_PUBLIC', () => {
-            const node = NodeEd25519.fromBase58(extendedKeys.neutered[0].key, Network.CATAPULT_PUBLIC);
-            const neuteredMaster = new ExtendedKey(node, Network.CATAPULT_PUBLIC);
+        it('should create NodeEd25519 node object given Network.SYMBOL', () => {
+            const node = NodeEd25519.fromBase58(extendedKeys.neutered[0].key, Network.SYMBOL);
+            const neuteredMaster = new ExtendedKey(node, Network.SYMBOL);
             const nodeEd25519 = neuteredMaster.node as NodeEd25519;
 
             expect(nodeEd25519).to.be.instanceof(NodeEd25519);
@@ -145,24 +145,24 @@ describe('ExtendedKey -->', () => {
             expect(neuteredNode.network.curve).to.be.equal(CurveAlgorithm.secp256k1);
         });
 
-        it('use network given network Network.CATAPULT', () => {
-            const neuteredNode = ExtendedKey.createFromBase58(extendedKeys.neutered[0].key, Network.CATAPULT);
+        it('use network given network Network.MIJIN', () => {
+            const neuteredNode = ExtendedKey.createFromBase58(extendedKeys.neutered[0].key, Network.MIJIN);
 
-            // check that Network.CATAPULT was used correctly
-            expect(neuteredNode.network.privateKeyPrefix).to.be.equal(Network.CATAPULT.privateKeyPrefix);
-            expect(neuteredNode.network.publicKeyPrefix).to.be.equal(Network.CATAPULT.publicKeyPrefix);
+            // check that Network.MIJIN was used correctly
+            expect(neuteredNode.network.privateKeyPrefix).to.be.equal(Network.MIJIN.privateKeyPrefix);
+            expect(neuteredNode.network.publicKeyPrefix).to.be.equal(Network.MIJIN.publicKeyPrefix);
             expect(neuteredNode.network.curve).to.be.equal(CurveAlgorithm.ed25519);
 
             // also check node implementation that was used
             expect(neuteredNode.node).to.be.instanceof(NodeEd25519);
         });
 
-        it('use network given network Network.CATAPULT_PUBLIC', () => {
-            const neuteredNode = ExtendedKey.createFromBase58(extendedKeys.neutered[0].key, Network.CATAPULT_PUBLIC);
+        it('use network given network Network.SYMBOL', () => {
+            const neuteredNode = ExtendedKey.createFromBase58(extendedKeys.neutered[0].key, Network.SYMBOL);
 
-            // check that Network.CATAPULT was used correctly
-            expect(neuteredNode.network.privateKeyPrefix).to.be.equal(Network.CATAPULT_PUBLIC.privateKeyPrefix);
-            expect(neuteredNode.network.publicKeyPrefix).to.be.equal(Network.CATAPULT_PUBLIC.publicKeyPrefix);
+            // check that Network.MIJIN was used correctly
+            expect(neuteredNode.network.privateKeyPrefix).to.be.equal(Network.SYMBOL.privateKeyPrefix);
+            expect(neuteredNode.network.publicKeyPrefix).to.be.equal(Network.SYMBOL.publicKeyPrefix);
             expect(neuteredNode.network.curve).to.be.equal(CurveAlgorithm.ed25519);
 
             // also check node implementation that was used
@@ -190,24 +190,24 @@ describe('ExtendedKey -->', () => {
             expect(masterFromSeed.toBase58()).to.be.equals(extendedKeys.nonNeutered[0].key);
         });
 
-        it('use network given network Network.CATAPULT', () => {
-            const masterFromSeed = ExtendedKey.createFromSeed(extendedKeys.seedHex, Network.CATAPULT);
+        it('use network given network Network.MIJIN', () => {
+            const masterFromSeed = ExtendedKey.createFromSeed(extendedKeys.seedHex, Network.MIJIN);
 
-            // check that Network.CATAPULT was used correctly
-            expect(masterFromSeed.network.privateKeyPrefix).to.be.equal(Network.CATAPULT.privateKeyPrefix);
-            expect(masterFromSeed.network.publicKeyPrefix).to.be.equal(Network.CATAPULT.publicKeyPrefix);
+            // check that Network.MIJIN was used correctly
+            expect(masterFromSeed.network.privateKeyPrefix).to.be.equal(Network.MIJIN.privateKeyPrefix);
+            expect(masterFromSeed.network.publicKeyPrefix).to.be.equal(Network.MIJIN.publicKeyPrefix);
             expect(masterFromSeed.network.curve).to.be.equal(CurveAlgorithm.ed25519);
 
             // also check node implementation that was used
             expect(masterFromSeed.node).to.be.instanceof(NodeEd25519);
         });
 
-        it('use network given network Network.CATAPULT_PUBLIC', () => {
-            const masterFromSeed = ExtendedKey.createFromSeed(extendedKeys.seedHex, Network.CATAPULT_PUBLIC);
+        it('use network given network Network.SYMBOL', () => {
+            const masterFromSeed = ExtendedKey.createFromSeed(extendedKeys.seedHex, Network.SYMBOL);
 
-            // check that Network.CATAPULT was used correctly
-            expect(masterFromSeed.network.privateKeyPrefix).to.be.equal(Network.CATAPULT_PUBLIC.privateKeyPrefix);
-            expect(masterFromSeed.network.publicKeyPrefix).to.be.equal(Network.CATAPULT_PUBLIC.publicKeyPrefix);
+            // check that Network.MIJIN was used correctly
+            expect(masterFromSeed.network.privateKeyPrefix).to.be.equal(Network.SYMBOL.privateKeyPrefix);
+            expect(masterFromSeed.network.publicKeyPrefix).to.be.equal(Network.SYMBOL.publicKeyPrefix);
             expect(masterFromSeed.network.curve).to.be.equal(CurveAlgorithm.ed25519);
 
             // also check node implementation that was used
@@ -231,13 +231,13 @@ describe('ExtendedKey -->', () => {
         });
 
         it('use correct network after being neutered', () => {
-            const node = NodeEd25519.fromBase58(extendedKeys.neutered[1].key);
-            const neuteredMaster = new ExtendedKey(node, Network.CATAPULT);
+            const node = NodeEd25519.fromBase58(extendedKeys.neutered[1].key, Network.MIJIN);
+            const neuteredMaster = new ExtendedKey(node, Network.MIJIN);
             const publicNode = neuteredMaster.getPublicNode();
 
-            // check that Network.CATAPULT was used correctly
-            expect(publicNode.network.privateKeyPrefix).to.be.equal(Network.CATAPULT.privateKeyPrefix);
-            expect(publicNode.network.publicKeyPrefix).to.be.equal(Network.CATAPULT.publicKeyPrefix);
+            // check that Network.MIJIN was used correctly
+            expect(publicNode.network.privateKeyPrefix).to.be.equal(Network.MIJIN.privateKeyPrefix);
+            expect(publicNode.network.publicKeyPrefix).to.be.equal(Network.MIJIN.publicKeyPrefix);
             expect(publicNode.network.curve).to.be.equal(CurveAlgorithm.ed25519);
 
             // also check node implementation that was used
@@ -365,18 +365,18 @@ describe('ExtendedKey -->', () => {
             // http://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=tests/t-ed25519.inp
             vectorED25519.map(vec => {
                 const privateKey = Buffer.from(Convert.hexToUint8(vec.sk));
-                const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.CATAPULT);
+                const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.MIJIN);
 
                 expect(bip32Node.privateKey.toString('hex')).to.be.equal(vec.sk);
                 expect(bip32Node.publicKey.toString('hex')).to.be.equal(vec.pk);
             })
         })
 
-        it('produce SHA512 public key given Network.CATAPULT', () => {
+        it('produce SHA512 public key given Network.MIJIN', () => {
             const privateHex = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
             const expectPub = '2e834140fd66cf87b254a693a2c7862c819217b676d3943267156625e816ec6f';
             const privateKey = Buffer.from(Convert.hexToUint8(privateHex));
-            const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.CATAPULT);
+            const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.MIJIN);
 
             expect(bip32Node.privateKey.toString('hex')).to.be.equal(privateHex);
             expect(bip32Node.publicKey.toString('hex')).to.be.equal(expectPub);
@@ -388,7 +388,7 @@ describe('ExtendedKey -->', () => {
 
             // NIS compatibility requires "key reversal".
             const reversedKey = Buffer.from(Convert.hexToUint8Reverse(privateHex));
-            const bip32Node = new NodeEd25519(reversedKey, undefined, Buffer.from(''), Network.CATAPULT_PUBLIC);
+            const bip32Node = new NodeEd25519(reversedKey, undefined, Buffer.from(''), Network.SYMBOL);
 
             expect(bip32Node.privateKey.toString('hex')).to.be.equal(reversedKey.toString('hex'));
             expect(bip32Node.publicKey.toString('hex')).to.be.equal(expectPub);

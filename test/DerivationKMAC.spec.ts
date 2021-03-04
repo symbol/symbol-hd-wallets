@@ -90,12 +90,12 @@ describe('BIP32-Ed15519 KMAC derivation -->', () => {
     // create HMAC and KMAC master keys
     const HMACMasterKey = ExtendedKey.createFromSeed(
         seed,
-        Network.CATAPULT
+        Network.MIJIN
     );
 
     const KMACMasterKey = ExtendedKey.createFromSeed(
         seed,
-        Network.CATAPULT,
+        Network.MIJIN,
         MACType.KMAC
     );
 

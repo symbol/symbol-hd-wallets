@@ -101,7 +101,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      *
      * Depending on the curve algorithm, the seed is prepended with one of:
      *
-     * - `ed25519 seed` for ed25519[-sha512] implementation (Network.CATAPULT|Network.CATAPULT_PUBLIC)
+     * - `ed25519 seed` for ed25519[-sha512] implementation (Network.MIJIN|Network.SYMBOL)
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L258
      * @param   seed    {Buffer}
@@ -110,7 +110,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      */
     public static fromSeed(
         seed: Buffer,
-        network: Network = Network.CATAPULT,
+        network: Network,
         macType: MACType = MACType.HMAC
     ): NodeEd25519 {
 
@@ -118,7 +118,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         if (seed.length > 64) throw new TypeError('Seed should be at most 512 bits');
 
         // (1) depending on curve algorithm, prepend the seed with one of:
-        // `ed25519 seed` for ed25519[-sha512] implementation (Network.CATAPULT|Network.CATAPULT_PUBLIC)
+        // `ed25519 seed` for ed25519[-sha512] implementation (Network.MIJIN|Network.SYMBOL)
         const prefix = 'ed25519 seed';
         const I = MACImpl.create(macType, Buffer.from(prefix, 'utf8'), seed);
 
@@ -142,12 +142,12 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts#L286
      * @param   inString    {string}    The base58 payload of the extended key.
-     * @param   network     {Network}   (Optional) The network of the key, default to `Network.CATAPULT`.
+     * @param   network     {Network}   (Optional) The network of the key.
      * @return  {NodeEd25519}
      */
     public static fromBase58(
         inString: string,
-        network: Network = Network.CATAPULT,
+        network: Network,
     ): NodeEd25519 {
 
         // decode base58
@@ -158,10 +158,10 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
 
         // 4 bytes: version bytes
         const version = buffer.readUInt32BE(0);
-        if (version !== Network.CATAPULT.privateKeyPrefix
-         && version !== Network.CATAPULT.publicKeyPrefix) {
-            throw new TypeError('Payload Version must be one of: ' + Network.CATAPULT.privateKeyPrefix
-                              + ' or ' + Network.CATAPULT.publicKeyPrefix + '.');
+        if (version !== Network.MIJIN.privateKeyPrefix
+         && version !== Network.MIJIN.publicKeyPrefix) {
+            throw new TypeError('Payload Version must be one of: ' + Network.MIJIN.privateKeyPrefix
+                              + ' or ' + Network.MIJIN.publicKeyPrefix + '.');
         }
 
         // 1 byte: depth: 0x00 for master nodes, 0x01 for level-1 descendants, ...
@@ -188,7 +188,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         const chainCode = buffer.slice(13, 45);
         let hd: NodeEd25519;
 
-        if (version === Network.CATAPULT.privateKeyPrefix) {
+        if (version === Network.MIJIN.privateKeyPrefix) {
         // 33 bytes: private key data (0x00 + k)
 
             if (buffer.readUInt8(45) !== 0x00) {

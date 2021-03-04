@@ -44,7 +44,7 @@ export abstract class DeterministicKey implements NodeInterface {
      * @param ___D      {Buffer|undefined}  The private key of the node.
      * @param ___Q      {Buffer|undefined}  The public key of the node.
      * @param chainCode {Buffer}            The chain code of the node (32 bytes).
-     * @param network   {Network}           The network of the node, defaults to `Network.CATAPULT`.
+     * @param network   {Network}           The network of the node
      * @param ___DEPTH  {number}            The depth of the node (0 for master).
      * @param ___INDEX  {number}            The account index (0 for master).
      * @param ___PARENT_FINGERPRINT     {number}    The parent fingerprint (0x00000000 for master)
@@ -53,7 +53,7 @@ export abstract class DeterministicKey implements NodeInterface {
         private readonly __D: Buffer | undefined, // private Key
         private __Q: Buffer | undefined, // public Key
         public readonly chainCode: Buffer,
-        public readonly network: Network = Network.CATAPULT,
+        public readonly network: Network,
         private readonly __DEPTH: number = 0,
         private readonly __INDEX: number = 0,
         private readonly __PARENT_FINGERPRINT: number = 0x00000000,
@@ -383,6 +383,6 @@ export abstract class DeterministicKey implements NodeInterface {
 
     // XXX hidden usage of toHex() ?
     public toWIF(): string {
-        throw new TypeError('Catapult BIP32 keys cannot be converted to WIF. Please use the toHex() method.');
+        throw new TypeError('Symbol BIP32 keys cannot be converted to WIF. Please use the toHex() method.');
     }
 }
