@@ -101,7 +101,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
      *
      * Depending on the curve algorithm, the seed is prepended with one of:
      *
-     * - `ed25519 seed` for ed25519[-sha512] implementation (Network.MIJIN|Network.SYMBOL)
+     * - `ed25519 seed` for ed25519[-sha512] implementation (Network.SYMBOL)
      *
      * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L258
      * @param   seed    {Buffer}
@@ -118,7 +118,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         if (seed.length > 64) throw new TypeError('Seed should be at most 512 bits');
 
         // (1) depending on curve algorithm, prepend the seed with one of:
-        // `ed25519 seed` for ed25519[-sha512] implementation (Network.MIJIN|Network.SYMBOL)
+        // `ed25519 seed` for ed25519[-sha512] implementation (Network.SYMBOL)
         const prefix = 'ed25519 seed';
         const I = MACImpl.create(macType, Buffer.from(prefix, 'utf8'), seed);
 
@@ -158,10 +158,10 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
 
         // 4 bytes: version bytes
         const version = buffer.readUInt32BE(0);
-        if (version !== Network.MIJIN.privateKeyPrefix
-         && version !== Network.MIJIN.publicKeyPrefix) {
-            throw new TypeError('Payload Version must be one of: ' + Network.MIJIN.privateKeyPrefix
-                              + ' or ' + Network.MIJIN.publicKeyPrefix + '.');
+        if (version !== Network.SYMBOL.privateKeyPrefix
+         && version !== Network.SYMBOL.publicKeyPrefix) {
+            throw new TypeError('Payload Version must be one of: ' + Network.SYMBOL.privateKeyPrefix
+                              + ' or ' + Network.SYMBOL.publicKeyPrefix + '.');
         }
 
         // 1 byte: depth: 0x00 for master nodes, 0x01 for level-1 descendants, ...
@@ -188,7 +188,7 @@ export class NodeEd25519 extends DeterministicKey implements NodeInterface {
         const chainCode = buffer.slice(13, 45);
         let hd: NodeEd25519;
 
-        if (version === Network.MIJIN.privateKeyPrefix) {
+        if (version === Network.SYMBOL.privateKeyPrefix) {
         // 33 bytes: private key data (0x00 + k)
 
             if (buffer.readUInt8(45) !== 0x00) {

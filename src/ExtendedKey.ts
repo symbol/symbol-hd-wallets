@@ -94,7 +94,7 @@ export class ExtendedKey {
         macType: MACType = MACType.HMAC
     ): ExtendedKey {
 
-        if (network === Network.MIJIN || network === Network.SYMBOL) {
+        if (network === Network.SYMBOL || network === Network.SYMBOL) {
         // use NodeEd25519 node implementation
 
             // interpret payload
@@ -136,7 +136,7 @@ export class ExtendedKey {
         macType: MACType = MACType.HMAC
     ): ExtendedKey {
 
-        if (network === Network.MIJIN || network === Network.SYMBOL) {
+        if (network === Network.SYMBOL || network === Network.SYMBOL) {
         // use NodeEd25519 node implementation
 
             // use hexadecimal seed

@@ -57,19 +57,6 @@ export class Network {
     );
 
     /**
-     * CATAPULT protocol extended key prefixes
-     *
-     * Result in Base58 notation to `xpub` and `xprv`.
-     *
-     * @var {Network}
-     */
-    public static readonly MIJIN: Network = new Network(
-        0x0488b21e, // base58 'xpub'
-        0x0488ade4, // base58 'xprv'
-        CurveAlgorithm.ed25519
-    );
-
-    /**
      * SYMBOL public network protocol extended key prefixes
      *
      * Result in Base58 notation to `xpub` and `xprv`.

@@ -151,7 +151,7 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
             // create master key node
             const masterKey = ExtendedKey.createFromSeed(
                 extendedKey.seedHex,
-                Network.MIJIN
+                Network.SYMBOL
             );
 
             it (extendedKey.label + ': create correct master extended private key', () => {
@@ -200,7 +200,7 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
             const expectPublicKey = '2e834140fd66cf87b254a693a2c7862c819217b676d3943267156625e816ec6f';
 
             const privateBytes = Convert.hexToUint8(privateKey);
-            const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.MIJIN);
+            const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.SYMBOL);
 
             expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);
         });
