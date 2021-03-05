@@ -67,7 +67,7 @@ export class ExtendedKey {
                  * The hyper-deterministic node network.
                  * @var {Network}
                  */
-                public network: Network = Network.BITCOIN,
+                public network: Network,
                 /**
                  * The Message Authentication Code type to use.
                  * Possible values include HMAC and KMAC.
@@ -90,15 +90,15 @@ export class ExtendedKey {
      */
     public static createFromBase58(
         payload: string,
-        network: Network = Network.BITCOIN,
+        network: Network,
         macType: MACType = MACType.HMAC
     ): ExtendedKey {
 
-        if (network === Network.CATAPULT || network === Network.CATAPULT_PUBLIC) {
+        if (network === Network.SYMBOL || network === Network.SYMBOL) {
         // use NodeEd25519 node implementation
 
             // interpret payload
-            const ed25519Node = NodeEd25519.fromBase58(payload);
+            const ed25519Node = NodeEd25519.fromBase58(payload, network);
 
             // instanciate our ExtendedKey
             return new ExtendedKey(ed25519Node, network, macType);
@@ -132,11 +132,11 @@ export class ExtendedKey {
      */
     public static createFromSeed(
         seed: string,
-        network: Network = Network.BITCOIN,
+        network: Network,
         macType: MACType = MACType.HMAC
     ): ExtendedKey {
 
-        if (network === Network.CATAPULT || network === Network.CATAPULT_PUBLIC) {
+        if (network === Network.SYMBOL || network === Network.SYMBOL) {
         // use NodeEd25519 node implementation
 
             // use hexadecimal seed

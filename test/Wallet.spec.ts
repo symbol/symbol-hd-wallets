@@ -61,14 +61,14 @@ describe('Wallet -->', () => {
     describe('constructor should', () => {
 
         it('take extended key and set read-only to false when non-neutered', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const wallet = new Wallet(xkey);
 
             expect(wallet.isReadOnly()).to.be.equal(false);
         });
 
         it('take extended key and set read-only to true when neutered', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const xpub = xkey.getPublicNode();
             const wallet = new Wallet(xpub);
 
@@ -76,7 +76,7 @@ describe('Wallet -->', () => {
         });
 
         it('take extended key to create wallet and get correct private key', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const wallet = new Wallet(xkey);
             const account = getAccount(wallet);
 
@@ -87,7 +87,7 @@ describe('Wallet -->', () => {
     describe('getAccount() should', () => {
 
         it('throw when wallet initialized with extended public key', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const xpub = xkey.getPublicNode();
             const wallet = new Wallet(xpub);
 
@@ -97,7 +97,7 @@ describe('Wallet -->', () => {
         });
 
         it('get catapult compatible private key / public key pair (keypair)', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const wallet = new Wallet(xkey);
             const account = getAccount(wallet);
 
@@ -109,7 +109,7 @@ describe('Wallet -->', () => {
     describe('getChildAccount() should', () => {
 
         it('throw when wallet initialized with extended public key', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const xpub = xkey.getPublicNode();
             const wallet = new Wallet(xpub);
 
@@ -119,7 +119,7 @@ describe('Wallet -->', () => {
         });
 
         it('derive default account when given no path', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const wallet = new Wallet(xkey);
             const account = getChildAccount(wallet);
 
@@ -128,7 +128,7 @@ describe('Wallet -->', () => {
         });
 
         it('derive second account when given path m/44\'/4343\'/1\'/0\'/0\'', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const wallet = new Wallet(xkey);
             const account = getChildAccount(wallet, 'm/44\'/4343\'/1\'/0\'/0\'');
 
@@ -140,7 +140,7 @@ describe('Wallet -->', () => {
     describe('getPublicAccount() should', () => {
 
         it('get catapult compatible read-only account given extended private key', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const wallet = new Wallet(xkey);
             const account = getPublicAccount(wallet);
 
@@ -149,7 +149,7 @@ describe('Wallet -->', () => {
         });
 
         it('get catapult compatible read-only account given extended public key', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const xpub = xkey.getPublicNode();
             const wallet = new Wallet(xpub);
             const account = getPublicAccount(wallet);
@@ -162,7 +162,7 @@ describe('Wallet -->', () => {
     describe('getChildPublicAccount() should', () => {
 
         it('derive default account when given no path', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const wallet = new Wallet(xkey);
             const account = getChildPublicAccount(wallet);
 
@@ -171,7 +171,7 @@ describe('Wallet -->', () => {
         });
 
         it('derive second account when given path m/44\'/4343\'/1\'/0\'/0\'', () => {
-            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.CATAPULT);
+            const xkey = ExtendedKey.createFromSeed(masterSeed, Network.SYMBOL);
             const wallet = new Wallet(xkey);
             const account = getChildPublicAccount(wallet, 'm/44\'/4343\'/1\'/0\'/0\'');
 

@@ -18,14 +18,13 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {expect} from 'chai';
-import * as bip32 from 'bip32';
-
+import { expect } from 'chai';
 // internal dependencies
 import {
-    ExtendedKey,
-    KeyEncoding
+    ExtendedKey
 } from '../index';
+import { Network } from '../src/Network';
+
 
 describe('BIP32 Extended Keys -->', () => {
 
@@ -112,7 +111,7 @@ describe('BIP32 Extended Keys -->', () => {
     describe('BIP32 ExtendedKey should', () => {
         extendedKeys.map((extendedKey) => {
             // create master key node
-            const masterKey = ExtendedKey.createFromSeed(extendedKey.seedHex);
+            const masterKey = ExtendedKey.createFromSeed(extendedKey.seedHex, Network.BITCOIN);
 
             it (extendedKey.label + ': create correct master extended private key', () => {
                 expect(masterKey.toBase58()).to.be.equal(extendedKey.masterPrv);

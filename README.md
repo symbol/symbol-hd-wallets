@@ -93,7 +93,7 @@ const bip32Seed = mnemonic.toSeed();
 
 ```
 
-### Generating a HD wallet (CATAPULT **mijin** and **mijinTest** compatible)
+### Generating a HD wallet (SYMBOL **mijin** and **mijinTest** compatible)
 
 ```ts
 // examples/GeneratingAHDWalletPrivateNetworkCompatible.ts
@@ -103,7 +103,7 @@ import {ExtendedKey} from "../src/ExtendedKey";
 import {Wallet} from "../src/Wallet";
 import {Network} from "../src/Network";
 
-const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT);
+const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.SYMBOL);
 const wallet = new Wallet(xkey);
 
 // get master account
@@ -124,7 +124,7 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 
 ```
 
-### Generating a HD wallet (CATAPULT **public** and **publicTest** compatible)
+### Generating a HD wallet (SYMBOL **public** and **publicTest** compatible)
 
 ```ts
 // examples/GeneratingAHDWalletPublicNetworkCompatible.ts
@@ -134,7 +134,7 @@ import {NetworkType} from "symbol-sdk";
 import {Wallet} from "../src/Wallet";
 import {ExtendedKey} from "../src/ExtendedKey";
 
-const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
+const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.SYMBOL);
 const wallet = new Wallet(xkey);
 
 // get master account
@@ -155,7 +155,7 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 
 ```
 
-### Signing with a HD wallet (CATAPULT compatible)
+### Signing with a HD wallet (SYMBOL compatible)
 
 ```ts
 // examples/SigningWithAHDWalletPrivateNetworkCompatible.ts
@@ -165,7 +165,7 @@ import {Wallet} from "../src/Wallet";
 import {ExtendedKey} from "../src/ExtendedKey";
 import {Network} from "../src/Network";
 
-const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.CATAPULT_PUBLIC);
+const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.SYMBOL);
 const wallet = new Wallet(xkey);
 
 // derive specific child path
