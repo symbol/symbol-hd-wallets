@@ -22,6 +22,9 @@ import {expect} from 'chai';
 import {Account, NetworkType, PublicAccount,} from 'symbol-sdk';
 // internal dependencies
 import {ExtendedKey, Network, Wallet,} from '../index';
+import { MnemonicPassPhrase } from '../src/MnemonicPassPhrase';
+
+import {testVectors} from './data/test-hd-derivation-data';
 
 const networkType = NetworkType.MIJIN_TEST;
 
@@ -39,6 +42,10 @@ function getPublicAccount(wallet: Wallet) {
 
 function getChildPublicAccount(wallet: Wallet, path: string = Wallet.DEFAULT_WALLET_PATH) {
     return PublicAccount.createFromPublicKey(wallet.getChildAccountPublicKey(path), networkType)
+}
+
+function buildAccountPath(pathArr: number[]) {
+    return `m/${pathArr[0]}\'/${pathArr[1]}\'/${pathArr[2]}\'/${pathArr[3]}\'/${pathArr[4]}\'`
 }
 
 describe('Wallet -->', () => {
@@ -179,4 +186,40 @@ describe('Wallet -->', () => {
             expect(account.publicKey.toLowerCase()).to.be.equal(secondPub);
         });
     });
+
+
+    describe('hd derivation test data', () => {
+        const vectors = [...testVectors.public_net, ...testVectors.test_net];
+        it('should run with mnemonic successfully', () => {
+            vectors.filter(v => v.mnemonic !== undefined).forEach((vector) => {
+                const mnemonic = new MnemonicPassPhrase(vector.mnemonic!!)
+                const seedHex = mnemonic.toSeed(vector.passphrase!!).toString('hex').toLowerCase();
+                expect(seedHex).to.be.equal(vector.seed.toLowerCase());
+                // create hd extended key
+                const extendedKey = ExtendedKey.createFromSeed(seedHex, Network.SYMBOL);
+                const wallet = new Wallet(extendedKey);
+                expect(wallet.getAccountPublicKey().toLowerCase()).to.be.eq(vector.rootPublicKey.toLowerCase());
+                vector.childAccounts.forEach(child => {
+                    const childAccount = getChildPublicAccount(wallet, buildAccountPath(child.path))
+                    expect(childAccount.publicKey.toLowerCase()).to.be.eq(child.publicKey.toLowerCase());
+                })
+            })
+        }).timeout(15000)
+
+        it('should run pass with seed successfully', () => {
+            vectors.filter(v => v.mnemonic === undefined).forEach((vector) => {
+                const seedHex = vector.seed.toLowerCase()
+                // create hd extended key
+                const extendedKey = ExtendedKey.createFromSeed(seedHex, Network.SYMBOL);
+                const wallet = new Wallet(extendedKey);
+                expect(wallet.getAccountPublicKey().toLowerCase()).to.be.eq(vector.rootPublicKey.toLowerCase());
+                vector.childAccounts.forEach(child => {
+                    const childAccount = getChildPublicAccount(wallet, buildAccountPath(child.path))
+                    expect(childAccount.publicKey.toLowerCase()).to.be.eq(child.publicKey.toLowerCase());
+                })
+            })
+        }).timeout(15000)
+
+
+    })
 });

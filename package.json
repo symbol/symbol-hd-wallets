@@ -39,6 +39,7 @@
     "pretest": "npm run build",
     "build": "rm -rf dist/ && tsc",
     "lint:all": "tslint --project .",
+    "lint:fix": "tslint --fix --project .",
     "test": "mocha --ui bdd --recursive ./dist/test",
     "test:cov": "nyc --reporter=lcov --reporter=text-summary npm t",
     "test:coveralls": "npm run test:cov | coveralls",

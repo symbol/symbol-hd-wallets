@@ -18,20 +18,17 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {expect} from 'chai';
-import * as bip32 from 'bip32';
+import { expect } from 'chai';
 import {
-    Account,
-    Convert,
-    NetworkType,
+    Convert
 } from 'symbol-sdk';
-
 // internal dependencies
 import {
     ExtendedKey,
     Network,
-    NodeEd25519,
+    NodeEd25519
 } from '../index';
+
 
 /**
  * BIP32-Ed25519 Extended Keys Unit Tests
