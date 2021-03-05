@@ -147,8 +147,8 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-keyword">const</span> mnemonic = MnemonicPassPhrase.createRandom();
 <span class="hljs-keyword">const</span> bip32Seed = mnemonic.toSeed();
 </code></pre>
-				<a href="#generating-a-hd-wallet-catapult-mijin-and-mijintest-compatible" id="generating-a-hd-wallet-catapult-mijin-and-mijintest-compatible" style="color: inherit; text-decoration: none;">
-					<h3>Generating a HD wallet (CATAPULT <strong>mijin</strong> and <strong>mijinTest</strong> compatible)</h3>
+				<a href="#generating-a-hd-wallet-symbol-mijin-and-mijintest-compatible" id="generating-a-hd-wallet-symbol-mijin-and-mijintest-compatible" style="color: inherit; text-decoration: none;">
+					<h3>Generating a HD wallet (SYMBOL <strong>mijin</strong> and <strong>mijinTest</strong> compatible)</h3>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-comment">// examples/GeneratingAHDWalletPrivateNetworkCompatible.ts</span>
 
@@ -157,7 +157,7 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-keyword">import</span> {Wallet} <span class="hljs-keyword">from</span> <span class="hljs-string">"../src/Wallet"</span>;
 <span class="hljs-keyword">import</span> {Network} <span class="hljs-keyword">from</span> <span class="hljs-string">"../src/Network"</span>;
 
-<span class="hljs-keyword">const</span> xkey = ExtendedKey.createFromSeed(<span class="hljs-string">'000102030405060708090a0b0c0d0e0f'</span>, Network.CATAPULT);
+<span class="hljs-keyword">const</span> xkey = ExtendedKey.createFromSeed(<span class="hljs-string">'000102030405060708090a0b0c0d0e0f'</span>, Network.SYMBOL);
 <span class="hljs-keyword">const</span> wallet = <span class="hljs-keyword">new</span> Wallet(xkey);
 
 <span class="hljs-comment">// get master account</span>
@@ -176,8 +176,8 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-comment">// get read-only DEFAULT ACCOUNT</span>
 <span class="hljs-keyword">const</span> readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 </code></pre>
-				<a href="#generating-a-hd-wallet-catapult-public-and-publictest-compatible" id="generating-a-hd-wallet-catapult-public-and-publictest-compatible" style="color: inherit; text-decoration: none;">
-					<h3>Generating a HD wallet (CATAPULT <strong>public</strong> and <strong>publicTest</strong> compatible)</h3>
+				<a href="#generating-a-hd-wallet-symbol-public-and-publictest-compatible" id="generating-a-hd-wallet-symbol-public-and-publictest-compatible" style="color: inherit; text-decoration: none;">
+					<h3>Generating a HD wallet (SYMBOL <strong>public</strong> and <strong>publicTest</strong> compatible)</h3>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-comment">// examples/GeneratingAHDWalletPublicNetworkCompatible.ts</span>
 
@@ -186,7 +186,7 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-keyword">import</span> {Wallet} <span class="hljs-keyword">from</span> <span class="hljs-string">"../src/Wallet"</span>;
 <span class="hljs-keyword">import</span> {ExtendedKey} <span class="hljs-keyword">from</span> <span class="hljs-string">"../src/ExtendedKey"</span>;
 
-<span class="hljs-keyword">const</span> xkey = ExtendedKey.createFromSeed(<span class="hljs-string">'000102030405060708090a0b0c0d0e0f'</span>, Network.CATAPULT_PUBLIC);
+<span class="hljs-keyword">const</span> xkey = ExtendedKey.createFromSeed(<span class="hljs-string">'000102030405060708090a0b0c0d0e0f'</span>, Network.SYMBOL);
 <span class="hljs-keyword">const</span> wallet = <span class="hljs-keyword">new</span> Wallet(xkey);
 
 <span class="hljs-comment">// get master account</span>
@@ -205,8 +205,8 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-comment">// get read-only DEFAULT ACCOUNT</span>
 <span class="hljs-keyword">const</span> readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 </code></pre>
-				<a href="#signing-with-a-hd-wallet-catapult-compatible" id="signing-with-a-hd-wallet-catapult-compatible" style="color: inherit; text-decoration: none;">
-					<h3>Signing with a HD wallet (CATAPULT compatible)</h3>
+				<a href="#signing-with-a-hd-wallet-symbol-compatible" id="signing-with-a-hd-wallet-symbol-compatible" style="color: inherit; text-decoration: none;">
+					<h3>Signing with a HD wallet (SYMBOL compatible)</h3>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-comment">// examples/SigningWithAHDWalletPrivateNetworkCompatible.ts</span>
 
@@ -215,7 +215,7 @@ MnemonicPassPhrase.createRandom(<span class="hljs-string">'japanese'</span>);
 <span class="hljs-keyword">import</span> {ExtendedKey} <span class="hljs-keyword">from</span> <span class="hljs-string">"../src/ExtendedKey"</span>;
 <span class="hljs-keyword">import</span> {Network} <span class="hljs-keyword">from</span> <span class="hljs-string">"../src/Network"</span>;
 
-<span class="hljs-keyword">const</span> xkey = ExtendedKey.createFromSeed(<span class="hljs-string">'000102030405060708090a0b0c0d0e0f'</span>, Network.CATAPULT_PUBLIC);
+<span class="hljs-keyword">const</span> xkey = ExtendedKey.createFromSeed(<span class="hljs-string">'000102030405060708090a0b0c0d0e0f'</span>, Network.SYMBOL);
 <span class="hljs-keyword">const</span> wallet = <span class="hljs-keyword">new</span> Wallet(xkey);
 
 <span class="hljs-comment">// derive specific child path</span>
