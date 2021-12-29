@@ -1,5 +1,12 @@
 # CHANGELOG
 
+# v0.14.2
+
+- ExtendedKey default network is removed
+- Network fields are renamed
+- HD derivation data unit test are added
+- `symbol-sdk`(dev dependency) version upgraded to v1.0.3
+
 # v0.14.0
 
 - removed symbol-sdk dependency

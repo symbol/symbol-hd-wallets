@@ -28,7 +28,7 @@
     "coveralls": "^3.0.9",
     "mocha": "^8.2.1",
     "nyc": "^14.1.1",
-    "symbol-sdk": "^0.21.0",
+    "symbol-sdk": "^1.0.3",
     "ts-node": "^7.0.0",
     "tslint": "^6.0.0",
     "typedoc": "^0.15.0",
