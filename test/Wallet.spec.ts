@@ -26,7 +26,7 @@ import { MnemonicPassPhrase } from '../src/MnemonicPassPhrase';
 
 import {testVectors} from './data/test-hd-derivation-data';
 
-const networkType = NetworkType.MIJIN_TEST;
+const networkType = NetworkType.TEST_NET;
 
 function getChildAccount(wallet: Wallet, path: string = Wallet.DEFAULT_WALLET_PATH) {
     return Account.createFromPrivateKey(wallet.getChildAccountPrivateKey(path), networkType)
