@@ -19,29 +19,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import { expect } from 'chai';
-import { Account, NetworkType, PublicAccount } from 'symbol-sdk';
 // internal dependencies
+import symbolSdk from 'symbol-sdk';
+import { KeyPair } from 'symbol-sdk/ts/src/symbol/KeyPair';
+import { PublicKey } from 'symbol-sdk/ts/src/CryptoTypes';
 import { ExtendedKey, Network, Wallet } from '../index';
 import { MnemonicPassPhrase } from '../src/MnemonicPassPhrase';
 
 import { testVectors } from './data/test-hd-derivation-data';
 
-const networkType = NetworkType.TEST_NET;
+const networkType = symbolSdk.symbol.Network.TESTNET.identifier;
 
-function getChildAccount(wallet: Wallet, path: string = Wallet.DEFAULT_WALLET_PATH) {
-  return Account.createFromPrivateKey(wallet.getChildAccountPrivateKey(path), networkType);
+function getChildAccount(wallet: Wallet, path: string = Wallet.DEFAULT_WALLET_PATH): KeyPair {
+  const privateKey = new symbolSdk.PrivateKey(wallet.getChildAccountPrivateKey(path));
+  return new symbolSdk.symbol.KeyPair(privateKey);
 }
 
-function getAccount(wallet: Wallet) {
-  return Account.createFromPrivateKey(wallet.getAccountPrivateKey(), networkType);
+function getAccount(wallet: Wallet): KeyPair {
+  const privateKey = new symbolSdk.PrivateKey(wallet.getAccountPrivateKey());
+  return new symbolSdk.symbol.KeyPair(privateKey);
 }
 
-function getPublicAccount(wallet: Wallet) {
-  return PublicAccount.createFromPublicKey(wallet.getAccountPublicKey(), networkType);
+function getPublicAccount(wallet: Wallet): PublicKey {
+  return new symbolSdk.PublicKey(wallet.getAccountPublicKey());
 }
 
-function getChildPublicAccount(wallet: Wallet, path: string = Wallet.DEFAULT_WALLET_PATH) {
-  return PublicAccount.createFromPublicKey(wallet.getChildAccountPublicKey(path), networkType);
+function getChildPublicAccount(wallet: Wallet, path: string = Wallet.DEFAULT_WALLET_PATH): PublicKey {
+  return new symbolSdk.PublicKey(wallet.getChildAccountPublicKey(path));
 }
 
 function buildAccountPath(pathArr: number[]) {
@@ -85,7 +89,7 @@ describe('Wallet -->', () => {
       const wallet = new Wallet(xkey);
       const account = getAccount(wallet);
 
-      expect(account.privateKey.toLowerCase()).to.be.equal(masterPriv);
+      expect(account.privateKey.toString().toLowerCase()).to.be.equal(masterPriv);
     });
   });
 
@@ -105,8 +109,8 @@ describe('Wallet -->', () => {
       const wallet = new Wallet(xkey);
       const account = getAccount(wallet);
 
-      expect(account.privateKey.toLowerCase()).to.be.equal(masterPriv);
-      expect(account.publicKey.toLowerCase()).to.be.equal(masterPub);
+      expect(account.privateKey.toString().toLowerCase()).to.be.equal(masterPriv);
+      expect(account.publicKey.toString().toLowerCase()).to.be.equal(masterPub);
     });
   });
 
@@ -126,8 +130,8 @@ describe('Wallet -->', () => {
       const wallet = new Wallet(xkey);
       const account = getChildAccount(wallet);
 
-      expect(account.privateKey.toLowerCase()).to.be.equal(defaultPriv);
-      expect(account.publicKey.toLowerCase()).to.be.equal(defaultPub);
+      expect(account.privateKey.toString().toLowerCase()).to.be.equal(defaultPriv);
+      expect(account.publicKey.toString().toLowerCase()).to.be.equal(defaultPub);
     });
 
     it('derive second account when given path m/44\'/4343\'/1\'/0\'/0\'', () => {
@@ -135,8 +139,8 @@ describe('Wallet -->', () => {
       const wallet = new Wallet(xkey);
       const account = getChildAccount(wallet, 'm/44\'/4343\'/1\'/0\'/0\'');
 
-      expect(account.privateKey.toLowerCase()).to.be.equal(secondPriv);
-      expect(account.publicKey.toLowerCase()).to.be.equal(secondPub);
+      expect(account.privateKey.toString().toLowerCase()).to.be.equal(secondPriv);
+      expect(account.publicKey.toString().toLowerCase()).to.be.equal(secondPub);
     });
   });
 
@@ -146,8 +150,8 @@ describe('Wallet -->', () => {
       const wallet = new Wallet(xkey);
       const account = getPublicAccount(wallet);
 
-      expect(account).to.be.instanceof(PublicAccount);
-      expect(account.publicKey.toLowerCase()).to.be.equal(masterPub);
+      expect(account).to.be.instanceof(PublicKey);
+      expect(account.toString().toLowerCase()).to.be.equal(masterPub);
     });
 
     it('get catapult compatible read-only account given extended public key', () => {
@@ -156,8 +160,8 @@ describe('Wallet -->', () => {
       const wallet = new Wallet(xpub);
       const account = getPublicAccount(wallet);
 
-      expect(account).to.be.instanceof(PublicAccount);
-      expect(account.publicKey.toLowerCase()).to.be.equal(masterPub);
+      expect(account).to.be.instanceof(PublicKey);
+      expect(account.toString().toLowerCase()).to.be.equal(masterPub);
     });
   });
 
@@ -167,8 +171,8 @@ describe('Wallet -->', () => {
       const wallet = new Wallet(xkey);
       const account = getChildPublicAccount(wallet);
 
-      expect(account).to.be.instanceof(PublicAccount);
-      expect(account.publicKey.toLowerCase()).to.be.equal(defaultPub);
+      expect(account).to.be.instanceof(PublicKey);
+      expect(account.toString().toLowerCase()).to.be.equal(defaultPub);
     });
 
     it('derive second account when given path m/44\'/4343\'/1\'/0\'/0\'', () => {
@@ -176,8 +180,8 @@ describe('Wallet -->', () => {
       const wallet = new Wallet(xkey);
       const account = getChildPublicAccount(wallet, 'm/44\'/4343\'/1\'/0\'/0\'');
 
-      expect(account).to.be.instanceof(PublicAccount);
-      expect(account.publicKey.toLowerCase()).to.be.equal(secondPub);
+      expect(account).to.be.instanceof(PublicKey);
+      expect(account.toString().toLowerCase()).to.be.equal(secondPub);
     });
   });
 
@@ -196,7 +200,7 @@ describe('Wallet -->', () => {
           expect(wallet.getAccountPublicKey().toLowerCase()).to.be.eq(vector.rootPublicKey.toLowerCase());
           vector.childAccounts.forEach((child) => {
             const childAccount = getChildPublicAccount(wallet, buildAccountPath(child.path));
-            expect(childAccount.publicKey.toLowerCase()).to.be.eq(child.publicKey.toLowerCase());
+            expect(childAccount.toString().toLowerCase()).to.be.eq(child.publicKey.toLowerCase());
           });
         });
     }).timeout(15000);
@@ -212,7 +216,7 @@ describe('Wallet -->', () => {
           expect(wallet.getAccountPublicKey().toLowerCase()).to.be.eq(vector.rootPublicKey.toLowerCase());
           vector.childAccounts.forEach((child) => {
             const childAccount = getChildPublicAccount(wallet, buildAccountPath(child.path));
-            expect(childAccount.publicKey.toLowerCase()).to.be.eq(child.publicKey.toLowerCase());
+            expect(childAccount.toString().toLowerCase()).to.be.eq(child.publicKey.toLowerCase());
           });
         });
     }).timeout(15000);

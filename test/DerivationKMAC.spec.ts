@@ -20,7 +20,6 @@
  */
 import { expect } from 'chai';
 import * as bip32 from 'bip32';
-import { Account, NetworkType } from 'symbol-sdk';
 
 // internal dependencies
 import { ExtendedKey, KeyEncoding, MACType, Network } from '../index';

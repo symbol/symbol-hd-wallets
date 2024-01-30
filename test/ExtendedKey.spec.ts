@@ -21,7 +21,7 @@
 import * as bip32 from 'bip32';
 import { BIP32 } from 'bip32';
 import { expect } from 'chai';
-import { Convert } from 'symbol-sdk';
+import symbolSdk from 'symbol-sdk';
 // internal dependencies
 import { CurveAlgorithm, ExtendedKey, KeyEncoding, Network, NodeEd25519 } from '../index';
 
@@ -377,7 +377,7 @@ describe('ExtendedKey -->', () => {
     it('produce SHA512 ED25519 compliant public key', () => {
       // http://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=tests/t-ed25519.inp
       vectorED25519.map((vec) => {
-        const privateKey = Buffer.from(Convert.hexToUint8(vec.sk));
+        const privateKey = Buffer.from(symbolSdk.utils.hexToUint8(vec.sk));
         const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.SYMBOL);
 
         expect(bip32Node.privateKey.toString('hex')).to.be.equal(vec.sk);
@@ -388,7 +388,7 @@ describe('ExtendedKey -->', () => {
     it('produce SHA512 public key given Network.SYMBOL', () => {
       const privateHex = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
       const expectPub = '2e834140fd66cf87b254a693a2c7862c819217b676d3943267156625e816ec6f';
-      const privateKey = Buffer.from(Convert.hexToUint8(privateHex));
+      const privateKey = Buffer.from(symbolSdk.utils.hexToUint8(privateHex));
       const bip32Node = new NodeEd25519(privateKey, undefined, Buffer.from(''), Network.SYMBOL);
 
       expect(bip32Node.privateKey.toString('hex')).to.be.equal(privateHex);
@@ -400,7 +400,7 @@ describe('ExtendedKey -->', () => {
       const expectPub = '5112ba143b78132af616af1a94e911ead890fdb51b164a1b57c352ecd9ca1894';
 
       // NIS compatibility requires "key reversal".
-      const reversedKey = Buffer.from(Convert.hexToUint8Reverse(privateHex));
+      const reversedKey = Buffer.from(symbolSdk.utils.hexToUint8(privateHex).reverse());
       const bip32Node = new NodeEd25519(reversedKey, undefined, Buffer.from(''), Network.SYMBOL);
 
       expect(bip32Node.privateKey.toString('hex')).to.be.equal(reversedKey.toString('hex'));

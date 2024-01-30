@@ -19,7 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import { expect } from 'chai';
-import { Convert } from 'symbol-sdk';
+import symbolSdk from 'symbol-sdk';
 // internal dependencies
 import { ExtendedKey, Network, NodeEd25519 } from '../index';
 
@@ -245,7 +245,7 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
       const privateKey = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
       const expectPublicKey = '2e834140fd66cf87b254a693a2c7862c819217b676d3943267156625e816ec6f';
 
-      const privateBytes = Convert.hexToUint8(privateKey);
+      const privateBytes = symbolSdk.utils.hexToUint8(privateKey);
       const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.SYMBOL);
 
       expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);
@@ -256,7 +256,7 @@ describe('BIP32-Ed15519 Extended Keys -->', () => {
       const expectPublicKey = '5112ba143b78132af616af1a94e911ead890fdb51b164a1b57c352ecd9ca1894';
 
       // REVERSED private key (NIS)
-      const privateBytes = Convert.hexToUint8Reverse(privateKey);
+      const privateBytes = symbolSdk.utils.hexToUint8(privateKey).reverse();
       const node = new NodeEd25519(Buffer.from(privateBytes), undefined, Buffer.from(''), Network.SYMBOL);
 
       expect(node.publicKey.toString('hex')).to.equal(expectPublicKey);

@@ -48,7 +48,7 @@ MnemonicPassPhrase.createRandom('japanese');
 import { MnemonicPassPhrase } from '../src/MnemonicPassPhrase';
 
 const mnemonic = MnemonicPassPhrase.createRandom();
-const secureSeedHex = mnemonic.toSeed('your-password');
+const secureSeedHex = mnemonic.toSeed('your-password').toString('hex');
 ```
 
 ```ts
@@ -58,7 +58,7 @@ import { MnemonicPassPhrase } from '../src/MnemonicPassPhrase';
 
 // Example 2: empty password for password-protected seed
 const mnemonic = MnemonicPassPhrase.createRandom();
-const secureSeedHex = mnemonic.toSeed(); // omit password means empty password: ''
+const secureSeedHex = mnemonic.toSeed().toString('hex'); // omit password means empty password: ''
 ```
 
 ### Generating a root (master) extended key
@@ -94,7 +94,6 @@ const bip32Seed = mnemonic.toSeed();
 ```ts
 // examples/GeneratingAHDWalletPrivateNetworkCompatible.ts
 
-import { NetworkType } from 'symbol-sdk';
 import { ExtendedKey } from '../src/ExtendedKey';
 import { Wallet } from '../src/Wallet';
 import { Network } from '../src/Network';
@@ -103,20 +102,20 @@ const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Netw
 const wallet = new Wallet(xkey);
 
 // get master account
-const masterAccount = wallet.getAccount();
+const masterAccount = wallet.getAccountPrivateKey();
 
 // get DEFAULT ACCOUNT
-const defaultAccount = wallet.getChildAccount();
+const defaultAccount = wallet.getChildAccountPrivateKey();
 
 // derive specific child path
-const childAccount = wallet.getChildAccount("m/44'/4343'/0'/0'/0'", NetworkType.MIJIN_TEST);
+const childAccount = wallet.getChildAccountPrivateKey("m/44'/4343'/0'/0'/0'");
 
 // get read-only wallet
 const readOnlyWallet = new Wallet(xkey.getPublicNode());
-const readOnlyAccount = readOnlyWallet.getPublicAccount(NetworkType.MIJIN_TEST);
+const readOnlyAccount = readOnlyWallet.getAccountPublicKey();
 
 // get read-only DEFAULT ACCOUNT
-const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
+const readOnlyDefaultAccount = readOnlyWallet.getChildAccountPublicKey();
 ```
 
 ### Generating a HD wallet (SYMBOL **public** and **publicTest** compatible)
@@ -154,29 +153,29 @@ const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 ```ts
 // examples/SigningWithAHDWalletPrivateNetworkCompatible.ts
 
-import { Account, Deadline, EmptyMessage, NetworkType, TransferTransaction } from 'symbol-sdk';
+import { Network } from '../src/Network';
+import { NetworkType } from 'symbol-sdk';
 import { Wallet } from '../src/Wallet';
 import { ExtendedKey } from '../src/ExtendedKey';
-import { Network } from '../src/Network';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.SYMBOL);
 const wallet = new Wallet(xkey);
 
+// get master account
+const masterAccount = wallet.getAccount();
+
+// get DEFAULT ACCOUNT
+const defaultAccount = wallet.getChildAccount();
+
 // derive specific child path
 const childAccount = wallet.getChildAccount("m/44'/4343'/0'/0'/0'", NetworkType.TEST_NET);
 
-// create a transfer object
-const transfer = TransferTransaction.create(
-  Deadline.create(),
-  Account.generateNewAccount(NetworkType.TEST_NET).address,
-  [],
-  EmptyMessage,
-  NetworkType.TEST_NET,
-);
+// get read-only wallet
+const readOnlyWallet = new Wallet(xkey.getPublicNode());
+const readOnlyAccount = readOnlyWallet.getPublicAccount(NetworkType.TEST_NET);
 
-// sign the transaction with derived account
-const generationHash = ''; // replace with network generation hash
-const signedTx = childAccount.sign(transfer, generationHash);
+// get read-only DEFAULT ACCOUNT
+const readOnlyDefaultAccount = readOnlyWallet.getChildPublicAccount();
 ```
 
 ## Getting help
