@@ -20,10 +20,7 @@
  */
 
 // internal dependencies
-import {
-    ExtendedKey,
-    KeyEncoding,
-} from '../index';
+import { ExtendedKey, KeyEncoding } from '../index';
 
 /**
  * Class `Wallet` describes a hierarchical deterministic Wallet that
@@ -52,133 +49,125 @@ import {
  * @since 0.3.0
  */
 export class Wallet {
+  /**
+   * The default wallet derivaton path.
+   * @var {string}
+   */
+  public static DEFAULT_WALLET_PATH = 'm/44\'/4343\'/0\'/0\'/0\'';
 
+  /**
+   * Whether the wallet is read-only or not.
+   * @var {boolean}
+   */
+  protected readOnly: boolean = false;
+
+  /**
+   * The wallet public key.
+   * @var {Buffer}
+   */
+  protected publicKey: Buffer;
+
+  /**
+   * Construct a `Wallet` object from an extended key.
+   *
+   * @param   extendedKey   {ExtendedKey}
+   */
+  constructor(
     /**
-     * The default wallet derivaton path.
-     * @var {string}
+     * The extended key.
+     * @var {ExtendedKey}
      */
-    public static DEFAULT_WALLET_PATH = 'm/44\'/4343\'/0\'/0\'/0\'';
-
-    /**
-     * Whether the wallet is read-only or not.
-     * @var {boolean}
-     */
-    protected readOnly: boolean = false;
-
-    /**
-     * The wallet public key.
-     * @var {Buffer}
-     */
-    protected publicKey: Buffer;
-
-    /**
-     * Construct a `Wallet` object from an extended key.
-     *
-     * @param   extendedKey   {ExtendedKey}
-     */
-    constructor(/**
-                 * The extended key.
-                 * @var {ExtendedKey}
-                 */
-                public readonly extendedKey: ExtendedKey,
-    ) {
-        // with an extended public key we have a read-only wallet
-        if (extendedKey.isNeutered()) {
-            this.readOnly = true;
-        }
-
-        this.publicKey = extendedKey.getPublicKey(KeyEncoding.ENC_BIN) as Buffer;
+    public readonly extendedKey: ExtendedKey,
+  ) {
+    // with an extended public key we have a read-only wallet
+    if (extendedKey.isNeutered()) {
+      this.readOnly = true;
     }
 
-    /**
-     * Return whether the current wallet is read-only, or not.
-     *
-     * In case of an initialization with an extended *public* key,
-     * the wallet is set to be read-only.
-     *
-     * @return  {boolean}
-     */
-    isReadOnly(): boolean {
-        return this.readOnly;
+    this.publicKey = extendedKey.getPublicKey(KeyEncoding.ENC_BIN) as Buffer;
+  }
+
+  /**
+   * Return whether the current wallet is read-only, or not.
+   *
+   * In case of an initialization with an extended *public* key,
+   * the wallet is set to be read-only.
+   *
+   * @return  {boolean}
+   */
+  isReadOnly(): boolean {
+    return this.readOnly;
+  }
+
+  /**
+   * Get a symbol private key string with the extended
+   * key property.
+   *
+   * No derivation is done in this step. Derivation must be done either before
+   * calling this method or using the `getChildAccount` method.
+   *
+   * @return  {string} main account private key.
+   * @throws  {Error}  On call of this method with a read-only wallet.
+   */
+  getAccountPrivateKey(): string {
+    // in case of read-only wallet, not possible to initiate Account
+    // only PublicAccount can be used, see getPublicAccount().
+    if (this.readOnly) {
+      throw new Error('Missing private key, please use method getAccountPublicKey().');
+    }
+    // note: do not store private key in memory longer than function call
+    return this.extendedKey.getPrivateKey(KeyEncoding.ENC_HEX) as string;
+  }
+
+  /**
+   * Get a symbol public key string with the extended key property.
+   *
+   * No derivation is done in this step. Derivation must be done either before
+   * calling this method or using the `getChildPublicAccount` method.
+   *
+   * @return  {string} the account public key.
+   */
+  getAccountPublicKey(): string {
+    return this.publicKey.toString('hex');
+  }
+
+  /**
+   * Get a symbol private key string with the derived child account.
+   *
+   * In case no derivation path is provided, the default wallet path
+   * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
+   *
+   * @see Wallet.DEFAULT_WALLET_PATH
+   * @param   path        {string}        Child derivation path, default to `Wallet.DEFAULT_WALLET_PATH`.
+   * @return  {string} the private key
+   * @throws  {Error}     On call of this method with a read-only wallet.
+   */
+  getChildAccountPrivateKey(path: string = Wallet.DEFAULT_WALLET_PATH): string {
+    // in case of read-only wallet, get PublicAccount instance
+    if (this.readOnly) {
+      throw new Error('Missing private key, please use method getChildAccountPublicKey().');
     }
 
-    /**
-     * Get a symbol private key string with the extended
-     * key property.
-     *
-     * No derivation is done in this step. Derivation must be done either before
-     * calling this method or using the `getChildAccount` method.
-     *
-     * @return  {string} main account private key.
-     * @throws  {Error}  On call of this method with a read-only wallet.
-     */
-    getAccountPrivateKey(): string {
+    // child key derivation with `ExtendedKeyNode.derivePath()`
+    const childKeyNode = this.extendedKey.derivePath(path);
 
-        // in case of read-only wallet, not possible to initiate Account
-        // only PublicAccount can be used, see getPublicAccount().
-        if (this.readOnly) {
-            throw new Error('Missing private key, please use method getAccountPublicKey().');
-        }
-        // note: do not store private key in memory longer than function call
-       return this.extendedKey.getPrivateKey(KeyEncoding.ENC_HEX) as string
+    // non-read-only, get Account instance
+    return childKeyNode.getPrivateKey(KeyEncoding.ENC_HEX) as string;
+  }
 
-    }
-
-    /**
-     * Get a symbol public key string with the extended key property.
-     *
-     * No derivation is done in this step. Derivation must be done either before
-     * calling this method or using the `getChildPublicAccount` method.
-     *
-     * @return  {string} the account public key.
-     */
-    getAccountPublicKey(): string {
-        return this.publicKey.toString('hex');
-    }
-
-    /**
-     * Get a symbol private key string with the derived child account.
-     *
-     * In case no derivation path is provided, the default wallet path
-     * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
-     *
-     * @see Wallet.DEFAULT_WALLET_PATH
-     * @param   path        {string}        Child derivation path, default to `Wallet.DEFAULT_WALLET_PATH`.
-     * @return  {string} the private key
-     * @throws  {Error}     On call of this method with a read-only wallet.
-     */
-    getChildAccountPrivateKey(
-        path: string = Wallet.DEFAULT_WALLET_PATH
-    ): string {
-
-        // in case of read-only wallet, get PublicAccount instance
-        if (this.readOnly) {
-            throw new Error('Missing private key, please use method getChildAccountPublicKey().');
-        }
-
-        // child key derivation with `ExtendedKeyNode.derivePath()`
-        const childKeyNode = this.extendedKey.derivePath(path);
-
-        // non-read-only, get Account instance
-        return childKeyNode.getPrivateKey(KeyEncoding.ENC_HEX) as string;
-    }
-
-    /**
-     * Get a symbol public key with the derived child account.
-     *
-     * In case no derivation path is provided, the default wallet path
-     * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
-     *
-     * @see Wallet.DEFAULT_WALLET_PATH
-     * @param   path        {string}        Child derivation path, default to `Wallet.DEFAULT_WALLET_PATH`.
-     * @return string the child public key.
-     */
-    getChildAccountPublicKey(
-        path: string = Wallet.DEFAULT_WALLET_PATH
-    ): string {
-        // child key derivation with `ExtendedKeyNode.derivePath()`
-        const childKeyNode = this.extendedKey.derivePath(path);
-        return  childKeyNode.getPublicKey(KeyEncoding.ENC_HEX) as string;
-    }
-
+  /**
+   * Get a symbol public key with the derived child account.
+   *
+   * In case no derivation path is provided, the default wallet path
+   * will be used, see `Wallet.DEFAULT_WALLET_PATH`.
+   *
+   * @see Wallet.DEFAULT_WALLET_PATH
+   * @param   path        {string}        Child derivation path, default to `Wallet.DEFAULT_WALLET_PATH`.
+   * @return string the child public key.
+   */
+  getChildAccountPublicKey(path: string = Wallet.DEFAULT_WALLET_PATH): string {
+    // child key derivation with `ExtendedKeyNode.derivePath()`
+    const childKeyNode = this.extendedKey.derivePath(path);
+    return childKeyNode.getPublicKey(KeyEncoding.ENC_HEX) as string;
+  }
 }

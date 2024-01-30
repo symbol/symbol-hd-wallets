@@ -19,9 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // internal dependencies
-import {
-    Network,
-} from '../index';
+import { Network } from '../index';
 
 /**
  * Interface `NodeInterface` defines ground rules for
@@ -32,25 +30,25 @@ import {
  * @since 0.2.0
  */
 export interface NodeInterface {
-    privateKey: Buffer;
-    publicKey: Buffer;
-    network: Network;
-    chainCode: Buffer;
+  privateKey: Buffer;
+  publicKey: Buffer;
+  network: Network;
+  chainCode: Buffer;
 
-    isNeutered(): boolean;
-    neutered(): NodeInterface;
-    toBase58(): string;
-    toWIF(): string;
-    derive(index: number): NodeInterface;
-    deriveHardened(index: number): NodeInterface;
-    derivePath(path: string): NodeInterface;
-    sign(hash: Buffer): Buffer;
-    verify(hash: Buffer, signature: Buffer): boolean;
+  isNeutered(): boolean;
+  neutered(): NodeInterface;
+  toBase58(): string;
+  toWIF(): string;
+  derive(index: number): NodeInterface;
+  deriveHardened(index: number): NodeInterface;
+  derivePath(path: string): NodeInterface;
+  sign(hash: Buffer): Buffer;
+  verify(hash: Buffer, signature: Buffer): boolean;
 
-    // Public getter addons
-    getD(): Buffer | undefined;
-    getQ(): Buffer | undefined;
-    getDepth(): number;
-    getIndex(): number;
-    getParentFingerprint(): number;
+  // Public getter addons
+  getD(): Buffer | undefined;
+  getQ(): Buffer | undefined;
+  getDepth(): number;
+  getIndex(): number;
+  getParentFingerprint(): number;
 }

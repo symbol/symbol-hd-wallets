@@ -1,4 +1,4 @@
-import {MnemonicPassPhrase} from "../src/MnemonicPassPhrase";
+import { MnemonicPassPhrase } from '../src/MnemonicPassPhrase';
 
 // Example 2: empty password for password-protected seed
 const mnemonic = MnemonicPassPhrase.createRandom();

@@ -24,61 +24,50 @@ const createHash = require('create-hash');
 const createHmac = require('create-hmac');
 
 // internal dependencies
-import {
-    HasherInterface,
-} from '../index';
+import { HasherInterface } from '../index';
 
 export class Cryptography {
-    /**
-     *
-     * @param buffer
-     */
-    public static hash160(
-        buffer: Buffer
-    ): Buffer {
-        // step 1: SHA256(buffer)
-        const sha256Hash: Buffer = createHash('sha256').update(buffer).digest();
+  /**
+   *
+   * @param buffer
+   */
+  public static hash160(buffer: Buffer): Buffer {
+    // step 1: SHA256(buffer)
+    const sha256Hash: Buffer = createHash('sha256').update(buffer).digest();
 
-        // step 2: RIPEMD160(shaHash)
-        try {
-            return createHash('rmd160').update(sha256Hash).digest();
-        } catch (err) {
-            return createHash('ripemd160').update(sha256Hash).digest();
-        }
+    // step 2: RIPEMD160(shaHash)
+    try {
+      return createHash('rmd160').update(sha256Hash).digest();
+    } catch (err) {
+      return createHash('ripemd160').update(sha256Hash).digest();
     }
+  }
 
-    /**
-     * Creates a Hash Message Authentication Code.
-     *
-     * This method uses SHA512 algorithm and `create-hmac`
-     * dependency for the MAC generation.
-     *
-     * @param   key     {Buffer}
-     * @param   data    {Buffer}
-     * @return  {Buffer}
-     */
-    public static HMAC(
-        key: Buffer,
-        data: Buffer
-    ): Buffer {
-        return createHmac('sha512', key).update(data).digest();
-    }
+  /**
+   * Creates a Hash Message Authentication Code.
+   *
+   * This method uses SHA512 algorithm and `create-hmac`
+   * dependency for the MAC generation.
+   *
+   * @param   key     {Buffer}
+   * @param   data    {Buffer}
+   * @return  {Buffer}
+   */
+  public static HMAC(key: Buffer, data: Buffer): Buffer {
+    return createHmac('sha512', key).update(data).digest();
+  }
 
-    /**
-     * Creates a Keccak Message Authentication Code.
-     *
-     * @internal This method is used internally for key derivation
-     * @param   key         {Buffer}
-     * @param   data        {Buffer}
-     * @param   publicSalt  {string}
-     * @return  {Buffer}
-     */
-    public static KMAC(
-        key: Buffer,
-        data: Buffer,
-        publicSalt: Buffer | undefined
-    ): Buffer {
-        const hex = kmac256(key, data, 512, publicSalt || '');
-        return Buffer.from(hex, 'hex');
-    }
+  /**
+   * Creates a Keccak Message Authentication Code.
+   *
+   * @internal This method is used internally for key derivation
+   * @param   key         {Buffer}
+   * @param   data        {Buffer}
+   * @param   publicSalt  {string}
+   * @return  {Buffer}
+   */
+  public static KMAC(key: Buffer, data: Buffer, publicSalt: Buffer | undefined): Buffer {
+    const hex = kmac256(key, data, 512, publicSalt || '');
+    return Buffer.from(hex, 'hex');
+  }
 }

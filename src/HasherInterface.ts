@@ -26,7 +26,7 @@
  * @since 0.2.0
  */
 export interface HasherInterface {
-    reset(): any;
-    update(d: Uint8Array): any;
-    finalize(r: Uint8Array): any;
+  reset(): any;
+  update(d: Uint8Array): any;
+  finalize(r: Uint8Array): any;
 }

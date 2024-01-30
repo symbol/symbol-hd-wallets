@@ -1,16 +1,14 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "quotemark": [true, "single"],
-        "curly": false,
-        "member-ordering": false,
-        "interface-name": false,
-        "no-unused-expression": false,
-        "no-var-requires": false
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "quotemark": [true, "single"],
+    "curly": false,
+    "member-ordering": false,
+    "interface-name": false,
+    "no-unused-expression": false,
+    "no-var-requires": false
+  },
+  "rulesDirectory": []
 }

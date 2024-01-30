@@ -26,6 +26,6 @@
  * @since 0.2.0
  */
 export enum CurveAlgorithm {
-    secp256k1 = 0,
-    ed25519 = 1,
+  secp256k1 = 0,
+  ed25519 = 1,
 }

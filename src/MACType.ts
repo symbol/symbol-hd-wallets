@@ -26,6 +26,6 @@
  * @since 0.3.0
  */
 export enum MACType {
-    HMAC = 0,
-    KMAC = 1,
+  HMAC = 0,
+  KMAC = 1,
 }

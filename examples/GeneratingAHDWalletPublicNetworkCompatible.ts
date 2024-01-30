@@ -1,7 +1,7 @@
-import {Network} from "../src/Network";
-import {NetworkType} from "symbol-sdk";
-import {Wallet} from "../src/Wallet";
-import {ExtendedKey} from "../src/ExtendedKey";
+import { Network } from '../src/Network';
+import { NetworkType } from 'symbol-sdk';
+import { Wallet } from '../src/Wallet';
+import { ExtendedKey } from '../src/ExtendedKey';
 
 const xkey = ExtendedKey.createFromSeed('000102030405060708090a0b0c0d0e0f', Network.SYMBOL);
 const wallet = new Wallet(xkey);
@@ -13,7 +13,7 @@ const masterAccount = wallet.getAccount();
 const defaultAccount = wallet.getChildAccount();
 
 // derive specific child path
-const childAccount = wallet.getChildAccount('m/44\'/4343\'/0\'/0\'/0\'', NetworkType.TEST_NET);
+const childAccount = wallet.getChildAccount("m/44'/4343'/0'/0'/0'", NetworkType.TEST_NET);
 
 // get read-only wallet
 const readOnlyWallet = new Wallet(xkey.getPublicNode());
