@@ -19,10 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // internal dependencies
-import {
-    Cryptography,
-    MACType,
-} from '../index';
+import { Cryptography, MACType } from '../index';
 
 /**
  * Enumeration `MACImpl` describes multiple message authentication
@@ -32,34 +29,28 @@ import {
  * @since 0.3.0
  */
 export class MACImpl {
+  /**
+   * No-Construct
+   */
+  private constructor() {}
 
-    /**
-     * No-Construct
-     */
-    private constructor() {}
-
-    /**
-     * Create a message authentication code with given `type`.
-     * This will use either of HMAC or KMAC code generation.
-     *
-     * @access public
-     * @param   type        {MACType}
-     * @param   key         {Buffer}
-     * @param   data        {Buffer}
-     * @param   publicSalt  {Buffer|undefined}  (Optional)
-     */
-    public static create(
-        type: MACType,
-        key: Buffer,
-        data: Buffer,
-        publicSalt?: Buffer,
-    ) {
-        if (MACType.KMAC === type) {
-            // use KMAC256
-            return Cryptography.KMAC(key, data, publicSalt);
-        }
-
-        // by default uses HMAC with SHA512
-        return Cryptography.HMAC(key, data);
+  /**
+   * Create a message authentication code with given `type`.
+   * This will use either of HMAC or KMAC code generation.
+   *
+   * @access public
+   * @param   type        {MACType}
+   * @param   key         {Buffer}
+   * @param   data        {Buffer}
+   * @param   publicSalt  {Buffer|undefined}  (Optional)
+   */
+  public static create(type: MACType, key: Buffer, data: Buffer, publicSalt?: Buffer) {
+    if (MACType.KMAC === type) {
+      // use KMAC256
+      return Cryptography.KMAC(key, data, publicSalt);
     }
+
+    // by default uses HMAC with SHA512
+    return Cryptography.HMAC(key, data);
+  }
 }

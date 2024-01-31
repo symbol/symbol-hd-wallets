@@ -19,9 +19,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // internal dependencies
-import {
-    CurveAlgorithm,
-} from '../index';
+import { CurveAlgorithm } from '../index';
 
 /**
  * Class `Network` describes an extended key prefix of 4 bytes. This object
@@ -41,69 +39,70 @@ import {
  * @since 0.1.0
  */
 export class Network {
+  /**
+   * BITCOIN protocol extended key prefixes
+   *
+   * Result in Base58 notation to `xpub` and `xprv`.
+   *
+   * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L19
+   * @var {Network}
+   */
+  public static readonly BITCOIN: Network = new Network(
+    0x0488b21e, // base58 'xpub'
+    0x0488ade4, // base58 'xprv'
+    CurveAlgorithm.secp256k1,
+  );
 
+  /**
+   * SYMBOL public network protocol extended key prefixes
+   *
+   * Result in Base58 notation to `xpub` and `xprv`.
+   *
+   * @var {Network}
+   */
+  public static readonly SYMBOL: Network = new Network(
+    0x0488b21e, // base58 'xpub'
+    0x0488ade4, // base58 'xprv'
+    CurveAlgorithm.ed25519,
+  );
+
+  /**
+   * Construct an `Network` object out of its' base58 payload.
+   *
+   * Result in Base58 notation to `xpub` and `xprv`.
+   *
+   * @param   base58Payload   {string}
+   */
+  constructor(
     /**
-     * BITCOIN protocol extended key prefixes
-     *
-     * Result in Base58 notation to `xpub` and `xprv`.
-     *
-     * @see https://github.com/bitcoinjs/bip32/blob/master/src/bip32.js#L19
-     * @var {Network}
+     * Prefix for extended public key (4 bytes unsigned integer)
+     * @var {number}
      */
-    public static readonly BITCOIN: Network = new Network(
-        0x0488b21e, // base58 'xpub'
-        0x0488ade4, // base58 'xprv'
-        CurveAlgorithm.secp256k1
+    public readonly publicKeyPrefix: number,
+    /**
+     * Prefix for extended private key (4 bytes unsigned integer)
+     * @var {number}
+     */
+    public readonly privateKeyPrefix: number,
+    /**
+     * The ellyptic curve algorithm
+     * @var {CurveAlgorithm}
+     */
+    public readonly curve: CurveAlgorithm = CurveAlgorithm.secp256k1,
+  ) {}
+
+  /**
+   * Checks whether current network instance **is identical**
+   * to given `b` network instance.
+   *
+   * @param   b       {Network}   The network object to compare against
+   * @return  {boolean}   Returns whether the two objects are identical
+   */
+  public equals(b: Network): boolean {
+    return (
+      this.privateKeyPrefix === b.privateKeyPrefix &&
+      this.publicKeyPrefix === b.publicKeyPrefix &&
+      this.curve === b.curve
     );
-
-    /**
-     * SYMBOL public network protocol extended key prefixes
-     *
-     * Result in Base58 notation to `xpub` and `xprv`.
-     *
-     * @var {Network}
-     */
-    public static readonly SYMBOL: Network = new Network(
-        0x0488b21e, // base58 'xpub'
-        0x0488ade4, // base58 'xprv'
-        CurveAlgorithm.ed25519
-    );
-
-    /**
-     * Construct an `Network` object out of its' base58 payload.
-     *
-     * Result in Base58 notation to `xpub` and `xprv`.
-     *
-     * @param   base58Payload   {string}
-     */
-    constructor(/**
-                 * Prefix for extended public key (4 bytes unsigned integer)
-                 * @var {number}
-                 */
-                public readonly publicKeyPrefix: number,
-                /**
-                 * Prefix for extended private key (4 bytes unsigned integer)
-                 * @var {number}
-                 */
-                public readonly privateKeyPrefix: number,
-                /**
-                 * The ellyptic curve algorithm
-                 * @var {CurveAlgorithm}
-                 */
-                public readonly curve: CurveAlgorithm = CurveAlgorithm.secp256k1) {
-
-    }
-
-    /**
-     * Checks whether current network instance **is identical**
-     * to given `b` network instance.
-     *
-     * @param   b       {Network}   The network object to compare against
-     * @return  {boolean}   Returns whether the two objects are identical
-     */
-    public equals(b: Network): boolean {
-        return this.privateKeyPrefix === b.privateKeyPrefix
-            && this.publicKeyPrefix === b.publicKeyPrefix
-            && this.curve === b.curve
-    }
+  }
 }

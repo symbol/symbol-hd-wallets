@@ -1,4 +1,4 @@
-import {MnemonicPassPhrase} from "../src/MnemonicPassPhrase";
+import { MnemonicPassPhrase } from '../src/MnemonicPassPhrase';
 
 // random 24-words mnemonic
 MnemonicPassPhrase.createRandom();

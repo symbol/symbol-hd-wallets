@@ -18,50 +18,45 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import {expect} from 'chai';
+import { expect } from 'chai';
 
 // internal dependencies
-import {
-    CurveAlgorithm,
-    Network,
-} from '../index';
+import { CurveAlgorithm, Network } from '../index';
 
 describe('Network -->', () => {
+  describe('constructor() should', () => {
+    it('set correct privateKeyPrefix and publicKeyPrefix', () => {
+      const network1 = new Network(1, 2, CurveAlgorithm.secp256k1);
+      const network2 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.secp256k1);
 
-    describe('constructor() should', () => {
-
-        it('set correct privateKeyPrefix and publicKeyPrefix', () => {
-            const network1 = new Network(1, 2, CurveAlgorithm.secp256k1)
-            const network2 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.secp256k1)
-
-            expect(network1.publicKeyPrefix).to.be.equal(1);
-            expect(network1.privateKeyPrefix).to.be.equal(2);
-            expect(network2.publicKeyPrefix).to.be.equal(0x0488b21e);
-            expect(network2.privateKeyPrefix).to.be.equal(0x0488ade4);
-        });
-
-        it('set correct curve algorithm', () => {
-            const network1 = new Network(1, 2, CurveAlgorithm.secp256k1)
-            const network2 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
-            const network3 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
-
-            expect(network1.curve).to.be.equal(CurveAlgorithm.secp256k1)
-            expect(network2.curve).to.be.equal(CurveAlgorithm.ed25519)
-            expect(network3.curve).to.be.equal(CurveAlgorithm.ed25519)
-        });
+      expect(network1.publicKeyPrefix).to.be.equal(1);
+      expect(network1.privateKeyPrefix).to.be.equal(2);
+      expect(network2.publicKeyPrefix).to.be.equal(0x0488b21e);
+      expect(network2.privateKeyPrefix).to.be.equal(0x0488ade4);
     });
 
-    describe('equals() should', () => {
-        it('return false given non-identical object', () => {
-            const network1 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
-            const network2 = new Network(1, 2, CurveAlgorithm.ed25519)
-            expect(network1.equals(network2)).to.be.equal(false)
-        });
+    it('set correct curve algorithm', () => {
+      const network1 = new Network(1, 2, CurveAlgorithm.secp256k1);
+      const network2 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519);
+      const network3 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519);
 
-        it('return true given identical object', () => {
-            const network1 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
-            const network2 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519)
-            expect(network1.equals(network2)).to.be.equal(true)
-        });
+      expect(network1.curve).to.be.equal(CurveAlgorithm.secp256k1);
+      expect(network2.curve).to.be.equal(CurveAlgorithm.ed25519);
+      expect(network3.curve).to.be.equal(CurveAlgorithm.ed25519);
     });
+  });
+
+  describe('equals() should', () => {
+    it('return false given non-identical object', () => {
+      const network1 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519);
+      const network2 = new Network(1, 2, CurveAlgorithm.ed25519);
+      expect(network1.equals(network2)).to.be.equal(false);
+    });
+
+    it('return true given identical object', () => {
+      const network1 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519);
+      const network2 = new Network(0x0488b21e, 0x0488ade4, CurveAlgorithm.ed25519);
+      expect(network1.equals(network2)).to.be.equal(true);
+    });
+  });
 });

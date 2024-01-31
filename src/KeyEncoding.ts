@@ -26,6 +26,6 @@
  * @since 0.1.0
  */
 export enum KeyEncoding {
-    ENC_HEX = 0,
-    ENC_BIN = 1
+  ENC_HEX = 0,
+  ENC_BIN = 1,
 }
